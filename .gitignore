@@ -1,0 +1,37 @@
+# Dependencies
+**/node_modules/
+/.pnp
+.pnp.js
+
+# Environment variables (sensitive data)
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# React build output
+admin/build/
+
+# Uploaded user files (keep directory via .gitkeep)
+Backend/uploads/guest-docs/*
+!Backend/uploads/guest-docs/.gitkeep
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+/coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Misc dev files
+lesson.html
+*.xlsx
