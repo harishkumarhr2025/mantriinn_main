@@ -208,10 +208,14 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
       .required('Number of adults required')
       .integer('Must be a whole number')
       .min(1, 'At least 1 adult'),
-    Children: Yup.number()
-      .typeError('Number of Children must be a number')
-      .integer('Must be a whole number')
-      .min(0, 'cannot be negative'),
+    Children: Yup.mixed().when('Guest_type', {
+      is: 'Daily',
+      then: Yup.mixed().notRequired(),
+      otherwise: Yup.number()
+        .typeError('Number of Children must be a number')
+        .integer('Must be a whole number')
+        .min(0, 'cannot be negative'),
+    }),
     Profession_type: Yup.string().when('Guest_type', {
       is: 'Daily',
       then: Yup.string(),
