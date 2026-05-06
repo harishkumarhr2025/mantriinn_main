@@ -2,6 +2,7 @@ import Guest from "../models/GuestModel.js";
 import { Room } from "../models/RoomModel.js";
 import { generateGRCNo } from "../utils/generateGRCNo.js";
 import { CheckOutEmail } from "../utils/CheckOutEmail.js";
+import { WelcomeEmail } from "../utils/WelcomeEmail.js";
 import { SendEmail } from "../utils/SendEmail.js";
 import mongoose from "mongoose";
 import moment from "moment";
@@ -535,6 +536,28 @@ const createGuest = async (req, res) => {
 
     await guest.save({ session });
     await session.commitTransaction();
+
+    // Send welcome email (non-blocking — don't fail the request if email fails)
+    if (guest.Guest_email) {
+      SendEmail({
+        email: guest.Guest_email,
+        subject: "Welcome to Mantri In!",
+        html: WelcomeEmail({
+          guest_name: guest.Guest_name,
+          room_no: guest.Room_no,
+          arrival_date: guest.Arrival_date
+            ? new Date(guest.Arrival_date).toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })
+            : "-",
+          grc_no: guest.GRC_No,
+        }),
+      }).catch((err) =>
+        console.error("Welcome email failed:", err.message)
+      );
+    }
 
     return res
       .status(201)
