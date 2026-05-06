@@ -192,7 +192,11 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
     Contact_number: phoneValidation,
     Emergency_number: phoneValidation,
     Room_no: Yup.string().required('Room No is required'),
-    bedId: Yup.string().required('Bed selection is required'),
+    bedId: Yup.string().when('Guest_type', {
+      is: 'Daily',
+      then: Yup.string(),
+      otherwise: Yup.string().required('Bed selection is required'),
+    }),
     Guest_type: Yup.string().required('Guest type is required'),
     Guest_address: Yup.string().required('Guest Address is required'),
     Room_type: Yup.string().required('Room type is required'),
@@ -208,7 +212,11 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
       .typeError('Number of Children must be a number')
       .integer('Must be a whole number')
       .min(0, 'cannot be negative'),
-    Profession_type: Yup.string().required('Profession type is required'),
+    Profession_type: Yup.string().when('Guest_type', {
+      is: 'Daily',
+      then: Yup.string(),
+      otherwise: Yup.string().required('Profession type is required'),
+    }),
     Payment_type: Yup.string().required('Payment type is required'),
     Foreign_guest_native_country: Yup.string().when('Guest_nationality', {
       is: 'Other',
@@ -626,6 +634,12 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
     setGuestDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
+      ...(name === 'Guest_type' && value === 'Daily' && {
+        bedId: '',
+        bedNumber: '',
+        Children: '',
+        Profession_type: '',
+      }),
     }));
 
     if (touched[name]) {
@@ -1192,7 +1206,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                   />
 
-                  <Autocomplete
+                  {guestDetails.Guest_type !== 'Daily' && <Autocomplete
                     options={beds?.filter((bed) => bed.status === 'available') || []}
                     getOptionLabel={(option) => `${option.bedNumber}`}
                     value={beds?.find((bed) => bed._id === guestDetails.bedId) || null}
@@ -1304,7 +1318,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                       },
                     }}
                     disabled={!guestDetails.roomId}
-                  />
+                  />}
 
                   <FormControl sx={{ minWidth: 120, width: '50%' }} error={!!errorText.Room_type}>
                     <InputLabel id="demo-select-small-label">Room Type</InputLabel>
@@ -1374,10 +1388,10 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                       pattern: '[0-9]*',
                     }}
                     sx={{
-                      width: '50%',
+                      width: guestDetails.Guest_type !== 'Daily' ? '50%' : '100%',
                     }}
                   />
-                  <TextField
+                  {guestDetails.Guest_type !== 'Daily' && <TextField
                     name="Children"
                     id="outlined-basic"
                     label="Number of Children"
@@ -1390,33 +1404,35 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     sx={{
                       width: '50%',
                     }}
-                  />
+                  />}
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 2, marginTop: '20px', alignItems: 'center' }}>
-                  <FormControl
-                    sx={{ minWidth: 120, width: '50%' }}
-                    error={!!errorText.Profession_type}
-                  >
-                    <InputLabel id="demo-select-small-label">Profession Type</InputLabel>
-                    <Select
-                      name="Profession_type"
-                      labelId="demo-select-small-label"
-                      id="demo-select-small"
-                      value={guestDetails.Profession_type}
-                      label="Profession Type"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                  {guestDetails.Guest_type !== 'Daily' && (
+                    <FormControl
+                      sx={{ minWidth: 120, width: '50%' }}
+                      error={!!errorText.Profession_type}
                     >
-                      <MenuItem value={'Student'}>Student</MenuItem>
-                      <MenuItem value={'Working'}>Working</MenuItem>
-                    </Select>
-                    {errorText.Profession_type && (
-                      <FormHelperText error>{errorText.Profession_type}</FormHelperText>
-                    )}
-                  </FormControl>
+                      <InputLabel id="demo-select-small-label">Profession Type</InputLabel>
+                      <Select
+                        name="Profession_type"
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        value={guestDetails.Profession_type}
+                        label="Profession Type"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        <MenuItem value={'Student'}>Student</MenuItem>
+                        <MenuItem value={'Working'}>Working</MenuItem>
+                      </Select>
+                      {errorText.Profession_type && (
+                        <FormHelperText error>{errorText.Profession_type}</FormHelperText>
+                      )}
+                    </FormControl>
+                  )}
                   <FormControl
-                    sx={{ minWidth: 120, width: '50%' }}
+                    sx={{ minWidth: 120, width: guestDetails.Guest_type !== 'Daily' ? '50%' : '100%' }}
                     error={!!errorText.Payment_type}
                   >
                     <InputLabel id="demo-select-small-label">Payment Type</InputLabel>
