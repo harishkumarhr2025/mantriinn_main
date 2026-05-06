@@ -481,7 +481,7 @@ const createGuest = async (req, res) => {
   session.startTransaction();
   try {
     const { GRC_No, financialYear } = await generateGRCNo(session);
-    const { aadharFront, aadharBack, bedId, ...otherFields } = req.body;
+    const { aadharFront, aadharBack, bedId, roomId, ...otherFields } = req.body;
     console.log("create Guest body:", req.body);
     // Validate Aadhar images
     if (!aadharFront || !aadharBack) {
@@ -499,6 +499,9 @@ const createGuest = async (req, res) => {
       financialYear,
       status: otherFields.status || "active",
       Guest_ID_Proof: [{ imageUrl: aadharFront }, { imageUrl: aadharBack }],
+      // Only set ObjectId fields when they have real values
+      ...(bedId ? { bedId } : {}),
+      ...(roomId ? { roomId } : {}),
     });
 
     // Daily guests do not have a fixed bed — skip bed assignment
