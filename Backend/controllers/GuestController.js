@@ -481,13 +481,25 @@ const createGuest = async (req, res) => {
   session.startTransaction();
   try {
     const { GRC_No, financialYear } = await generateGRCNo(session);
-    const { aadharFront, aadharBack, bedId, ...otherFields } = req.body;
+    const { aadharFront, aadharBack, bedId, roomId, selectedRoom, ...otherFields } = req.body;
     console.log("create Guest body:", req.body);
+
+    const isDaily = otherFields.Guest_type === "Daily";
+
     // Validate Aadhar images
     if (!aadharFront || !aadharBack) {
       return res.status(400).json({
         success: false,
         message: "Both Aadhar front and back images are required",
+      });
+    }
+
+    // For non-daily guests a bed must be selected
+    if (!isDaily && !bedId) {
+      await session.abortTransaction();
+      return res.status(400).json({
+        success: false,
+        message: "Bed selection is required",
       });
     }
 
@@ -497,41 +509,43 @@ const createGuest = async (req, res) => {
       financialYear,
       status: otherFields.status || "active",
       Guest_ID_Proof: [{ imageUrl: aadharFront }, { imageUrl: aadharBack }],
+      ...(bedId ? { bedId } : {}),
+      ...(roomId ? { roomId } : {}),
     });
 
-    const historyEntry = {
-      tenant: guest._id,
-      checkInDate: new Date(),
-      bedId: bedId,
-    };
+    if (!isDaily) {
+      const historyEntry = {
+        tenant: guest._id,
+        checkInDate: new Date(),
+        bedId: bedId,
+      };
 
-    // Assign Bed
-    const updatedRoom = await Room.findOneAndUpdate(
-      { "beds._id": bedId, "beds.status": "available" }, // Find the room that contains the bed
-
-      {
-        $set: {
-          "beds.$[bed].status": "occupied",
-          "beds.$[bed].tenant": guest._id,
-          "beds.$[bed].movedInAt": Date.now(),
-          "beds.$[bed].movedOutAt": null,
+      // Assign Bed
+      const updatedRoom = await Room.findOneAndUpdate(
+        { "beds._id": bedId, "beds.status": "available" },
+        {
+          $set: {
+            "beds.$[bed].status": "occupied",
+            "beds.$[bed].tenant": guest._id,
+            "beds.$[bed].movedInAt": Date.now(),
+            "beds.$[bed].movedOutAt": null,
+          },
+          $inc: { currentOccupancy: 1 },
+          $push: {
+            checkInCheckOutHistory: historyEntry,
+            "beds.$[bed].history": historyEntry,
+          },
         },
+        { new: true, session, arrayFilters: [{ "bed._id": bedId }] }
+      );
 
-        $inc: { currentOccupancy: 1 },
-        $push: {
-          checkInCheckOutHistory: historyEntry,
-          "beds.$[bed].history": historyEntry,
-        },
-      },
-      { new: true, session, arrayFilters: [{ "bed._id": bedId }] }
-    );
-
-    if (!updatedRoom) {
-      await session.abortTransaction();
-      return res.status(400).json({
-        success: false,
-        message: "Bed/Room not found or already occupied",
-      });
+      if (!updatedRoom) {
+        await session.abortTransaction();
+        return res.status(400).json({
+          success: false,
+          message: "Bed/Room not found or already occupied",
+        });
+      }
     }
 
     await guest.save({ session });
