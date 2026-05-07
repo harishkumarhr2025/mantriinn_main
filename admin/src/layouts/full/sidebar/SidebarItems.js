@@ -15,9 +15,6 @@ const SidebarItems = () => {
   const allowRoleManagement = canManageRoles(currentUser);
 
   const visibleItems = Menuitems.filter((item) => {
-    if (item.href === '/salon-report' && !allowReports) {
-      return false;
-    }
     if (item.href === '/roles' && !allowRoleManagement) {
       return false;
     }

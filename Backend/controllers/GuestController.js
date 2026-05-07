@@ -4,6 +4,9 @@ import { generateGRCNo } from "../utils/generateGRCNo.js";
 import { CheckOutEmail } from "../utils/CheckOutEmail.js";
 import { WelcomeEmail } from "../utils/WelcomeEmail.js";
 import { SendEmail } from "../utils/SendEmail.js";
+import ScheduledWhatsApp from "../models/ScheduledWhatsAppModel.js";
+import WhatsAppTemplate from "../models/WhatsAppTemplateModel.js";
+import sendGlobal91Whatsapp from "../utils/sendGlobal91WhatsApp.js";
 import mongoose from "mongoose";
 import moment from "moment";
 // import { generateHTMLInvoice } from "../utils/InvoiceServices.js";
@@ -481,7 +484,7 @@ const createGuest = async (req, res) => {
   session.startTransaction();
   try {
     const { GRC_No, financialYear } = await generateGRCNo(session);
-    const { aadharFront, aadharBack, bedId, roomId, selectedRoom, ...otherFields } = req.body;
+    const { aadharFront, aadharBack, bedId, roomId, selectedRoom, whatsappTemplateIds, ...otherFields } = req.body;
     console.log("create Guest body:", req.body);
 
     const isDaily = otherFields.Guest_type === "Daily";
@@ -571,6 +574,71 @@ const createGuest = async (req, res) => {
       }).catch((err) =>
         console.error("Welcome email failed:", err.message)
       );
+    }
+
+    // Send WhatsApp via Global91 for every new guest (non-blocking)
+    if (guest.Contact_number) {
+      const mobile = String(guest.Contact_number).replace(/\D/g, "");
+      if (mobile.length >= 10) {
+        const arrivalStr = guest.Arrival_date
+          ? new Date(guest.Arrival_date).toLocaleDateString("en-IN", {
+              day: "2-digit", month: "short", year: "numeric",
+            })
+          : "-";
+        const checkoutStr = guest.Checkout_date
+          ? new Date(guest.Checkout_date).toLocaleDateString("en-IN", {
+              day: "2-digit", month: "short", year: "numeric",
+            })
+          : "-";
+
+        const fillTemplate = (body) =>
+          body
+            .replace(/\{\{guest_name\}\}/g, guest.Guest_name || "")
+            .replace(/\{\{room_no\}\}/g, guest.Room_no || "")
+            .replace(/\{\{grc_no\}\}/g, guest.GRC_No || "")
+            .replace(/\{\{arrival_date\}\}/g, arrivalStr)
+            .replace(/\{\{checkout_date\}\}/g, checkoutStr)
+            .replace(/\{\{amount\}\}/g, guest.grand_total ? `₹${guest.grand_total}` : "-")
+            .replace(/\{\{hotel_name\}\}/g, "Mantri In")
+            .replace(/\{\{contact_number\}\}/g, guest.Contact_number || "")
+            .replace(/\{\{agent_name\}\}/g, guest.Agent_commission || "")
+            .replace(/\{\{days\}\}/g, guest.Checkout_date && guest.Arrival_date
+              ? Math.ceil(
+                  (new Date(guest.Checkout_date) - new Date(guest.Arrival_date)) /
+                  (1000 * 60 * 60 * 24)
+                )
+              : "-");
+
+        if (Array.isArray(whatsappTemplateIds) && whatsappTemplateIds.length > 0) {
+          // Send each selected template via Global91
+          WhatsAppTemplate.find({ _id: { $in: whatsappTemplateIds }, isActive: true })
+            .then(async (templates) => {
+              for (const tpl of templates) {
+                const body = fillTemplate(tpl.body);
+                try {
+                  await sendGlobal91Whatsapp({ to: mobile, body });
+                  console.log(`[Global91] Sent "${tpl.name}" to ${mobile}`);
+                } catch (err) {
+                  console.error(`[Global91] Failed "${tpl.name}" to ${mobile}: ${err.message}`);
+                }
+              }
+            })
+            .catch((err) => console.error("WhatsApp template send failed:", err.message));
+        } else {
+          // No templates selected — send default welcome message
+          const defaultMsg =
+            `Welcome to Mantri In, ${guest.Guest_name || "Guest"}! 🎉\n\n` +
+            `Your check-in is confirmed. Here are your details:\n` +
+            `🏨 Room No  : ${guest.Room_no || "-"}\n` +
+            `📅 Arrival  : ${arrivalStr}\n` +
+            `📋 GRC No   : ${guest.GRC_No || "-"}\n\n` +
+            `We hope you have a wonderful stay. For any assistance, feel free to contact us anytime.\n\n` +
+            `Warm regards,\nTeam Mantri In`;
+          sendGlobal91Whatsapp({ to: mobile, body: defaultMsg }).catch((err) =>
+            console.error("[Global91] Default welcome WhatsApp failed:", err.message)
+          );
+        }
+      }
     }
 
     return res
@@ -765,6 +833,7 @@ const guestCheckout = async (req, res) => {
       gstAmount,
       grandTotal,
       remark,
+      whatsappTemplateIds,
     } = req.body;
 
     if (!Checkout_date || !Checkout_time || !guestId) {
@@ -797,13 +866,14 @@ const guestCheckout = async (req, res) => {
       });
     }
 
-    // Find the room where this guest is currently assigned
+    // Find the room where this guest is currently assigned (non-daily guests only)
+    const isDaily = guestExist.Guest_type === "Daily";
     const occupiedRoom = await Room.findOne({
       "beds.tenant": guestId,
       "beds.status": "occupied",
     }).session(session);
 
-    if (!occupiedRoom) {
+    if (!occupiedRoom && !isDaily) {
       await session.abortTransaction();
       return res.status(404).json({
         success: false,
@@ -811,84 +881,60 @@ const guestCheckout = async (req, res) => {
       });
     }
 
-    // Find the specific bed this guest is occupying
+    let updatedRoom = null;
 
-    const occupiedBed = occupiedRoom.beds.find(
-      (bed) => bed.tenant?.toString() === guestId && bed.status === "occupied"
-    );
+    if (occupiedRoom) {
+      // Find the specific bed this guest is occupying
+      const occupiedBed = occupiedRoom.beds.find(
+        (bed) => bed.tenant?.toString() === guestId && bed.status === "occupied"
+      );
 
-    console.log("occupiedBed:", occupiedBed);
+      console.log("occupiedBed:", occupiedBed);
 
-    if (!occupiedBed) {
-      await session.abortTransaction();
-      return res.status(404).json({
-        success: false,
-        message: "No bed assignment found for this guest",
-      });
-    }
-    const checkoutHistory = {
-      tenant: guestId,
-      checkOutDate: new Date(Checkout_date),
-      bedId: occupiedBed._id,
-    };
-
-    // Update the room - free up the bed
-    // const updatedRoom = await Room.findOneAndUpdate(
-    //   {
-    //     "beds.tenant": guestId,
-    //   },
-    //   {
-    //     $set: {
-    //       "beds.$[bed].status": "available",
-    //       "beds.$[bed].tenant": null,
-    //       "beds.$[bed].movedOutAt": Date.now(),
-    //     },
-    //     $inc: { currentOccupancy: -1 },
-    //     $push: {
-    //       "beds.$[bed].history": checkoutHistory,
-    //       checkInCheckOutHistory: checkoutHistory,
-    //     },
-    //   },
-    //   { new: true, session, arrayFilters: [{ "bed.tenant": guestId }] }
-    // );
-
-    // Update room and bed history
-    const updatedRoom = await Room.findOneAndUpdate(
-      {
-        _id: occupiedRoom._id,
-        "beds._id": occupiedBed._id,
-      },
-      {
-        $set: {
-          "beds.$.status": "available",
-          "beds.$.tenant": null,
-          "beds.$.movedOutAt": new Date(),
-          "beds.$.history.$[bedHist].checkOutDate": new Date(Checkout_date),
-          "checkInCheckOutHistory.$[roomHist].checkOutDate": new Date(
-            Checkout_date
-          ),
-        },
-        $inc: { currentOccupancy: -1 },
-      },
-      {
-        arrayFilters: [
-          { "bedHist.tenant": guestId, "bedHist.checkOutDate": null },
-          { "roomHist.tenant": guestId, "roomHist.checkOutDate": null },
-        ],
-        new: true,
-        session,
+      if (!occupiedBed) {
+        await session.abortTransaction();
+        return res.status(404).json({
+          success: false,
+          message: "No bed assignment found for this guest",
+        });
       }
-    );
 
-    if (!updatedRoom) {
-      await session.abortTransaction();
-      return res.status(400).json({
-        success: false,
-        message: "Failed to update room/bed status",
-      });
+      // Update room and bed history
+      updatedRoom = await Room.findOneAndUpdate(
+        {
+          _id: occupiedRoom._id,
+          "beds._id": occupiedBed._id,
+        },
+        {
+          $set: {
+            "beds.$.status": "available",
+            "beds.$.tenant": null,
+            "beds.$.movedOutAt": new Date(),
+            "beds.$.history.$[bedHist].checkOutDate": new Date(Checkout_date),
+            "checkInCheckOutHistory.$[roomHist].checkOutDate": new Date(Checkout_date),
+          },
+          $inc: { currentOccupancy: -1 },
+        },
+        {
+          arrayFilters: [
+            { "bedHist.tenant": guestId, "bedHist.checkOutDate": null },
+            { "roomHist.tenant": guestId, "roomHist.checkOutDate": null },
+          ],
+          new: true,
+          session,
+        }
+      );
+
+      if (!updatedRoom) {
+        await session.abortTransaction();
+        return res.status(400).json({
+          success: false,
+          message: "Failed to update room/bed status",
+        });
+      }
+
+      console.log("Checkout guest history:", updatedRoom);
     }
-
-    console.log("Checkout guest history:", updatedRoom);
 
     guestExist.Checkout_date = Checkout_date;
     guestExist.Checkout_time = Checkout_time;
@@ -941,6 +987,63 @@ const guestCheckout = async (req, res) => {
       console.log(`Checkout email sent to ${guestExist.Guest_email}`);
     } catch (error) {
       console.log("Failed to sent the Email");
+    }
+
+    // Send WhatsApp via Global91 on checkout (non-blocking)
+    if (guestExist.Contact_number) {
+      const mobile = String(guestExist.Contact_number).replace(/\D/g, "");
+      if (mobile.length >= 10) {
+        const checkoutDateStr = new Date(Checkout_date).toLocaleDateString("en-IN", {
+          day: "2-digit", month: "short", year: "numeric",
+        });
+        const arrivalStr = guestExist.Arrival_date
+          ? new Date(guestExist.Arrival_date).toLocaleDateString("en-IN", {
+              day: "2-digit", month: "short", year: "numeric",
+            })
+          : "-";
+        const days = guestExist.Arrival_date
+          ? Math.ceil((new Date(Checkout_date) - new Date(guestExist.Arrival_date)) / (1000 * 60 * 60 * 24))
+          : "-";
+
+        const fillTemplate = (body) =>
+          body
+            .replace(/\{\{guest_name\}\}/g, guestExist.Guest_name || "")
+            .replace(/\{\{room_no\}\}/g, guestExist.Room_no || "")
+            .replace(/\{\{grc_no\}\}/g, guestExist.GRC_No || "")
+            .replace(/\{\{arrival_date\}\}/g, arrivalStr)
+            .replace(/\{\{checkout_date\}\}/g, checkoutDateStr)
+            .replace(/\{\{amount\}\}/g, grandTotal ? `₹${grandTotal}` : "-")
+            .replace(/\{\{hotel_name\}\}/g, "Mantri In")
+            .replace(/\{\{contact_number\}\}/g, guestExist.Contact_number || "")
+            .replace(/\{\{agent_name\}\}/g, guestExist.Agent_commission || "")
+            .replace(/\{\{days\}\}/g, String(days));
+
+        if (Array.isArray(whatsappTemplateIds) && whatsappTemplateIds.length > 0) {
+          WhatsAppTemplate.find({ _id: { $in: whatsappTemplateIds }, isActive: true })
+            .then(async (templates) => {
+              for (const tpl of templates) {
+                const body = fillTemplate(tpl.body);
+                try {
+                  await sendGlobal91Whatsapp({ to: mobile, body });
+                  console.log(`[Global91] Checkout "${tpl.name}" sent to ${mobile}`);
+                } catch (err) {
+                  console.error(`[Global91] Checkout "${tpl.name}" failed for ${mobile}: ${err.message}`);
+                }
+              }
+            })
+            .catch((err) => console.error("Checkout WhatsApp template send failed:", err.message));
+        } else {
+          // No templates selected — send default checkout confirmation
+          const defaultMsg =
+            `Dear ${guestExist.Guest_name || "Guest"},\n\n` +
+            `Thank you for staying at Mantri In! 🙏\n\n` +
+            `We hope to see you again soon. Have a safe journey!\n\n` +
+            `Warm regards,\nTeam Mantri In`;
+          sendGlobal91Whatsapp({ to: mobile, body: defaultMsg }).catch((err) =>
+            console.error("[Global91] Default checkout WhatsApp failed:", err.message)
+          );
+        }
+      }
     }
 
     return res.status(200).json({

@@ -22,13 +22,13 @@ const AboutUS = Loadable(lazy(() => import('../views/QuickLinks/AboutUs')));
 const FAQ = Loadable(lazy(() => import('../views/QuickLinks/FAQ')));
 const PrivacyPolicy = Loadable(lazy(() => import('../views/QuickLinks/PrivacyPolicy')));
 const TNC = Loadable(lazy(() => import('../views/QuickLinks/TNC')));
-const Salon = Loadable(lazy(() => import('../views/Salon/Salon')));
-const SalonServices = Loadable(lazy(() => import('../views/Salon/SalonServices')));
-const SalonReport = Loadable(lazy(() => import('../views/Salon/SalonReport')));
 const Employee = Loadable(lazy(() => import('../views/Employee/Employee')));
 const Roles = Loadable(lazy(() => import('../views/Roles/Roles')));
 const ProductManagement = Loadable(
   lazy(() => import('../views/ProductManagement/ProductManagement')),
+);
+const WhatsAppTemplates = Loadable(
+  lazy(() => import('../views/WhatsAppTemplates/WhatsAppTemplates')),
 );
 
 const Router = [
@@ -48,17 +48,15 @@ const Router = [
     children: [
       {
         path: '/dashboard',
-        element: <Protected Component={Dashboard} allowedRoles={['admin', 'semi admin', 'salonfrontoffice']} />,
+        element: <Protected Component={Dashboard} allowedRoles={['admin', 'semi admin']} />,
       },
       { path: '/agents', element: <Protected Component={Agents} /> },
       { path: '/guest-entry', element: <Protected Component={GuestEntry} /> },
       { path: '/room-management', element: <Protected Component={Room} /> },
-      { path: '/salon-management', element: <Protected Component={Salon} /> },
-      { path: '/salon-services', element: <Protected Component={SalonServices} /> },
-      { path: '/salon-report', element: <Protected Component={SalonReport} allowedRoles={['admin']} /> },
       { path: '/roles', element: <Protected Component={Roles} allowedRoles={['admin']} /> },
       { path: '/product-manage', element: <Protected Component={ProductManagement} /> },
       { path: '/manage-employee', element: <Protected Component={Employee} /> },
+      { path: '/whatsapp-templates', element: <Protected Component={WhatsAppTemplates} allowedRoles={['admin', 'semi admin']} /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

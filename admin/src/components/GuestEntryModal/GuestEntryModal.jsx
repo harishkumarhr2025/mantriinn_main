@@ -41,6 +41,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Config from '../Config';
 import axios from 'axios';
 import { useDebounce } from 'use-debounce';
@@ -110,6 +111,8 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
   const [isCheckingGuest, setIsCheckingGuest] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingBeds, setLoadingBeds] = useState(false);
+  const [waTemplates, setWaTemplates] = useState([]);
+  const [selectedWaTemplates, setSelectedWaTemplates] = useState([]);
 
   const [debouncedPhone] = useDebounce(guestDetails.Contact_number, 500);
 
@@ -420,6 +423,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
           aadharFront: cloudinaryFrontUrl,
           aadharBack: cloudinaryBackUrl,
           Guest_picture: cloudinaryGuestPicture,
+          whatsappTemplateIds: selectedWaTemplates,
         }),
       };
 
@@ -708,9 +712,23 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
     const fetchData = async () => {
       await handleRoom();
     };
-
     fetchData();
   }, []);
+
+  // Fetch check-in WhatsApp templates when modal opens
+  useEffect(() => {
+    if (!open || guest) return; // only for new guests
+    Config.get('/whatsapp/templates', { params: { isActive: true } })
+      .then((res) => {
+        setWaTemplates(res.data?.data || []);
+        // Pre-select check-in templates by default
+        const defaultSelected = (res.data?.data || [])
+          .filter((t) => t.category === 'check-in')
+          .map((t) => t._id);
+        setSelectedWaTemplates(defaultSelected);
+      })
+      .catch(() => setWaTemplates([]));
+  }, [open, guest]);
 
   useEffect(() => {
     if (guestDetails.roomId) {
@@ -1801,6 +1819,61 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                         </Grid>
                       ))}
                     </Grid>
+                  </Box>
+                )}
+
+                {/* WhatsApp template selector — only for new guests */}
+                {!guest && waTemplates.length > 0 && (
+                  <Box
+                    sx={{
+                      mt: 3,
+                      p: 2,
+                      border: '1px solid #e0e0e0',
+                      borderRadius: 2,
+                      bgcolor: '#f0fdf4',
+                    }}
+                  >
+                    <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
+                      <WhatsAppIcon sx={{ color: '#25D366' }} fontSize="small" />
+                      <Typography variant="subtitle2" fontWeight={700}>
+                        Send WhatsApp Messages on Check-in
+                      </Typography>
+                    </Stack>
+                    <Typography variant="caption" color="text.secondary" display="block" mb={1.5}>
+                      Select templates to send to the guest after successful check-in:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {waTemplates.map((t) => {
+                        const selected = selectedWaTemplates.includes(t._id);
+                        return (
+                          <Chip
+                            key={t._id}
+                            label={t.name}
+                            clickable
+                            color={selected ? 'success' : 'default'}
+                            variant={selected ? 'filled' : 'outlined'}
+                            icon={
+                              selected ? (
+                                <CheckCircleIcon style={{ fontSize: 16 }} />
+                              ) : undefined
+                            }
+                            onClick={() =>
+                              setSelectedWaTemplates((prev) =>
+                                prev.includes(t._id)
+                                  ? prev.filter((id) => id !== t._id)
+                                  : [...prev, t._id],
+                              )
+                            }
+                            sx={{ textTransform: 'capitalize' }}
+                          />
+                        );
+                      })}
+                    </Box>
+                    {selectedWaTemplates.length > 0 && (
+                      <Typography variant="caption" color="success.main" sx={{ mt: 1, display: 'block' }}>
+                        {selectedWaTemplates.length} template{selectedWaTemplates.length > 1 ? 's' : ''} will be sent
+                      </Typography>
+                    )}
                   </Box>
                 )}
 

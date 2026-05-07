@@ -35,7 +35,7 @@ const normalizeRole = (role) =>
 
 const toDisplayRole = (role) => {
   const normalized = normalizeRole(role);
-  if (normalized === 'semiadmin' || normalized === 'salonfrontoffice') {
+  if (normalized === 'semiadmin') {
     return 'semi admin';
   }
   if (normalized === 'admin') return 'admin';

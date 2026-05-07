@@ -1,11 +1,11 @@
 import {
   IconLayoutDashboard,
-  IconScissors,
   IconMan,
   IconCar,
   IconHome2,
   IconTools,
   IconReport,
+  IconBrandWhatsapp,
 } from '@tabler/icons';
 import { uniqueId } from 'lodash';
 
@@ -39,28 +39,6 @@ const Menuitems = [
   },
   {
     navlabel: true,
-    subheader: 'Salon',
-  },
-  {
-    id: uniqueId(),
-    title: 'Salon',
-    icon: IconScissors,
-    href: '/salon-management',
-  },
-  {
-    id: uniqueId(),
-    title: 'Salon Report',
-    icon: IconReport,
-    href: '/salon-report',
-  },
-  {
-    id: uniqueId(),
-    title: 'Salon Services',
-    icon: IconTools,
-    href: '/salon-services',
-  },
-  {
-    navlabel: true,
     subheader: 'Employee Managements',
   },
   {
@@ -88,6 +66,16 @@ const Menuitems = [
     title: 'Manage Agents',
     icon: IconCar,
     href: '/agents',
+  },
+  {
+    navlabel: true,
+    subheader: 'WhatsApp',
+  },
+  {
+    id: uniqueId(),
+    title: 'WA Templates',
+    icon: IconBrandWhatsapp,
+    href: '/whatsapp-templates',
   },
   {
     navlabel: true,

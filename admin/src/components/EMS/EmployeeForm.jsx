@@ -951,7 +951,6 @@ const EmployeesForm = ({ open, onClose, employeeDetail }) => {
                   error={!!errors['otherInfo.workplace']}
                   helperText={errors['otherInfo.workplace']}
                 >
-                  <MenuItem value="Salon">Salon</MenuItem>
                   <MenuItem value="PG">PG</MenuItem>
                   <MenuItem value="Home">Home</MenuItem>
                 </TextField>

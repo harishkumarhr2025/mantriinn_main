@@ -47,7 +47,7 @@ const Header = () => {
 
   // Determine actual authentication status
   const isReallyAuthenticated = isAuthenticated && !!user;
-  const allowedDashboardRoles = ['admin', 'semiadmin', 'salonfrontoffice'];
+  const allowedDashboardRoles = ['admin', 'semiadmin'];
   const canShowDashboard = allowedDashboardRoles.includes(normalizeRole(user?.role));
 
   const navItems = [

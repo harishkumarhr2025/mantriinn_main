@@ -332,7 +332,7 @@ const GuestSlice = createSlice({
     });
 
     builder.addCase(guestCheckout.fulfilled, (state, action) => {
-      const updatedGuest = action.payload;
+      const updatedGuest = action.payload?.data?.guest || action.payload;
       state.allGuests = state.allGuests.map((guest) =>
         guest._id === updatedGuest._id ? updatedGuest : guest,
       );

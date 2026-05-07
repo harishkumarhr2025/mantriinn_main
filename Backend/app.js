@@ -16,7 +16,9 @@ import SalonServiceRouter from "./routers/Salon/SalonServiceRouter.js";
 import EmployeeRouter from "./routers/EmployeeRouter.js";
 import SalonRouter from "./routers/Salon/SalonRouter.js";
 import ProductRouter from "./routers/ProductRouter.js";
-import { initDailyReportCron } from "./Services/cronJob.js";
+import WhatsAppRouter from "./routers/WhatsAppRouter.js";
+import { initDailyReportCron, initScheduledWhatsAppCron, initCheckoutReminderCron } from "./Services/cronJob.js";
+import { seedWhatsAppTemplates } from "./scripts/seedWhatsAppTemplates.js";
 
 import connectDB from "./DB/ConnectDB.js";
 // import { generateMonthlySalonReportPDF } from "./PDF/Salon/generateSalonReportPDF.js";
@@ -55,10 +57,12 @@ const localUpload = multer({
   },
 });
 
-connectDB(process.env.MONGO_URL_PROD);
-// connectDB(process.env.MONGO_URL_DEV);
+connectDB(process.env.MONGO_URL_PROD).then(() => seedWhatsAppTemplates());
+// connectDB(process.env.MONGO_URL_DEV).then(() => seedWhatsAppTemplates());
 // Start cron when server starts
 initDailyReportCron();
+initScheduledWhatsAppCron();
+initCheckoutReminderCron();
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -90,6 +94,7 @@ app.use("/api/v1", SalonServiceRouter);
 app.use("/api/v1", EmployeeRouter);
 app.use("/api/v1", SalonRouter);
 app.use("/api/v1", ProductRouter);
+app.use("/api/v1", WhatsAppRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at Port:${PORT}`);

@@ -12,7 +12,11 @@ import {
   Paper,
   Grid,
   CircularProgress,
+  Chip,
 } from '@mui/material';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Config from '../Config';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -34,12 +38,33 @@ const CheckoutModal = ({ open, handleClose, opacityValue, guest, handleCategoryS
   const [GSTRate, setGSTRate] = useState(12);
   const [remark, setRemark] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [waTemplates, setWaTemplates] = useState([]);
+  const [selectedWaTemplates, setSelectedWaTemplates] = useState([]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     setGuestDetails({ Checkout_date: dayjs(), Checkout_time: dayjs() });
   }, [open, guest]);
+
+  // Fetch checkout & reminder WhatsApp templates when modal opens
+  useEffect(() => {
+    if (!open) return;
+    Config.get('/whatsapp/templates', { params: { isActive: true } })
+      .then((res) => {
+        const all = res.data?.data || [];
+        const checkoutTemplates = all.filter(
+          (t) => t.category === 'checkout' || t.category === 'reminder',
+        );
+        setWaTemplates(checkoutTemplates);
+        // Pre-select checkout templates by default
+        const defaultSelected = checkoutTemplates
+          .filter((t) => t.category === 'checkout')
+          .map((t) => t._id);
+        setSelectedWaTemplates(defaultSelected);
+      })
+      .catch(() => setWaTemplates([]));
+  }, [open]);
 
   useEffect(() => {
     if (guest) {
@@ -91,6 +116,7 @@ const CheckoutModal = ({ open, handleClose, opacityValue, guest, handleCategoryS
         gstAmount: gstAmount,
         grandTotal: grandTotal,
         remark,
+        whatsappTemplateIds: selectedWaTemplates,
       };
 
       const checkoutResponse = await dispatch(guestCheckout(checkout_data)).unwrap();
@@ -320,6 +346,58 @@ const CheckoutModal = ({ open, handleClose, opacityValue, guest, handleCategoryS
                 onChange={(e) => setRemark(e.target.value)}
               />
             </Box>
+
+            {/* WhatsApp template selector for checkout */}
+            {waTemplates.length > 0 && (
+              <Box
+                sx={{
+                  mt: 3,
+                  p: 2,
+                  border: '1px solid #e0e0e0',
+                  borderRadius: 2,
+                  bgcolor: '#f0fdf4',
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
+                  <WhatsAppIcon sx={{ color: '#25D366' }} fontSize="small" />
+                  <Typography variant="subtitle2" fontWeight={700}>
+                    Send WhatsApp on Checkout
+                  </Typography>
+                </Stack>
+                <Typography variant="caption" color="text.secondary" display="block" mb={1.5}>
+                  Select templates to send to the guest after successful checkout:
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {waTemplates.map((t) => {
+                    const selected = selectedWaTemplates.includes(t._id);
+                    return (
+                      <Chip
+                        key={t._id}
+                        label={`${t.name}${t.category === 'reminder' ? ' (Reminder)' : ''}`}
+                        clickable
+                        color={selected ? 'success' : 'default'}
+                        variant={selected ? 'filled' : 'outlined'}
+                        icon={selected ? <CheckCircleIcon style={{ fontSize: 16 }} /> : undefined}
+                        onClick={() =>
+                          setSelectedWaTemplates((prev) =>
+                            prev.includes(t._id)
+                              ? prev.filter((id) => id !== t._id)
+                              : [...prev, t._id],
+                          )
+                        }
+                        sx={{ textTransform: 'capitalize' }}
+                      />
+                    );
+                  })}
+                </Box>
+                {selectedWaTemplates.length > 0 && (
+                  <Typography variant="caption" color="success.main" sx={{ mt: 1, display: 'block' }}>
+                    {selectedWaTemplates.length} template
+                    {selectedWaTemplates.length > 1 ? 's' : ''} will be sent
+                  </Typography>
+                )}
+              </Box>
+            )}
           </Paper>
 
           <Box sx={{ marginTop: '20px' }}>

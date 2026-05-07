@@ -136,6 +136,10 @@ const guestSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Room",
     },
+    checkoutReminderSent: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
