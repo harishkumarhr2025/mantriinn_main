@@ -26,40 +26,53 @@ import * as XLSX from 'xlsx';
 
 const TEMPLATE_HEADERS = [
   'GRC_No',
+  'financialYear',
   'Guest_name',
   'Guest_picture',
   'Guest_email',
   'Guest_type',
-  'Contact_number',
   'Guest_aadhar_No',
+  'Contact_number',
   'Guest_address',
   'Emergency_number',
-  'Adults',
-  'Children',
-  'Purpose_of_visit',
-  'Booking_details',
-  'Room_no',
-  'Room_type',
-  'Room_tariff',
+  'date_of_birth',
   'Arrival_date',
   'Arrival_time',
   'Checkout_date',
   'Checkout_time',
+  'Room_no',
+  'Room_type',
+  'Room_tariff',
+  'Adults',
+  'Children',
+  'Booking_details',
+  'Purpose_of_visit',
   'Payment_type',
   'Agent_commission',
   'Profession_type',
-  'registration_fee',
-  'advance_deposit',
-  'meal_plan',
-  'Guest_nationality',
+  'status',
+  'totalRoomRent',
+  'GSTAmount',
   'grand_total',
   'remark',
+  'Guest_nationality',
+  'Guest_ID_Proof',
+  'meal_plan',
+  'registration_fee',
+  'advance_deposit',
+  'bedId',
   'bedNumber',
-  'status',
+  'roomId',
+  'checkoutReminderSent',
+  '_id',
+  'createdAt',
+  'updatedAt',
+  '__v',
 ];
 
 const TEMPLATE_EXAMPLE_ROW = {
   GRC_No: '',
+  financialYear: '2026-2027',
   Guest_name: 'Ravi Kumar',
   Guest_picture: '',
   Guest_email: 'ravi@example.com',
@@ -82,15 +95,32 @@ const TEMPLATE_EXAMPLE_ROW = {
   Payment_type: 'Cash',
   Agent_commission: '0',
   Profession_type: 'Business',
-  registration_fee: '0',
-  advance_deposit: '500',
-  meal_plan: 'breakfast,lunch',
-  Guest_nationality: 'Indian',
+  status: 'active',
+  totalRoomRent: '2500',
+  GSTAmount: '450',
   grand_total: '3000',
   remark: '',
+  Guest_nationality: 'Indian',
+  Guest_ID_Proof: '[{"imageUrl":"https://example.com/id-front.jpg"}]',
+  meal_plan: 'breakfast,lunch',
+  registration_fee: '0',
+  advance_deposit: '500',
+  date_of_birth: '1998-09-15',
+  bedId: '',
   bedNumber: 'A1',
-  status: 'active',
+  roomId: '',
+  checkoutReminderSent: 'false',
+  _id: '',
+  createdAt: '',
+  updatedAt: '',
+  __v: '',
 };
+
+const normalizeHeader = (header) =>
+  String(header || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '');
 
 const formatFileSize = (bytes) => {
   if (!bytes) {
@@ -177,8 +207,35 @@ const GuestImportDialog = ({ open, onClose, onImport, onPreview, isImporting }) 
     }
 
     const headers = Object.keys(rows[0] || {});
-    const matchedHeaders = TEMPLATE_HEADERS.filter((header) => headers.includes(header));
-    const missingHeaders = TEMPLATE_HEADERS.filter((header) => !headers.includes(header));
+    const expectedNormalized = TEMPLATE_HEADERS.map(normalizeHeader);
+    const actualNormalized = headers.map(normalizeHeader);
+
+    const matchedHeaders = TEMPLATE_HEADERS.filter((header) =>
+      actualNormalized.includes(normalizeHeader(header)),
+    );
+    const missingHeaders = TEMPLATE_HEADERS.filter(
+      (header) => !actualNormalized.includes(normalizeHeader(header)),
+    );
+    const unexpectedHeaders = headers.filter(
+      (header) => !expectedNormalized.includes(normalizeHeader(header)),
+    );
+
+    if (missingHeaders.length || unexpectedHeaders.length) {
+      const missingPart = missingHeaders.length
+        ? `Missing: ${missingHeaders.join(', ')}`
+        : '';
+      const unexpectedPart = unexpectedHeaders.length
+        ? `Unexpected: ${unexpectedHeaders.join(', ')}`
+        : '';
+      throw new Error(
+        `Invalid file format. Please import only files exported from Guest Entry (All Fields). ${[
+          missingPart,
+          unexpectedPart,
+        ]
+          .filter(Boolean)
+          .join(' | ')}`,
+      );
+    }
 
     return {
       rows,

@@ -70,6 +70,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
     Contact_number: '',
     Guest_address: '',
     Emergency_number: '',
+    date_of_birth: null,
     Arrival_date: '',
     Arrival_time: '',
     Checkout_date: '',
@@ -194,6 +195,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
 
     Contact_number: phoneValidation,
     Emergency_number: phoneValidation,
+    date_of_birth: Yup.date().nullable().optional(),
     Room_no: Yup.string().required('Room No is required'),
     bedId: Yup.string().when('Guest_type', {
       is: 'Daily',
@@ -598,6 +600,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
         Contact_number: '',
         Guest_address: '',
         Emergency_number: '',
+        date_of_birth: null,
         Checkout_date: '',
         Checkout_time: '',
         Room_no: '',
@@ -936,6 +939,29 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     )}
                   </FormControl>
                 </Box>
+
+                <Box sx={{ display: 'flex', gap: 2, marginTop: '20px' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Date of Birth"
+                      value={guestDetails.date_of_birth ? dayjs(guestDetails.date_of_birth) : null}
+                      onChange={(newValue) =>
+                        setGuestDetails({ ...guestDetails, date_of_birth: newValue ? newValue.toDate() : null })
+                      }
+                      inputFormat="DD/MM/YYYY"
+                      disableFuture
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Date of Birth"
+                          helperText="Optional — used for birthday wishes"
+                          sx={{ width: '50%' }}
+                        />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Box>
+
                 {guestDetails.Guest_type === 'Monthly' ? (
                   <Box
                     sx={{

@@ -5,6 +5,7 @@ import {
   generateSalonDailyReport,
 } from "../controllers/ReportController.js";
 import ScheduledWhatsApp from "../models/ScheduledWhatsAppModel.js";
+import WhatsAppTemplate from "../models/WhatsAppTemplateModel.js";
 import sendGlobal91Whatsapp from "../utils/sendGlobal91WhatsApp.js";
 import Guest from "../models/GuestModel.js";
 
@@ -78,6 +79,70 @@ export const initDailyReportCron = () => {
 };
 
 export { initScheduledWhatsAppCron };
+
+/**
+ * Re-schedule next year's birthday messages for guests whose birthday is TODAY.
+ * Runs daily at 00:05 IST (18:35 UTC previous day).
+ */
+export const initBirthdayReschedulerCron = () => {
+  // 00:05 IST = 18:35 UTC
+  cron.schedule("35 18 * * *", async () => {
+    try {
+      const istOffset = 330 * 60 * 1000;
+      const nowUTC = new Date();
+      const nowIST = new Date(nowUTC.getTime() + istOffset);
+      const todayMonth = nowIST.getUTCMonth(); // 0-indexed
+      const todayDay = nowIST.getUTCDate();
+
+      // Find guests whose birthday month+day matches today
+      const guests = await Guest.find({
+        date_of_birth: { $exists: true, $ne: null },
+        Contact_number: { $exists: true, $ne: "" },
+      });
+
+      const todayGuests = guests.filter((g) => {
+        const dob = new Date(g.date_of_birth);
+        return dob.getUTCMonth() === todayMonth && dob.getUTCDate() === todayDay;
+      });
+
+      if (todayGuests.length === 0) return;
+
+      const [onDayTpl, dayBeforeTpl] = await Promise.all([
+        WhatsAppTemplate.findOne({ name: "Birthday wish(on the day)", isActive: true }),
+        WhatsAppTemplate.findOne({ name: "Birthday Wish(1 day before)", isActive: true }),
+      ]);
+
+      for (const guest of todayGuests) {
+        const mobile = String(guest.Contact_number).replace(/\D/g, "");
+        if (mobile.length < 10) continue;
+
+        const fillBody = (body) =>
+          body
+            .replace(/\{\{guest_name\}\}/g, guest.Guest_name || "Guest")
+            .replace(/\{\{hotel_name\}\}/g, "Mantri In")
+            .replace(/\{\{room_no\}\}/g, guest.Room_no || "")
+            .replace(/\{\{grc_no\}\}/g, guest.GRC_No || "");
+
+        // Schedule next year at midnight IST
+        const nextYear = nowIST.getUTCFullYear() + 1;
+        const dob = new Date(guest.date_of_birth);
+        const onDayAt = new Date(Date.UTC(nextYear, dob.getUTCMonth(), dob.getUTCDate()) - istOffset);
+        const dayBeforeAt = new Date(onDayAt.getTime() - 24 * 60 * 60 * 1000);
+
+        const docs = [];
+        if (dayBeforeTpl) docs.push({ to: mobile, body: fillBody(dayBeforeTpl.body), scheduledAt: dayBeforeAt, guestId: guest._id });
+        if (onDayTpl)     docs.push({ to: mobile, body: fillBody(onDayTpl.body),     scheduledAt: onDayAt,    guestId: guest._id });
+
+        if (docs.length > 0) {
+          await ScheduledWhatsApp.insertMany(docs);
+          console.log(`[BirthdayRescheduler] Rescheduled ${docs.length} msg(s) for ${mobile} → ${nextYear}`);
+        }
+      }
+    } catch (err) {
+      console.error("Birthday rescheduler error:", err.message);
+    }
+  }, { scheduled: true, timezone: "Asia/Kolkata" });
+};
 
 // Send WhatsApp reminder 1 hour before checkout — runs every minute
 export const initCheckoutReminderCron = () => {

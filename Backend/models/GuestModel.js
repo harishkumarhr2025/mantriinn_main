@@ -140,6 +140,9 @@ const guestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    date_of_birth: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

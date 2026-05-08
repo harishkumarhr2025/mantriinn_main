@@ -27,8 +27,8 @@ import SearchBar from 'src/components/SearchBar/SearchBar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
-import { CSVLink } from 'react-csv';
 import DownloadIcon from '@mui/icons-material/Download';
+import * as XLSX from 'xlsx';
 
 import GroupIcon from '@mui/icons-material/Group';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +54,52 @@ import PaginationControl from 'src/components/PaginationControl/PaginationContro
 import ReportModal from '../../components/ReportModal/ReportModal';
 import Config from '../../components/Config';
 import { canModifyRecords, canViewReports, canExportData } from '../../utils/permissions';
+
+const GUEST_EXPORT_IMPORT_HEADERS = [
+  'GRC_No',
+  'financialYear',
+  'Guest_name',
+  'Guest_picture',
+  'Guest_email',
+  'Guest_type',
+  'Guest_aadhar_No',
+  'Contact_number',
+  'Guest_address',
+  'Emergency_number',
+  'date_of_birth',
+  'Arrival_date',
+  'Arrival_time',
+  'Checkout_date',
+  'Checkout_time',
+  'Room_no',
+  'Room_type',
+  'Room_tariff',
+  'Adults',
+  'Children',
+  'Booking_details',
+  'Purpose_of_visit',
+  'Payment_type',
+  'Agent_commission',
+  'Profession_type',
+  'status',
+  'totalRoomRent',
+  'GSTAmount',
+  'grand_total',
+  'remark',
+  'Guest_nationality',
+  'Guest_ID_Proof',
+  'meal_plan',
+  'registration_fee',
+  'advance_deposit',
+  'bedId',
+  'bedNumber',
+  'roomId',
+  'checkoutReminderSent',
+  '_id',
+  'createdAt',
+  'updatedAt',
+  '__v',
+];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -118,26 +164,6 @@ const GuestEntry = () => {
   const allowImport = canModifyRecords(currentUser);
   const allowReports = canViewReports(currentUser);
   const allowExport = canExportData(currentUser);
-
-  const csvHeaders = [
-    { label: 'GRC No.', key: 'GRC_No' },
-    { label: 'Guest Name', key: 'Guest_name' },
-    { label: 'Email', key: 'Guest_email' },
-    { label: 'Contact', key: 'Contact_number' },
-    { label: 'Aadhar_No', key: 'Guest_aadhar_No' },
-    { label: 'Address', key: 'Guest_address' },
-    { label: 'Adults', key: 'Adults' },
-    { label: 'Children', key: 'Children' },
-    { label: 'Purpose', key: 'Purpose_of_visit' },
-    { label: 'Room No.', key: 'Room_no' },
-    { label: 'Room Type', key: 'Room_type' },
-    { label: 'Guest Type', key: 'Guest_type' },
-    { label: 'Check-In Date', key: 'Arrival_date' },
-    { label: 'Check-Out Date', key: 'Checkout_date' },
-    { label: 'Total Amount (₹)', key: 'grand_total' },
-    { label: 'Payment Type', key: 'Payment_type' },
-    { label: 'Status', key: 'status' },
-  ];
 
   const guests = useMemo(() => (Array.isArray(allGuests) ? allGuests : []), [allGuests]);
 
@@ -300,29 +326,51 @@ const GuestEntry = () => {
     );
   }, [openDetailsModal, guestId, updateDetailsModal, handleCloseDetailsModal, handleModalSubmit]);
 
-  const csvData = completeGuests.map((guest) => ({
-    GRC_No: guest.GRC_No || 'N/A',
-    Guest_name: guest.Guest_name,
-    Contact_number: guest.Contact_number,
-    Room_no: guest.Room_no,
-    Guest_type: guest.Guest_type,
-    Room_type: guest.Room_type,
-    Guest_email: guest.Guest_email,
-    Guest_aadhar_No: guest.Guest_aadhar_No,
-    Guest_address: guest.Guest_address,
-    Adults: guest.Adults,
-    Children: guest.Children,
-    Purpose_of_visit: guest.Purpose_of_visit,
-    Arrival_date: guest.Arrival_date
-      ? new Date(guest.Arrival_date).toLocaleDateString('en-IN')
-      : 'N/A',
-    Checkout_date: guest.Checkout_date
-      ? new Date(guest.Checkout_date).toLocaleDateString('en-IN')
-      : 'Not Checked Out',
-    grand_total: guest.grand_total ? `₹${guest.grand_total.toLocaleString('en-IN')}` : '0',
-    Payment_type: guest.Payment_type,
-    status: guest.Checkout_date ? 'Checked Out' : 'Active',
-  }));
+  const formatExcelCellValue = useCallback((value) => {
+    if (value === null || typeof value === 'undefined') {
+      return '';
+    }
+
+    if (Array.isArray(value)) {
+      return value
+        .map((item) => {
+          if (item && typeof item === 'object') {
+            return JSON.stringify(item);
+          }
+          return String(item);
+        })
+        .join(', ');
+    }
+
+    if (value && typeof value === 'object') {
+      return JSON.stringify(value);
+    }
+
+    return value;
+  }, []);
+
+  const handleExportExcel = useCallback(() => {
+    if (!Array.isArray(completeGuests) || completeGuests.length === 0) {
+      Toast.error('No guest data available to export.');
+      return;
+    }
+
+    const exportKeys = GUEST_EXPORT_IMPORT_HEADERS;
+    const exportRows = completeGuests.map((guest) => {
+      const row = {};
+      exportKeys.forEach((key) => {
+        row[key] = formatExcelCellValue(guest?.[key]);
+      });
+      return row;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(exportRows, { header: exportKeys });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Guest Entry');
+
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    XLSX.writeFile(workbook, `guest-entry-all-fields-${timestamp}.xlsx`);
+  }, [completeGuests, formatExcelCellValue]);
 
   const refreshGuestLists = async ({
     page = pagination.page,
@@ -583,33 +631,27 @@ const GuestEntry = () => {
             </Button>
           )}
           {allowExport && (
-            <CSVLink
-              data={csvData}
-              headers={csvHeaders}
-              filename="guest-list.csv"
-              style={{ textDecoration: 'none' }}
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<DownloadIcon />}
+              onClick={handleExportExcel}
+              sx={{
+                float: 'right',
+                p: 1.5,
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                boxShadow: 2,
+                '&:hover': {
+                  boxShadow: 4,
+                  transform: 'translateY(-1px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<DownloadIcon />}
-                sx={{
-                  float: 'right',
-                  p: 1.5,
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  boxShadow: 2,
-                  '&:hover': {
-                    boxShadow: 4,
-                    transform: 'translateY(-1px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Export CSV
-              </Button>
-            </CSVLink>
+              Export Excel (All Fields)
+            </Button>
           )}
         </Box>
       </Box>

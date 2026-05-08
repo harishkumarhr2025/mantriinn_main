@@ -42,10 +42,61 @@ const importableGuestFields = [
   "grand_total",
   "remark",
   "Guest_nationality",
+  "Guest_ID_Proof",
   "meal_plan",
   "registration_fee",
   "advance_deposit",
+  "date_of_birth",
+  "bedId",
   "bedNumber",
+  "roomId",
+  "checkoutReminderSent",
+];
+
+const expectedGuestImportHeaders = [
+  "GRC_No",
+  "financialYear",
+  "Guest_name",
+  "Guest_picture",
+  "Guest_email",
+  "Guest_type",
+  "Guest_aadhar_No",
+  "Contact_number",
+  "Guest_address",
+  "Emergency_number",
+  "date_of_birth",
+  "Arrival_date",
+  "Arrival_time",
+  "Checkout_date",
+  "Checkout_time",
+  "Room_no",
+  "Room_type",
+  "Room_tariff",
+  "Adults",
+  "Children",
+  "Booking_details",
+  "Purpose_of_visit",
+  "Payment_type",
+  "Agent_commission",
+  "Profession_type",
+  "status",
+  "totalRoomRent",
+  "GSTAmount",
+  "grand_total",
+  "remark",
+  "Guest_nationality",
+  "Guest_ID_Proof",
+  "meal_plan",
+  "registration_fee",
+  "advance_deposit",
+  "bedId",
+  "bedNumber",
+  "roomId",
+  "checkoutReminderSent",
+  "_id",
+  "createdAt",
+  "updatedAt",
+  "__v",
 ];
 
 const normalizedFieldLookup = importableGuestFields.reduce((lookup, field) => {
@@ -130,6 +181,17 @@ const headerAliases = {
   gst_amount: "GSTAmount",
   bednumber: "bedNumber",
   bed_number: "bedNumber",
+  bedid: "bedId",
+  bed_id: "bedId",
+  roomid: "roomId",
+  room_id: "roomId",
+  dob: "date_of_birth",
+  dateofbirth: "date_of_birth",
+  date_of_birth: "date_of_birth",
+  checkoutremindersent: "checkoutReminderSent",
+  checkout_reminder_sent: "checkoutReminderSent",
+  guestidproof: "Guest_ID_Proof",
+  guest_id_proof: "Guest_ID_Proof",
 };
 
 function normalizeFieldName(header) {
@@ -195,7 +257,7 @@ const sanitizeValue = (field, value) => {
     return undefined;
   }
 
-  if (["Arrival_date", "Checkout_date"].includes(field)) {
+  if (["Arrival_date", "Checkout_date", "date_of_birth"].includes(field)) {
     return parseDateField(value);
   }
 
@@ -217,11 +279,45 @@ const sanitizeValue = (field, value) => {
     return String(value).trim();
   }
 
+  if (["bedId", "roomId"].includes(field)) {
+    return String(value).trim();
+  }
+
+  if (field === "checkoutReminderSent") {
+    const normalized = String(value).trim().toLowerCase();
+    return ["true", "1", "yes", "y"].includes(normalized);
+  }
+
   if (field === "meal_plan") {
     return String(value)
       .split(/[|,]/)
       .map((item) => item.trim().toLowerCase())
       .filter(Boolean);
+  }
+
+  if (field === "Guest_ID_Proof") {
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    const raw = String(value).trim();
+    if (!raw) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      if (parsed && typeof parsed === "object") {
+        return [parsed];
+      }
+    } catch (_error) {
+      // Ignore malformed Guest_ID_Proof payload and fallback to empty array.
+    }
+
+    return [];
   }
 
   if (field === "status") {
@@ -264,6 +360,37 @@ const mapImportedGuestRow = (row) => {
   }
 
   return mappedRow;
+};
+
+const validateGuestImportHeaders = (rows) => {
+  if (!Array.isArray(rows) || !rows.length) {
+    return;
+  }
+
+  const actualHeaders = Object.keys(rows[0] || {});
+  const normalizedExpected = expectedGuestImportHeaders.map((header) => normalizeFieldName(header));
+  const normalizedActual = actualHeaders.map((header) => normalizeFieldName(header));
+
+  const missingHeaders = expectedGuestImportHeaders.filter(
+    (header) => !normalizedActual.includes(normalizeFieldName(header))
+  );
+  const unexpectedHeaders = actualHeaders.filter(
+    (header) => !normalizedExpected.includes(normalizeFieldName(header))
+  );
+
+  if (missingHeaders.length || unexpectedHeaders.length) {
+    const issues = [];
+    if (missingHeaders.length) {
+      issues.push(`Missing: ${missingHeaders.join(", ")}`);
+    }
+    if (unexpectedHeaders.length) {
+      issues.push(`Unexpected: ${unexpectedHeaders.join(", ")}`);
+    }
+
+    throw new Error(
+      `Invalid guest import format. Please import only files exported from Guest Entry (All Fields). ${issues.join(" | ")}`
+    );
+  }
 };
 
 const getNextGRCNumber = async (financialYear, cache) => {
@@ -479,6 +606,63 @@ const analyzeImportRows = async (rows, options = {}) => {
   };
 };
 
+/**
+ * Calculate the next occurrence of a birthday at midnight IST (00:00 IST = 18:30 UTC prev day).
+ * Returns a UTC Date.
+ */
+const nextBirthdayMidnightUTC = (dob, referenceDate = new Date()) => {
+  const d = new Date(dob);
+  const now = new Date(referenceDate);
+  // Work in IST (UTC+5:30 = +330 min)
+  const istOffset = 330 * 60 * 1000;
+  const nowIST = new Date(now.getTime() + istOffset);
+  let year = nowIST.getUTCFullYear();
+
+  // Build midnight IST on birthday this year
+  // midnight IST = 00:00:00 IST = (prev day) 18:30:00 UTC
+  const birthdayMidnightIST = new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()) - istOffset);
+
+  // If already past this year's birthday midnight, use next year
+  if (birthdayMidnightIST <= now) {
+    const next = new Date(Date.UTC(year + 1, d.getUTCMonth(), d.getUTCDate()) - istOffset);
+    return next;
+  }
+  return birthdayMidnightIST;
+};
+
+const scheduleBirthdayMessages = async (guest) => {
+  const [onDayTpl, dayBeforeTpl] = await Promise.all([
+    WhatsAppTemplate.findOne({ name: "Birthday wish(on the day)", isActive: true }),
+    WhatsAppTemplate.findOne({ name: "Birthday Wish(1 day before)", isActive: true }),
+  ]);
+
+  if (!onDayTpl && !dayBeforeTpl) return;
+
+  const mobile = String(guest.Contact_number).replace(/\D/g, "");
+  if (mobile.length < 10) return;
+
+  const fillBody = (body) =>
+    body
+      .replace(/\{\{guest_name\}\}/g, guest.Guest_name || "Guest")
+      .replace(/\{\{hotel_name\}\}/g, "Mantri In")
+      .replace(/\{\{room_no\}\}/g, guest.Room_no || "")
+      .replace(/\{\{grc_no\}\}/g, guest.GRC_No || "");
+
+  const onDayAt = nextBirthdayMidnightUTC(guest.date_of_birth);       // 00:00 IST on birthday
+  const dayBeforeAt = new Date(onDayAt.getTime() - 24 * 60 * 60 * 1000); // 00:00 IST day before
+
+  const docs = [];
+  if (dayBeforeTpl) {
+    docs.push({ to: mobile, body: fillBody(dayBeforeTpl.body), scheduledAt: dayBeforeAt, guestId: guest._id });
+  }
+  if (onDayTpl) {
+    docs.push({ to: mobile, body: fillBody(onDayTpl.body), scheduledAt: onDayAt, guestId: guest._id });
+  }
+
+  await ScheduledWhatsApp.insertMany(docs);
+  console.log(`[Birthday] Scheduled ${docs.length} message(s) for ${mobile} (next birthday: ${onDayAt.toISOString()})`);
+};
+
 const createGuest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -573,6 +757,13 @@ const createGuest = async (req, res) => {
         }),
       }).catch((err) =>
         console.error("Welcome email failed:", err.message)
+      );
+    }
+
+    // Schedule birthday WhatsApp messages (non-blocking)
+    if (guest.Contact_number && guest.date_of_birth) {
+      scheduleBirthdayMessages(guest).catch((err) =>
+        console.error("Birthday scheduling failed:", err.message)
       );
     }
 
@@ -1112,6 +1303,8 @@ const previewGuestImport = async (req, res) => {
       });
     }
 
+    validateGuestImportHeaders(rows);
+
     const preview = await analyzeImportRows(rows, { forceCreate, persist: false });
 
     return res.status(200).json({
@@ -1141,6 +1334,8 @@ const importGuests = async (req, res) => {
         message: "No rows found in the uploaded sheet",
       });
     }
+
+    validateGuestImportHeaders(rows);
 
     const result = await analyzeImportRows(rows, { forceCreate, persist: true });
 

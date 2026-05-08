@@ -17,7 +17,7 @@ import EmployeeRouter from "./routers/EmployeeRouter.js";
 import SalonRouter from "./routers/Salon/SalonRouter.js";
 import ProductRouter from "./routers/ProductRouter.js";
 import WhatsAppRouter from "./routers/WhatsAppRouter.js";
-import { initDailyReportCron, initScheduledWhatsAppCron, initCheckoutReminderCron } from "./Services/cronJob.js";
+import { initDailyReportCron, initScheduledWhatsAppCron, initCheckoutReminderCron, initBirthdayReschedulerCron } from "./Services/cronJob.js";
 import { seedWhatsAppTemplates } from "./scripts/seedWhatsAppTemplates.js";
 
 import connectDB from "./DB/ConnectDB.js";
@@ -63,6 +63,7 @@ connectDB(process.env.MONGO_URL_PROD).then(() => seedWhatsAppTemplates());
 initDailyReportCron();
 initScheduledWhatsAppCron();
 initCheckoutReminderCron();
+initBirthdayReschedulerCron();
 // Middleware
 app.use(cors());
 app.use(express.json());

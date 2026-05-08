@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "migrate:remove-salon-checkout-date": "node scripts/removeSalonCheckoutDateFields.js"
+    "migrate:remove-salon-checkout-date": "node scripts/removeSalonCheckoutDateFields.js",
+    "migrate:guest-new-fields": "node scripts/backfillGuestNewFields.js",
+    "migrate:sync-recent-db-changes": "node scripts/syncRecentDbChanges.js"
   },
   "keywords": [],
   "author": "",
