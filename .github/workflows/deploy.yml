@@ -91,11 +91,6 @@ jobs:
           script: |
             set -euo pipefail
 
-            cat > /var/www/mantri_inn/shared/.env.backend << 'EOF'
-            ${{ secrets.BACKEND_ENV_FILE }}
-            EOF
-            chmod 600 /var/www/mantri_inn/shared/.env.backend
-
             RELEASE_ID="$(date +%Y%m%d%H%M%S)"
             /var/www/mantri_inn/scripts/deploy.sh "$RELEASE_ID" /tmp/frontend.tgz /tmp/backend.tgz
 
