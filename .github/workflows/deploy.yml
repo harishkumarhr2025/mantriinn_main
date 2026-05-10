@@ -17,48 +17,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # ── Build + Deploy on VPS self-hosted runner ────────────────────────────────
   deploy:
     runs-on: self-hosted
     if: ${{ github.event.inputs.rollback_release == '' }}
 
     steps:
-      - name: Checkout
+      - name: Checkout latest code
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Build frontend
         run: |
-          set -e
           cp /var/www/mantri_inn/shared/.env.frontend admin/.env.production
           cd admin
           npm ci
           CI=false npm run build
 
-      - name: Package artifacts
+      - name: Deploy frontend
         run: |
-          tar -czf /tmp/frontend.tgz -C admin build
-          tar \
-            --exclude='.git' \
-            --exclude='node_modules' \
-            --exclude='.env' \
-            -czf /tmp/backend.tgz -C Backend .
-
-      - name: Deploy
-        run: |
-          set -euo pipefail
-          RELEASE_ID="$(date +%Y%m%d%H%M%S)"
-          /var/www/mantri_inn/scripts/deploy.sh \
-            "$RELEASE_ID" \
-            /tmp/frontend.tgz \
-            /tmp/backend.tgz
+          rm -rf /var/www/mantri_inn/frontend/current/build
+          cp -r admin/build /var/www/mantri_inn/frontend/current/build
           sudo systemctl reload nginx
 
-  # ── Rollback job (manual trigger only) ─────────────────────────────────────
+      - name: Deploy backend
+        run: |
+          cp -r Backend/. /var/www/mantri_inn/backend/current/
+          cd /var/www/mantri_inn/backend/current
+          npm ci --omit=dev
+          pm2 reload mantriinn-backend
+
   rollback:
     runs-on: self-hosted
     if: ${{ github.event.inputs.rollback_release != '' }}
@@ -66,6 +52,5 @@ jobs:
     steps:
       - name: Rollback
         run: |
-          set -e
           /var/www/mantri_inn/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
           sudo systemctl reload nginx
