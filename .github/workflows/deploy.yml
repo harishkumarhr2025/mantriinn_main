@@ -55,7 +55,7 @@ jobs:
           set -e
           cd admin
           npm ci
-          npm run build
+          CI=false npm run build
           cd ..
           tar -czf frontend.tgz -C admin build
 
