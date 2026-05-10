@@ -5,11 +5,11 @@ RELEASE_ID="${1:?release id required}"
 FRONTEND_TGZ="${2:?frontend archive required}"
 BACKEND_TGZ="${3:?backend archive required}"
 
-BASE="/var/www/salon-app"
+BASE="/var/www/mantri_inn"
 FRONT_BASE="$BASE/frontend"
 BACK_BASE="$BASE/backend"
 SHARED="$BASE/shared"
-LOG_FILE="/var/log/salon-app/deploy.log"
+LOG_FILE="/var/log/mantri_inn/deploy.log"
 
 FRONT_RELEASE="$FRONT_BASE/releases/$RELEASE_ID"
 BACK_RELEASE="$BACK_BASE/releases/$RELEASE_ID"

@@ -3,7 +3,7 @@ set -euo pipefail
 
 RELEASE_ID="${1:?release id required}"
 
-BASE="/var/www/salon-app"
+BASE="/var/www/mantri_inn"
 FRONT_BASE="$BASE/frontend"
 BACK_BASE="$BASE/backend"
 SHARED="$BASE/shared"

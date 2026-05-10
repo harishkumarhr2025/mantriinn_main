@@ -39,7 +39,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             set -e
-            /var/www/salon-app/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
+            /var/www/mantri_inn/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
             sudo systemctl reload nginx
 
       - name: Write frontend production env
@@ -91,12 +91,12 @@ jobs:
           script: |
             set -euo pipefail
 
-            cat > /var/www/salon-app/shared/.env.backend << 'EOF'
+            cat > /var/www/mantri_inn/shared/.env.backend << 'EOF'
             ${{ secrets.BACKEND_ENV_FILE }}
             EOF
-            chmod 600 /var/www/salon-app/shared/.env.backend
+            chmod 600 /var/www/mantri_inn/shared/.env.backend
 
             RELEASE_ID="$(date +%Y%m%d%H%M%S)"
-            /var/www/salon-app/scripts/deploy.sh "$RELEASE_ID" /tmp/frontend.tgz /tmp/backend.tgz
+            /var/www/mantri_inn/scripts/deploy.sh "$RELEASE_ID" /tmp/frontend.tgz /tmp/backend.tgz
 
             sudo systemctl reload nginx

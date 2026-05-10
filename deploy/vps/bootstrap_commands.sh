@@ -8,8 +8,8 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt install -y nodejs
 npm install -g pm2
 
-mkdir -p /var/www/salon-app/{frontend/releases,backend/releases,shared,scripts}
-mkdir -p /var/log/salon-app
+mkdir -p /var/www/mantri_inn/{frontend/releases,backend/releases,shared,scripts}
+mkdir -p /var/log/mantri_inn
 
 # Create deploy user if missing.
 if ! id -u deploy >/dev/null 2>&1; then
@@ -18,9 +18,9 @@ if ! id -u deploy >/dev/null 2>&1; then
   usermod -aG www-data deploy
 fi
 
-chown -R deploy:deploy /var/www/salon-app
-chown -R deploy:deploy /var/log/salon-app
-chmod -R 755 /var/www/salon-app
+chown -R deploy:deploy /var/www/mantri_inn
+chown -R deploy:deploy /var/log/mantri_inn
+chmod -R 755 /var/www/mantri_inn
 
 # Firewall baseline.
 ufw default deny incoming
