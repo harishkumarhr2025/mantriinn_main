@@ -17,9 +17,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # ── Job 1: Build on GitHub cloud (fast, powerful) ──────────────────────────
-  build:
-    runs-on: ubuntu-latest
+  # ── Build + Deploy on VPS self-hosted runner ────────────────────────────────
+  deploy:
+    runs-on: self-hosted
     if: ${{ github.event.inputs.rollback_release == '' }}
 
     steps:
@@ -31,49 +31,22 @@ jobs:
         with:
           node-version: 20
 
-      - name: Write frontend production env
-        run: |
-          printf '%s' "$FRONTEND_ENV" > admin/.env.production
-        env:
-          FRONTEND_ENV: ${{ secrets.FRONTEND_ENV_FILE }}
-
       - name: Build frontend
         run: |
           set -e
+          cp /var/www/mantri_inn/shared/.env.frontend admin/.env.production
           cd admin
           npm ci
           CI=false npm run build
 
       - name: Package artifacts
         run: |
-          tar -czf frontend.tgz -C admin build
+          tar -czf /tmp/frontend.tgz -C admin build
           tar \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.env' \
-            -czf backend.tgz -C Backend .
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: deploy-artifacts
-          path: |
-            frontend.tgz
-            backend.tgz
-          retention-days: 1
-
-  # ── Job 2: Deploy on VPS self-hosted runner (no inbound SSH/SCP needed) ─────
-  deploy:
-    runs-on: self-hosted
-    needs: build
-    if: ${{ github.event.inputs.rollback_release == '' }}
-
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: deploy-artifacts
-          path: /tmp/mantriinn-artifacts
+            -czf /tmp/backend.tgz -C Backend .
 
       - name: Deploy
         run: |
@@ -81,11 +54,11 @@ jobs:
           RELEASE_ID="$(date +%Y%m%d%H%M%S)"
           /var/www/mantri_inn/scripts/deploy.sh \
             "$RELEASE_ID" \
-            /tmp/mantriinn-artifacts/frontend.tgz \
-            /tmp/mantriinn-artifacts/backend.tgz
+            /tmp/frontend.tgz \
+            /tmp/backend.tgz
           sudo systemctl reload nginx
 
-  # ── Rollback job (manual trigger only) ────────────────────────────────────
+  # ── Rollback job (manual trigger only) ─────────────────────────────────────
   rollback:
     runs-on: self-hosted
     if: ${{ github.event.inputs.rollback_release != '' }}
