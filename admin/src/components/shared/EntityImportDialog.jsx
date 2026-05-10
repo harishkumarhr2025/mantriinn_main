@@ -23,20 +23,15 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useDropzone } from 'react-dropzone';
 import * as XLSX from 'xlsx';
+import { useTranslation } from 'react-i18next';
 
-const actionConfig = {
-  insert: { color: 'success', label: 'Insert' },
-  update: { color: 'warning', label: 'Update' },
-  skip: { color: 'error', label: 'Skip' },
-};
-
-const formatFileSize = (bytes) => {
-  if (!bytes) return '0 KB';
+const formatFileSize = (bytes, t) => {
+  if (!bytes) return `0 ${t('importDialog.units.kb', { defaultValue: 'KB' })}`;
   const sizeInKb = bytes / 1024;
   if (sizeInKb < 1024) {
-    return `${sizeInKb.toFixed(1)} KB`;
+    return `${sizeInKb.toFixed(1)} ${t('importDialog.units.kb', { defaultValue: 'KB' })}`;
   }
-  return `${(sizeInKb / 1024).toFixed(2)} MB`;
+  return `${(sizeInKb / 1024).toFixed(2)} ${t('importDialog.units.mb', { defaultValue: 'MB' })}`;
 };
 
 const EntityImportDialog = ({
@@ -53,6 +48,7 @@ const EntityImportDialog = ({
   templateFileName,
   sheetName = 'Import',
 }) => {
+  const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewSummary, setPreviewSummary] = useState(null);
   const [previewResult, setPreviewResult] = useState(null);
@@ -87,7 +83,7 @@ const EntityImportDialog = ({
       const worksheet = workbook.Sheets[preferredSheetName || workbook.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false });
       if (!rows.length) {
-        throw new Error('The selected file does not contain any importable rows.');
+        throw new Error(t('importDialog.errors.noImportableRows', { defaultValue: 'The selected file does not contain any importable rows.' }));
       }
       const headers = Object.keys(rows[0] || {});
       return {
@@ -113,12 +109,12 @@ const EntityImportDialog = ({
         setPreviewResult(result);
       } catch (error) {
         setPreviewResult(null);
-        setErrorMessage(error.message || 'Unable to preview import actions.');
+        setErrorMessage(error.message || t('importDialog.errors.previewFailed', { defaultValue: 'Unable to preview import actions.' }));
       } finally {
         setIsPreviewLoading(false);
       }
     },
-    [onPreview],
+    [onPreview, t],
   );
 
   const handleFileSelection = useCallback(
@@ -134,21 +130,21 @@ const EntityImportDialog = ({
         setSelectedFile(null);
         setPreviewSummary(null);
         setPreviewResult(null);
-        setErrorMessage(error.message || 'Unable to read the selected file.');
+        setErrorMessage(error.message || t('importDialog.errors.readFailed', { defaultValue: 'Unable to read the selected file.' }));
       }
     },
-    [forceCreate, parseFilePreview, requestPreview],
+    [forceCreate, parseFilePreview, requestPreview, t],
   );
 
   const onDrop = useCallback(
     async (acceptedFiles, rejectedFiles) => {
       if (rejectedFiles?.length) {
-        setErrorMessage(rejectedFiles[0]?.errors?.[0]?.message || 'Invalid file selected.');
+        setErrorMessage(rejectedFiles[0]?.errors?.[0]?.message || t('importDialog.errors.invalidFile', { defaultValue: 'Invalid file selected.' }));
         return;
       }
       await handleFileSelection(acceptedFiles[0]);
     },
-    [handleFileSelection],
+    [handleFileSelection, t],
   );
 
   const { getRootProps, getInputProps, isDragActive, open: openFileDialog } = useDropzone({
@@ -184,14 +180,14 @@ const EntityImportDialog = ({
 
   const handleImportClick = useCallback(async () => {
     if (!selectedFile || !previewSummary?.rows?.length) {
-      setErrorMessage('Choose a valid CSV or Excel file before importing.');
+      setErrorMessage(t('importDialog.errors.chooseFileBeforeImport', { defaultValue: 'Choose a valid CSV or Excel file before importing.' }));
       return;
     }
     const result = await onImport(previewSummary.rows, { forceCreate });
     if (result?.success) {
       setImportResult(result);
     }
-  }, [forceCreate, onImport, previewSummary, selectedFile]);
+  }, [forceCreate, onImport, previewSummary, selectedFile, t]);
 
   const handleResultClose = useCallback(() => {
     setImportResult(null);
@@ -201,10 +197,23 @@ const EntityImportDialog = ({
 
   const helperText = useMemo(() => {
     if (!previewSummary) {
-      return 'Drag and drop a CSV/XLS/XLSX file here, or choose it from your computer.';
+      return t('importDialog.helper.dropOrChoose', { defaultValue: 'Drag and drop a CSV/XLS/XLSX file here, or choose it from your computer.' });
     }
-    return `${previewSummary.rows.length} row(s) found in sheet "${previewSummary.sheetName}".`;
-  }, [previewSummary]);
+    return t('importDialog.helper.rowsFound', {
+      count: previewSummary.rows.length,
+      sheetName: previewSummary.sheetName,
+      defaultValue: '{{count}} row(s) found in sheet "{{sheetName}}".',
+    });
+  }, [previewSummary, t]);
+
+  const actionConfig = useMemo(
+    () => ({
+      insert: { color: 'success', label: t('importDialog.actions.insert', { defaultValue: 'Insert' }) },
+      update: { color: 'warning', label: t('importDialog.actions.update', { defaultValue: 'Update' }) },
+      skip: { color: 'error', label: t('importDialog.actions.skip', { defaultValue: 'Skip' }) },
+    }),
+    [t],
+  );
 
   return (
     <>
@@ -230,17 +239,19 @@ const EntityImportDialog = ({
               <input {...getInputProps()} />
               <CloudUploadIcon color={isDragActive ? 'primary' : 'action'} sx={{ fontSize: 44 }} />
               <Typography variant="h6" sx={{ mt: 1.5, mb: 1 }}>
-                {isDragActive ? 'Drop the import sheet here' : 'Drag and drop CSV or Excel here'}
+                {isDragActive
+                  ? t('importDialog.dropzone.activeTitle', { defaultValue: 'Drop the import sheet here' })
+                  : t('importDialog.dropzone.idleTitle', { defaultValue: 'Drag and drop CSV or Excel here' })}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {helperText}
               </Typography>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 2.5, justifyContent: 'center' }}>
                 <Button variant="contained" onClick={openFileDialog} disabled={isImporting}>
-                  Choose File
+                  {t('importDialog.buttons.chooseFile', { defaultValue: 'Choose File' })}
                 </Button>
                 <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleDownloadTemplate}>
-                  Download Template
+                  {t('importDialog.buttons.downloadTemplate', { defaultValue: 'Download Template' })}
                 </Button>
               </Stack>
             </Paper>
@@ -258,34 +269,34 @@ const EntityImportDialog = ({
                           {selectedFile.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {formatFileSize(selectedFile.size)}
+                          {formatFileSize(selectedFile.size, t)}
                         </Typography>
                       </Box>
                     </Box>
                     <Button color="error" startIcon={<DeleteOutlineIcon />} onClick={resetState} disabled={isImporting}>
-                      Remove
+                      {t('importDialog.buttons.remove', { defaultValue: 'Remove' })}
                     </Button>
                   </Box>
 
                   <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                    <Chip label={`Rows: ${previewSummary.rows.length}`} color="primary" variant="outlined" />
-                    <Chip label={`Matched headers: ${previewSummary.matchedHeaders.length}`} color="success" variant="outlined" />
-                    <Chip label={`Missing headers: ${previewSummary.missingHeaders.length}`} color={previewSummary.missingHeaders.length ? 'warning' : 'default'} variant="outlined" />
+                    <Chip label={t('importDialog.summary.rows', { count: previewSummary.rows.length, defaultValue: 'Rows: {{count}}' })} color="primary" variant="outlined" />
+                    <Chip label={t('importDialog.summary.matchedHeaders', { count: previewSummary.matchedHeaders.length, defaultValue: 'Matched headers: {{count}}' })} color="success" variant="outlined" />
+                    <Chip label={t('importDialog.summary.missingHeaders', { count: previewSummary.missingHeaders.length, defaultValue: 'Missing headers: {{count}}' })} color={previewSummary.missingHeaders.length ? 'warning' : 'default'} variant="outlined" />
                   </Stack>
 
                   <FormControlLabel
                     control={<Switch checked={forceCreate} onChange={handleForceCreateChange} />}
-                    label="Always create new rows instead of updating matches"
+                    label={t('importDialog.forceCreateLabel', { defaultValue: 'Always create new rows instead of updating matches' })}
                   />
 
                   {isPreviewLoading ? (
-                    <Alert severity="info">Checking which rows will be inserted, updated, or skipped...</Alert>
+                    <Alert severity="info">{t('importDialog.preview.checking', { defaultValue: 'Checking which rows will be inserted, updated, or skipped...' })}</Alert>
                   ) : previewResult ? (
                     <Stack spacing={2}>
                       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                        <Chip label={`Will insert: ${previewResult.insertedCount}`} color="success" />
-                        <Chip label={`Will update: ${previewResult.updatedCount}`} color="warning" />
-                        <Chip label={`Will skip: ${previewResult.skippedCount}`} color="error" />
+                        <Chip label={t('importDialog.preview.willInsert', { count: previewResult.insertedCount, defaultValue: 'Will insert: {{count}}' })} color="success" />
+                        <Chip label={t('importDialog.preview.willUpdate', { count: previewResult.updatedCount, defaultValue: 'Will update: {{count}}' })} color="warning" />
+                        <Chip label={t('importDialog.preview.willSkip', { count: previewResult.skippedCount, defaultValue: 'Will skip: {{count}}' })} color="error" />
                       </Stack>
                       {previewResult.note && <Alert severity="info">{previewResult.note}</Alert>}
                       <List dense sx={{ maxHeight: 240, overflowY: 'auto', border: 1, borderColor: 'divider', borderRadius: 2 }}>
@@ -303,7 +314,12 @@ const EntityImportDialog = ({
                             }
                           >
                             <ListItemText
-                              primary={`Row ${row.rowNumber}${row.label ? ` - ${row.label}` : ''}`}
+                              primary={t('importDialog.rowLabel', {
+                                rowNumber: row.rowNumber,
+                                label: row.label,
+                                defaultValue: 'Row {{rowNumber}}{{labelSuffix}}',
+                                labelSuffix: row.label ? ` - ${row.label}` : '',
+                              })}
                               secondary={row.reason}
                               secondaryTypographyProps={{ sx: { pr: 8 } }}
                             />
@@ -318,22 +334,22 @@ const EntityImportDialog = ({
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5 }}>
-          <Button onClick={handleClose} disabled={isImporting}>Cancel</Button>
+          <Button onClick={handleClose} disabled={isImporting}>{t('importDialog.buttons.cancel', { defaultValue: 'Cancel' })}</Button>
           <Button variant="contained" onClick={handleImportClick} disabled={isImporting || !selectedFile}>
-            {isImporting ? 'Importing...' : importButtonLabel}
+            {isImporting ? t('importDialog.buttons.importing', { defaultValue: 'Importing...' }) : importButtonLabel}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={Boolean(importResult)} onClose={handleResultClose} fullWidth maxWidth="sm">
-        <DialogTitle>Import Result</DialogTitle>
+        <DialogTitle>{t('importDialog.result.title', { defaultValue: 'Import Result' })}</DialogTitle>
         <DialogContent>
           {importResult && (
             <Stack spacing={2} sx={{ pt: 1 }}>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                <Chip label={`Inserted: ${importResult.insertedCount}`} color="success" />
-                <Chip label={`Updated: ${importResult.updatedCount}`} color="warning" />
-                <Chip label={`Skipped: ${importResult.skippedCount}`} color="error" />
+                <Chip label={t('importDialog.result.inserted', { count: importResult.insertedCount, defaultValue: 'Inserted: {{count}}' })} color="success" />
+                <Chip label={t('importDialog.result.updated', { count: importResult.updatedCount, defaultValue: 'Updated: {{count}}' })} color="warning" />
+                <Chip label={t('importDialog.result.skipped', { count: importResult.skippedCount, defaultValue: 'Skipped: {{count}}' })} color="error" />
               </Stack>
               {importResult.note && <Alert severity="info">{importResult.note}</Alert>}
               <List dense sx={{ maxHeight: 280, overflowY: 'auto', border: 1, borderColor: 'divider', borderRadius: 2 }}>
@@ -351,7 +367,12 @@ const EntityImportDialog = ({
                     }
                   >
                     <ListItemText
-                      primary={`Row ${row.rowNumber}${row.label ? ` - ${row.label}` : ''}`}
+                      primary={t('importDialog.rowLabel', {
+                        rowNumber: row.rowNumber,
+                        label: row.label,
+                        defaultValue: 'Row {{rowNumber}}{{labelSuffix}}',
+                        labelSuffix: row.label ? ` - ${row.label}` : '',
+                      })}
                       secondary={row.reason}
                       secondaryTypographyProps={{ sx: { pr: 8 } }}
                     />
@@ -362,7 +383,7 @@ const EntityImportDialog = ({
           )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5 }}>
-          <Button variant="contained" onClick={handleResultClose}>Close</Button>
+          <Button variant="contained" onClick={handleResultClose}>{t('importDialog.buttons.close', { defaultValue: 'Close' })}</Button>
         </DialogActions>
       </Dialog>
     </>

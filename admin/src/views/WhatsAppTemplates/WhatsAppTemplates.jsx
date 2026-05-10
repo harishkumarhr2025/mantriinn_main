@@ -32,6 +32,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Toast from 'react-hot-toast';
 import Config from '../../components/Config';
 import WhatsAppTemplateModal from '../../components/WhatsAppTemplateModal/WhatsAppTemplateModal';
+import { useTranslation } from 'react-i18next';
 
 const CATEGORY_COLORS = {
   'check-in':  'success',
@@ -42,6 +43,7 @@ const CATEGORY_COLORS = {
 };
 
 const WhatsAppTemplates = () => {
+  const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [filterCategory, setFilterCategory] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -66,7 +68,7 @@ const WhatsAppTemplates = () => {
       const res = await Config.get('/whatsapp/templates', { params });
       setTemplates(res.data?.data || []);
     } catch {
-      Toast.error('Failed to load templates');
+      Toast.error(t('whatsapp.toast.loadFailed', { defaultValue: 'Failed to load templates' }));
     }
   }, [filterCategory]);
 
@@ -78,23 +80,23 @@ const WhatsAppTemplates = () => {
   const openEdit = (t) => { setEditTarget(t);    setModalOpen(true); };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this template?')) return;
+    if (!window.confirm(t('whatsapp.confirm.deleteTemplate', { defaultValue: 'Delete this template?' }))) return;
     try {
       setDeleting(id);
       const res = await Config.delete(`/whatsapp/templates/${id}`);
       if (res.data?.success) {
-        Toast.success('Template deleted');
+        Toast.success(t('whatsapp.toast.deleted', { defaultValue: 'Template deleted' }));
         setTemplates((prev) => prev.filter((t) => t._id !== id));
       }
     } catch {
-      Toast.error('Failed to delete template');
+      Toast.error(t('whatsapp.toast.deleteFailed', { defaultValue: 'Failed to delete template' }));
     } finally {
       setDeleting(null);
     }
   };
 
   const copyBody = (body) => {
-    navigator.clipboard.writeText(body).then(() => Toast.success('Copied!'));
+    navigator.clipboard.writeText(body).then(() => Toast.success(t('whatsapp.toast.copied', { defaultValue: 'Copied!' })));
   };
 
   const openTestDialog = (t) => {
@@ -110,7 +112,7 @@ const WhatsAppTemplates = () => {
 
   const handleSendWA2 = async () => {
     if (!/^[6-9]\d{9}$/.test(wa2Phone)) {
-      Toast.error('Enter a valid 10-digit mobile number');
+      Toast.error(t('whatsapp.toast.invalidMobile', { defaultValue: 'Enter a valid 10-digit mobile number' }));
       return;
     }
     try {
@@ -120,13 +122,13 @@ const WhatsAppTemplates = () => {
         message: wa2Message.trim() || undefined,
       });
       if (res.data?.success) {
-        Toast.success('Message sent via WA2 provider!');
+        Toast.success(t('whatsapp.toast.wa2Sent', { defaultValue: 'Message sent via WA2 provider!' }));
         setWa2Dialog({ open: false, template: null });
       } else {
-        Toast.error(res.data?.message || 'WA2 send failed');
+        Toast.error(res.data?.message || t('whatsapp.toast.wa2Failed', { defaultValue: 'WA2 send failed' }));
       }
     } catch (err) {
-      Toast.error(err.response?.data?.message || 'WA2 send failed');
+      Toast.error(err.response?.data?.message || t('whatsapp.toast.wa2Failed', { defaultValue: 'WA2 send failed' }));
     } finally {
       setWa2Sending(false);
     }
@@ -134,7 +136,7 @@ const WhatsAppTemplates = () => {
 
   const handleSendTest = async () => {
     if (!/^[6-9]\d{9}$/.test(testPhone)) {
-      Toast.error('Enter a valid 10-digit mobile number');
+      Toast.error(t('whatsapp.toast.invalidMobile', { defaultValue: 'Enter a valid 10-digit mobile number' }));
       return;
     }
     try {
@@ -144,13 +146,13 @@ const WhatsAppTemplates = () => {
         to: testPhone,
       });
       if (res.data?.success) {
-        Toast.success(res.data.message || 'Test message scheduled for 1 minute from now!');
+        Toast.success(res.data.message || t('whatsapp.toast.testScheduled', { defaultValue: 'Test message scheduled for 1 minute from now!' }));
         setTestDialog({ open: false, template: null });
       } else {
-        Toast.error(res.data?.message || 'Failed to schedule test');
+        Toast.error(res.data?.message || t('whatsapp.toast.scheduleFailed', { defaultValue: 'Failed to schedule test' }));
       }
     } catch (err) {
-      Toast.error(err.response?.data?.message || 'Failed to schedule test');
+      Toast.error(err.response?.data?.message || t('whatsapp.toast.scheduleFailed', { defaultValue: 'Failed to schedule test' }));
     } finally {
       setTestSending(false);
     }
@@ -161,35 +163,38 @@ const WhatsAppTemplates = () => {
       {/* Header */}
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={3} flexWrap="wrap" gap={1}>
         <Box>
-          <Typography variant="h5" fontWeight={700}>WhatsApp Templates</Typography>
+          <Typography variant="h5" fontWeight={700}>{t('whatsapp.title', { defaultValue: 'WhatsApp Templates' })}</Typography>
           <Typography variant="body2" color="text.secondary">
-            Create and manage message templates with dynamic fields
+            {t('whatsapp.description', { defaultValue: 'Create and manage message templates with dynamic fields' })}
           </Typography>
         </Box>
         <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd}>
-          New Template
+          {t('whatsapp.actions.newTemplate', { defaultValue: 'New Template' })}
         </Button>
       </Stack>
 
       {/* Filter */}
       <Stack direction="row" spacing={2} mb={3} alignItems="center">
         <FormControl size="small" sx={{ minWidth: 180 }}>
-          <InputLabel>Filter by Category</InputLabel>
+          <InputLabel>{t('whatsapp.filter.label', { defaultValue: 'Filter by Category' })}</InputLabel>
           <Select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            label="Filter by Category"
+            label={t('whatsapp.filter.label', { defaultValue: 'Filter by Category' })}
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="">{t('whatsapp.filter.all', { defaultValue: 'All' })}</MenuItem>
             {['check-in', 'checkout', 'reminder', 'promotion', 'custom'].map((c) => (
               <MenuItem key={c} value={c} sx={{ textTransform: 'capitalize' }}>
-                {c.charAt(0).toUpperCase() + c.slice(1)}
+                {t(`whatsapp.categories.${c}`, { defaultValue: c.charAt(0).toUpperCase() + c.slice(1) })}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
         <Typography variant="body2" color="text.secondary">
-          {templates.length} template{templates.length !== 1 ? 's' : ''}
+          {templates.length}{' '}
+          {templates.length === 1
+            ? t('whatsapp.filter.templateSingle', { defaultValue: 'template' })
+            : t('whatsapp.filter.templatePlural', { defaultValue: 'templates' })}
         </Typography>
       </Stack>
 
@@ -202,25 +207,25 @@ const WhatsAppTemplates = () => {
             color: 'text.secondary',
           }}
         >
-          <Typography variant="h6">No templates yet</Typography>
+          <Typography variant="h6">{t('whatsapp.states.noTemplatesTitle', { defaultValue: 'No templates yet' })}</Typography>
           <Typography variant="body2" mt={1}>
-            Click <strong>New Template</strong> to create your first WhatsApp message template.
+            {t('whatsapp.states.noTemplatesDescription', { defaultValue: 'Click New Template to create your first WhatsApp message template.' })}
           </Typography>
         </Box>
       ) : (
         <Grid container spacing={2}>
-          {templates.map((t) => (
-            <Grid item xs={12} sm={6} md={4} key={t._id}>
+          {templates.map((template) => (
+            <Grid item xs={12} sm={6} md={4} key={template._id}>
               <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: 1 }}>
                   {/* Title row */}
                   <Stack direction="row" alignItems="flex-start" justifyContent="space-between" mb={1}>
                     <Typography variant="subtitle1" fontWeight={600} sx={{ wordBreak: 'break-word' }}>
-                      {t.name}
+                      {template.name}
                     </Typography>
                     <Chip
-                      label={t.category}
-                      color={CATEGORY_COLORS[t.category] || 'default'}
+                      label={t(`whatsapp.categories.${template.category}`, { defaultValue: template.category })}
+                      color={CATEGORY_COLORS[template.category] || 'default'}
                       size="small"
                       sx={{ ml: 1, textTransform: 'capitalize', flexShrink: 0 }}
                     />
@@ -228,8 +233,10 @@ const WhatsAppTemplates = () => {
 
                   {/* Status badge */}
                   <Chip
-                    label={t.isActive ? 'Active' : 'Inactive'}
-                    color={t.isActive ? 'success' : 'default'}
+                    label={template.isActive
+                      ? t('whatsapp.status.active', { defaultValue: 'Active' })
+                      : t('whatsapp.status.inactive', { defaultValue: 'Inactive' })}
+                    color={template.isActive ? 'success' : 'default'}
                     size="small"
                     variant="outlined"
                     sx={{ mb: 1.5 }}
@@ -250,18 +257,18 @@ const WhatsAppTemplates = () => {
                       WebkitBoxOrient: 'vertical',
                     }}
                   >
-                    {t.body}
+                    {template.body}
                   </Typography>
 
                   {/* Variables used */}
-                  {t.variables?.length > 0 && (
+                  {template.variables?.length > 0 && (
                     <>
                       <Divider sx={{ my: 1.5 }} />
                       <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
-                        Fields used:
+                        {t('whatsapp.fieldsUsed', { defaultValue: 'Fields used:' })}
                       </Typography>
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {t.variables.map((v) => (
+                        {template.variables.map((v) => (
                           <Chip
                             key={v}
                             label={`{{${v}}}`}
@@ -277,32 +284,32 @@ const WhatsAppTemplates = () => {
 
                 <Divider />
                 <CardActions sx={{ justifyContent: 'flex-end', px: 1.5 }}>
-                  <Tooltip title="Test via WA2 (instant)">
-                    <IconButton size="small" color="success" onClick={() => openWA2Dialog(t)}>
+                  <Tooltip title={t('whatsapp.tooltips.testWa2', { defaultValue: 'Test via WA2 (instant)' })}>
+                    <IconButton size="small" color="success" onClick={() => openWA2Dialog(template)}>
                       <WhatsAppIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Test via Provider 1 (1 min)">
-                    <IconButton size="small" color="info" onClick={() => openTestDialog(t)}>
+                  <Tooltip title={t('whatsapp.tooltips.testProvider1', { defaultValue: 'Test via Provider 1 (1 min)' })}>
+                    <IconButton size="small" color="info" onClick={() => openTestDialog(template)}>
                       <NotificationsActiveIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Copy message">
-                    <IconButton size="small" onClick={() => copyBody(t.body)}>
+                  <Tooltip title={t('whatsapp.tooltips.copyMessage', { defaultValue: 'Copy message' })}>
+                    <IconButton size="small" onClick={() => copyBody(template.body)}>
                       <ContentCopyIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Edit">
-                    <IconButton size="small" color="primary" onClick={() => openEdit(t)}>
+                  <Tooltip title={t('whatsapp.tooltips.edit', { defaultValue: 'Edit' })}>
+                    <IconButton size="small" color="primary" onClick={() => openEdit(template)}>
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Delete">
+                  <Tooltip title={t('whatsapp.tooltips.delete', { defaultValue: 'Delete' })}>
                     <IconButton
                       size="small"
                       color="error"
-                      disabled={deleting === t._id}
-                      onClick={() => handleDelete(t._id)}
+                      disabled={deleting === template._id}
+                      onClick={() => handleDelete(template._id)}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
@@ -317,7 +324,7 @@ const WhatsAppTemplates = () => {
       {/* FAB for mobile */}
       <Fab
         color="primary"
-        aria-label="add template"
+        aria-label={t('whatsapp.actions.addAriaLabel', { defaultValue: 'Add template' })}
         onClick={openAdd}
         sx={{ position: 'fixed', bottom: 24, right: 24, display: { sm: 'none' } }}
       >
@@ -341,36 +348,36 @@ const WhatsAppTemplates = () => {
         <DialogTitle sx={{ pb: 1 }}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <WhatsAppIcon color="success" fontSize="small" />
-            <Typography fontWeight={700}>Test via WA2 Provider</Typography>
+            <Typography fontWeight={700}>{t('whatsapp.wa2Dialog.title', { defaultValue: 'Test via WA2 Provider' })}</Typography>
           </Stack>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Template: <strong>{wa2Dialog.template?.name}</strong>
+            {t('whatsapp.wa2Dialog.templateLabel', { defaultValue: 'Template' })}: <strong>{wa2Dialog.template?.name}</strong>
           </Typography>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Message is sent <strong>instantly</strong> using the secondary WhatsApp provider (WA2).
+            {t('whatsapp.wa2Dialog.description', { defaultValue: 'Message is sent instantly using the secondary WhatsApp provider (WA2).' })}
           </Typography>
           <TextField
-            label="Mobile Number"
+            label={t('whatsapp.wa2Dialog.mobileLabel', { defaultValue: 'Mobile Number' })}
             value={wa2Phone}
             onChange={(e) => setWa2Phone(e.target.value.replace(/\D/g, '').slice(0, 10))}
             fullWidth
             size="small"
-            placeholder="Enter 10-digit mobile"
+            placeholder={t('whatsapp.wa2Dialog.mobilePlaceholder', { defaultValue: 'Enter 10-digit mobile' })}
             inputProps={{ maxLength: 10, inputMode: 'numeric' }}
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Message"
+            label={t('whatsapp.wa2Dialog.messageLabel', { defaultValue: 'Message' })}
             value={wa2Message}
             onChange={(e) => setWa2Message(e.target.value)}
             fullWidth
             size="small"
             multiline
             rows={4}
-            placeholder="Message to send (pre-filled from template body)"
-            helperText="Placeholders like {{guest_name}} will be sent as-is for testing"
+            placeholder={t('whatsapp.wa2Dialog.messagePlaceholder', { defaultValue: 'Message to send (pre-filled from template body)' })}
+            helperText={t('whatsapp.wa2Dialog.helperText', { defaultValue: 'Placeholders like {{guest_name}} will be sent as-is for testing' })}
           />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -380,7 +387,7 @@ const WhatsAppTemplates = () => {
             onClick={() => setWa2Dialog({ open: false, template: null })}
             disabled={wa2Sending}
           >
-            Cancel
+            {t('whatsapp.actions.cancel', { defaultValue: 'Cancel' })}
           </Button>
           <Button
             variant="contained"
@@ -389,7 +396,9 @@ const WhatsAppTemplates = () => {
             onClick={handleSendWA2}
             disabled={wa2Sending || wa2Phone.length !== 10 || !wa2Message.trim()}
           >
-            {wa2Sending ? 'Sending…' : 'Send Now'}
+            {wa2Sending
+              ? t('whatsapp.actions.sending', { defaultValue: 'Sending...' })
+              : t('whatsapp.actions.sendNow', { defaultValue: 'Send Now' })}
           </Button>
         </DialogActions>
       </Dialog>
@@ -404,16 +413,15 @@ const WhatsAppTemplates = () => {
         <DialogTitle sx={{ pb: 1 }}>
           <Stack direction="row" alignItems="center" spacing={1}>
               <NotificationsActiveIcon color="success" fontSize="small" />
-              <Typography fontWeight={700}>Send Test Message</Typography>
+              <Typography fontWeight={700}>{t('whatsapp.testDialog.title', { defaultValue: 'Send Test Message' })}</Typography>
             </Stack>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Template: <strong>{testDialog.template?.name}</strong>
+            {t('whatsapp.testDialog.templateLabel', { defaultValue: 'Template' })}: <strong>{testDialog.template?.name}</strong>
           </Typography>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            The message will be sent with <em>sample/dummy data</em> and delivered in{' '}
-            <strong>~1 minute</strong>.
+            {t('whatsapp.testDialog.description', { defaultValue: 'The message will be sent with sample/dummy data and delivered in ~1 minute.' })}
           </Typography>
 
           {/* Scheduled time preview */}
@@ -428,13 +436,13 @@ const WhatsAppTemplates = () => {
             }}
           >
             <Typography variant="caption" color="success.dark" fontWeight={600}>
-              Scheduled at:{' '}
+              {t('whatsapp.testDialog.scheduledAt', { defaultValue: 'Scheduled at:' })}{' '}
               {new Date(Date.now() + 60000).toLocaleTimeString('en-IN', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
               })}{' '}
-              — {new Date(Date.now() + 60000).toLocaleDateString('en-IN', {
+              - {new Date(Date.now() + 60000).toLocaleDateString('en-IN', {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric',
@@ -443,14 +451,14 @@ const WhatsAppTemplates = () => {
           </Box>
 
           <TextField
-            label="Mobile Number"
+            label={t('whatsapp.testDialog.mobileLabel', { defaultValue: 'Mobile Number' })}
             value={testPhone}
             onChange={(e) => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
             fullWidth
             size="small"
-            placeholder="Enter 10-digit mobile"
+            placeholder={t('whatsapp.testDialog.mobilePlaceholder', { defaultValue: 'Enter 10-digit mobile' })}
             inputProps={{ maxLength: 10, inputMode: 'numeric' }}
-            helperText="WhatsApp will be sent to this number"
+            helperText={t('whatsapp.testDialog.helperText', { defaultValue: 'WhatsApp will be sent to this number' })}
           />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -460,7 +468,7 @@ const WhatsAppTemplates = () => {
             onClick={() => setTestDialog({ open: false, template: null })}
             disabled={testSending}
           >
-            Cancel
+            {t('whatsapp.actions.cancel', { defaultValue: 'Cancel' })}
           </Button>
           <Button
             variant="contained"
@@ -469,7 +477,9 @@ const WhatsAppTemplates = () => {
             onClick={handleSendTest}
             disabled={testSending || testPhone.length !== 10}
           >
-            {testSending ? 'Scheduling…' : 'Schedule Test'}
+            {testSending
+              ? t('whatsapp.actions.scheduling', { defaultValue: 'Scheduling...' })
+              : t('whatsapp.actions.scheduleTest', { defaultValue: 'Schedule Test' })}
           </Button>
         </DialogActions>
       </Dialog>

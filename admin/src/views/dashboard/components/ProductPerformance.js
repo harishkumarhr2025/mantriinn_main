@@ -9,6 +9,7 @@ import {
     Chip
 } from '@mui/material';
 import DashboardCard from '../../../components/shared/DashboardCard';
+import { useTranslation } from 'react-i18next';
 
 const products = [
     {
@@ -51,9 +52,10 @@ const products = [
 
 
 const ProductPerformance = () => {
+    const { t } = useTranslation();
     return (
 
-        <DashboardCard title="Product Performance">
+        <DashboardCard title={t('dashboard.sections.productPerformance.title', { defaultValue: 'Product Performance' })}>
             <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>
                 <Table
                     aria-label="simple table"
@@ -66,27 +68,27 @@ const ProductPerformance = () => {
                         <TableRow>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Id
+                                    {t('dashboard.sections.productPerformance.columns.id', { defaultValue: 'Id' })}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Assigned
+                                    {t('dashboard.sections.productPerformance.columns.assigned', { defaultValue: 'Assigned' })}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Name
+                                    {t('dashboard.sections.productPerformance.columns.name', { defaultValue: 'Name' })}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Priority
+                                    {t('dashboard.sections.productPerformance.columns.priority', { defaultValue: 'Priority' })}
                                 </Typography>
                             </TableCell>
                             <TableCell align="right">
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Budget
+                                    {t('dashboard.sections.productPerformance.columns.budget', { defaultValue: 'Budget' })}
                                 </Typography>
                             </TableCell>
                         </TableRow>
@@ -139,7 +141,12 @@ const ProductPerformance = () => {
                                             color: "#fff",
                                         }}
                                         size="small"
-                                        label={product.priority}
+                                                                                label={t(
+                                                                                    `dashboard.sections.productPerformance.priority.${String(
+                                                                                        product.priority || '',
+                                                                                    ).toLowerCase()}`,
+                                                                                    { defaultValue: product.priority },
+                                                                                )}
                                     ></Chip>
                                 </TableCell>
                                 <TableCell align="right">

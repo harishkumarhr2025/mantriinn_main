@@ -8,6 +8,7 @@ import BedIcon from '@mui/icons-material/Bed';
 import StarIcon from '@mui/icons-material/Star';
 import GroupsIcon from '@mui/icons-material/Groups';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import { useTranslation } from 'react-i18next';
 // components
 import SalesOverview from './components/SalesOverview';
 import YearlyBreakup from './components/YearlyBreakup';
@@ -18,13 +19,17 @@ import MonthlyEarnings from './components/MonthlyEarnings';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isAuthenticated, user } = useSelector((state) => state.Auth);
 
   return (
-    <PageContainer title="Dashboard" description="this is Dashboard">
+    <PageContainer
+      title={t('dashboard.pageTitle', { defaultValue: 'Dashboard' })}
+      description={t('dashboard.pageDescription', { defaultValue: 'this is Dashboard' })}
+    >
       <Box
         sx={{
           background: 'linear-gradient(135deg, rgba(25,118,210,0.1) 0%, rgba(255,255,255,1) 100%)',
@@ -80,7 +85,7 @@ const Dashboard = () => {
                   mb: 2,
                 }}
               >
-                Welcome to Mantri In
+                {t('dashboard.heroTitle', { defaultValue: 'Welcome to Mantri In' })}
               </Typography>
 
               <Typography
@@ -93,7 +98,9 @@ const Dashboard = () => {
                   fontWeight: 300,
                 }}
               >
-                Where Luxury Meets Homely Comfort
+                {t('dashboard.heroSubtitle', {
+                  defaultValue: 'Where Luxury Meets Homely Comfort',
+                })}
               </Typography>
 
               <Button
@@ -115,18 +122,32 @@ const Dashboard = () => {
                 }}
                 onClick={() => navigate('/guest-entry')}
               >
-                Book Your Stay Now
+                {t('dashboard.bookNow', { defaultValue: 'Book Your Stay Now' })}
               </Button>
 
               {/* Stats Grid */}
               <Grid container spacing={4} sx={{ mt: 8 }}>
                 {[
-                  { icon: <BedIcon fontSize="large" />, label: 'Luxury Rooms', value: '50+' },
-                  { icon: <StarIcon fontSize="large" />, label: '5-Star Rating', value: '4.9/5' },
-                  { icon: <GroupsIcon fontSize="large" />, label: 'Happy Guests', value: '10K+' },
+                  {
+                    icon: <BedIcon fontSize="large" />,
+                    label: t('dashboard.stats.luxuryRooms', { defaultValue: 'Luxury Rooms' }),
+                    value: '50+',
+                  },
+                  {
+                    icon: <StarIcon fontSize="large" />,
+                    label: t('dashboard.stats.starRating', { defaultValue: '5-Star Rating' }),
+                    value: '4.9/5',
+                  },
+                  {
+                    icon: <GroupsIcon fontSize="large" />,
+                    label: t('dashboard.stats.happyGuests', { defaultValue: 'Happy Guests' }),
+                    value: '10K+',
+                  },
                   {
                     icon: <LocalOfferIcon fontSize="large" />,
-                    label: 'Special Offers',
+                    label: t('dashboard.stats.specialOffers', {
+                      defaultValue: 'Special Offers',
+                    }),
                     value: '20% Off',
                   },
                 ].map((item, index) => (

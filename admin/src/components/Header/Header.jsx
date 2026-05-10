@@ -15,9 +15,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ClickAwayListener } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { CheckAuthentication, logout } from 'src/redux/features/AuthSlice';
+import LanguageSwitcher from 'src/components/LanguageSwitcher/LanguageSwitcher';
 
 const Header = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -54,13 +57,13 @@ const Header = () => {
     ...(isReallyAuthenticated
       ? [
           ...(canShowDashboard
-            ? [{ name: 'Dashboard', path: '/dashboard' }]
+            ? [{ name: t('header.dashboard', { defaultValue: 'Dashboard' }), path: '/dashboard' }]
             : []),
-          { name: 'Logout', action: handleLogout },
+          { name: t('header.logout', { defaultValue: 'Logout' }), action: handleLogout },
         ]
       : [
-          { name: 'Login', path: '/auth/login' },
-          { name: 'Register', path: '/auth/register' },
+          { name: t('header.login', { defaultValue: 'Login' }), path: '/auth/login' },
+          { name: t('header.register', { defaultValue: 'Register' }), path: '/auth/register' },
         ]),
   ];
 
@@ -145,7 +148,12 @@ const Header = () => {
               <Box sx={{ display: 'flex', gap: 3, fontFamily: 'Poppins' }}>
                 {isReallyAuthenticated ? (
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={headingStyles}>Welcome, {user?.name || 'Guest'}</Typography>
+                    <Typography sx={headingStyles}>
+                      {t('header.welcome', {
+                        defaultValue: 'Welcome, {{name}}',
+                        name: user?.name || t('header.guest', { defaultValue: 'Guest' }),
+                      })}
+                    </Typography>
 
                     {canShowDashboard && (
                       <Button
@@ -153,23 +161,24 @@ const Header = () => {
                         sx={buttonStyles}
                         disabled={!user}
                       >
-                        Dashboard
+                        {t('header.dashboard', { defaultValue: 'Dashboard' })}
                       </Button>
                     )}
                     <Button sx={buttonStyles} onClick={handleLogout}>
-                      Logout
+                      {t('header.logout', { defaultValue: 'Logout' })}
                     </Button>
                   </Box>
                 ) : (
                   <>
                     <Button onClick={() => navigate('/auth/login')} sx={buttonStyles}>
-                      Login
+                      {t('header.login', { defaultValue: 'Login' })}
                     </Button>
                     <Button onClick={() => navigate('/auth/register')} sx={buttonStyles}>
-                      Register
+                      {t('header.register', { defaultValue: 'Register' })}
                     </Button>
                   </>
                 )}
+                <LanguageSwitcher />
               </Box>
             ) : (
               <IconButton
@@ -201,8 +210,14 @@ const Header = () => {
               }}
             >
               {isReallyAuthenticated ? (
-                <Typography sx={headingStyles}>Welcome, {user?.name || 'Guest'}</Typography>
+                <Typography sx={headingStyles}>
+                  {t('header.welcome', {
+                    defaultValue: 'Welcome, {{name}}',
+                    name: user?.name || t('header.guest', { defaultValue: 'Guest' }),
+                  })}
+                </Typography>
               ) : null}
+              <LanguageSwitcher />
               {navItems.map((item) => (
                 <Button
                   key={item.name}

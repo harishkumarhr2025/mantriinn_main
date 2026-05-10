@@ -26,6 +26,7 @@ import { useSelector } from 'react-redux';
 import Config from '../../components/Config';
 import EntityImportDialog from '../../components/shared/EntityImportDialog';
 import { canModifyRecords, canExportData } from '../../utils/permissions';
+import { useTranslation } from 'react-i18next';
 
 const initialFormState = {
   productName: '',
@@ -46,6 +47,7 @@ const initialFormState = {
 };
 
 const ProductManagement = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState(initialFormState);
   const [products, setProducts] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,7 +66,7 @@ const ProductManagement = () => {
       setProducts(response.data?.data || []);
     } catch (error) {
       setProducts([]);
-      Toast.error('Failed to fetch products.');
+      Toast.error(t('product.toast.fetchFailed', { defaultValue: 'Failed to fetch products.' }));
     }
   };
 
@@ -90,7 +92,10 @@ const ProductManagement = () => {
         await fetchProducts();
       }
     } catch (error) {
-      Toast.error(error.response?.data?.message || 'Failed to create product.');
+      Toast.error(
+        error.response?.data?.message ||
+          t('product.toast.createFailed', { defaultValue: 'Failed to create product.' }),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -108,7 +113,10 @@ const ProductManagement = () => {
       await fetchProducts();
       return response.data;
     } catch (error) {
-      Toast.error(error.response?.data?.message || 'Failed to import products.');
+      Toast.error(
+        error.response?.data?.message ||
+          t('product.toast.importFailed', { defaultValue: 'Failed to import products.' }),
+      );
       return null;
     } finally {
       setIsImporting(false);
@@ -116,21 +124,24 @@ const ProductManagement = () => {
   };
 
   const csvHeaders = [
-    { label: 'Product Name', key: 'productName' },
-    { label: 'HSN Code', key: 'hsnCode' },
-    { label: 'Vendor Name', key: 'vendorName' },
-    { label: 'Vendor Code', key: 'vendorCode' },
-    { label: 'Manufacturing Date', key: 'manufacturingDate' },
-    { label: 'Expiry Date', key: 'expiryDate' },
+    { label: t('product.csv.productName', { defaultValue: 'Product Name' }), key: 'productName' },
+    { label: t('product.csv.hsnCode', { defaultValue: 'HSN Code' }), key: 'hsnCode' },
+    { label: t('product.csv.vendorName', { defaultValue: 'Vendor Name' }), key: 'vendorName' },
+    { label: t('product.csv.vendorCode', { defaultValue: 'Vendor Code' }), key: 'vendorCode' },
+    {
+      label: t('product.csv.manufacturingDate', { defaultValue: 'Manufacturing Date' }),
+      key: 'manufacturingDate',
+    },
+    { label: t('product.csv.expiryDate', { defaultValue: 'Expiry Date' }), key: 'expiryDate' },
     { label: 'UOM', key: 'uom' },
-    { label: 'Price', key: 'price' },
-    { label: 'GST Type', key: 'gstType' },
-    { label: 'Min Quantity', key: 'minQuantity' },
-    { label: 'Max Quantity', key: 'maxQuantity' },
-    { label: 'Batch Number', key: 'batchNumber' },
-    { label: 'Bill Number', key: 'billNumber' },
-    { label: 'Bill Date', key: 'billDate' },
-    { label: 'Remarks', key: 'remarks' },
+    { label: t('product.csv.price', { defaultValue: 'Price' }), key: 'price' },
+    { label: t('product.csv.gstType', { defaultValue: 'GST Type' }), key: 'gstType' },
+    { label: t('product.csv.minQuantity', { defaultValue: 'Min Quantity' }), key: 'minQuantity' },
+    { label: t('product.csv.maxQuantity', { defaultValue: 'Max Quantity' }), key: 'maxQuantity' },
+    { label: t('product.csv.batchNumber', { defaultValue: 'Batch Number' }), key: 'batchNumber' },
+    { label: t('product.csv.billNumber', { defaultValue: 'Bill Number' }), key: 'billNumber' },
+    { label: t('product.csv.billDate', { defaultValue: 'Bill Date' }), key: 'billDate' },
+    { label: t('product.csv.remarks', { defaultValue: 'Remarks' }), key: 'remarks' },
   ];
 
   const csvData = useMemo(
@@ -158,7 +169,7 @@ const ProductManagement = () => {
           flexWrap: 'wrap',
         }}
       >
-        <Typography variant="h4">Product Management</Typography>
+        <Typography variant="h4">{t('product.title', { defaultValue: 'Product Management' })}</Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           {allowExport && (
             <CSVLink
@@ -168,13 +179,13 @@ const ProductManagement = () => {
               style={{ textDecoration: 'none' }}
             >
               <Button variant="outlined" startIcon={<DownloadIcon />}>
-                Export CSV
+                {t('product.actions.exportCsv', { defaultValue: 'Export CSV' })}
               </Button>
             </CSVLink>
           )}
           {allowImport && (
             <Button variant="outlined" startIcon={<UploadFileIcon />} onClick={() => setImportDialogOpen(true)}>
-              Import CSV / Excel
+              {t('product.actions.importCsv', { defaultValue: 'Import CSV / Excel' })}
             </Button>
           )}
         </Box>
@@ -182,33 +193,33 @@ const ProductManagement = () => {
 
       <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Product Entry Form
+          {t('product.form.title', { defaultValue: 'Product Entry Form' })}
         </Typography>
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Product Name" name="productName" value={formData.productName} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.productName', { defaultValue: 'Product Name' })} name="productName" value={formData.productName} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="HSN Code" name="hsnCode" value={formData.hsnCode} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.hsnCode', { defaultValue: 'HSN Code' })} name="hsnCode" value={formData.hsnCode} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Vendor Name" name="vendorName" value={formData.vendorName} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.vendorName', { defaultValue: 'Vendor Name' })} name="vendorName" value={formData.vendorName} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Vendor Code" name="vendorCode" value={formData.vendorCode} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.vendorCode', { defaultValue: 'Vendor Code' })} name="vendorCode" value={formData.vendorCode} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Date of Manufacturing" type="date" name="manufacturingDate" InputLabelProps={{ shrink: true }} value={formData.manufacturingDate} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.manufacturingDate', { defaultValue: 'Date of Manufacturing' })} type="date" name="manufacturingDate" InputLabelProps={{ shrink: true }} value={formData.manufacturingDate} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Date of Expiry" type="date" name="expiryDate" InputLabelProps={{ shrink: true }} value={formData.expiryDate} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.expiryDate', { defaultValue: 'Date of Expiry' })} type="date" name="expiryDate" InputLabelProps={{ shrink: true }} value={formData.expiryDate} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
-                <InputLabel>Unit of Measurement</InputLabel>
-                <Select name="uom" value={formData.uom} label="Unit of Measurement" onChange={handleChange}>
+                <InputLabel>{t('product.form.uom', { defaultValue: 'Unit of Measurement' })}</InputLabel>
+                <Select name="uom" value={formData.uom} label={t('product.form.uom', { defaultValue: 'Unit of Measurement' })} onChange={handleChange}>
                   {uomOptions.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
@@ -218,12 +229,12 @@ const ProductManagement = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Price" name="price" type="number" value={formData.price} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.price', { defaultValue: 'Price' })} name="price" type="number" value={formData.price} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
-                <InputLabel>GST Type</InputLabel>
-                <Select name="gstType" value={formData.gstType} label="GST Type" onChange={handleChange}>
+                <InputLabel>{t('product.form.gstType', { defaultValue: 'GST Type' })}</InputLabel>
+                <Select name="gstType" value={formData.gstType} label={t('product.form.gstType', { defaultValue: 'GST Type' })} onChange={handleChange}>
                   {gstOptions.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
@@ -233,26 +244,28 @@ const ProductManagement = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={3}>
-              <TextField fullWidth label="Min Quantity" name="minQuantity" type="number" value={formData.minQuantity} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.minQuantity', { defaultValue: 'Min Quantity' })} name="minQuantity" type="number" value={formData.minQuantity} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={3}>
-              <TextField fullWidth label="Max Quantity" name="maxQuantity" type="number" value={formData.maxQuantity} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.maxQuantity', { defaultValue: 'Max Quantity' })} name="maxQuantity" type="number" value={formData.maxQuantity} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Batch Number" name="batchNumber" value={formData.batchNumber} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.batchNumber', { defaultValue: 'Batch Number' })} name="batchNumber" value={formData.batchNumber} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Bill Number" name="billNumber" value={formData.billNumber} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.billNumber', { defaultValue: 'Bill Number' })} name="billNumber" value={formData.billNumber} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Bill Date" type="date" name="billDate" InputLabelProps={{ shrink: true }} value={formData.billDate} onChange={handleChange} required />
+              <TextField fullWidth label={t('product.form.billDate', { defaultValue: 'Bill Date' })} type="date" name="billDate" InputLabelProps={{ shrink: true }} value={formData.billDate} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth label="Remarks" name="remarks" multiline rows={4} value={formData.remarks} onChange={handleChange} />
+              <TextField fullWidth label={t('product.form.remarks', { defaultValue: 'Remarks' })} name="remarks" multiline rows={4} value={formData.remarks} onChange={handleChange} />
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" variant="contained" size="large" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : 'Submit'}
+                {isSubmitting
+                  ? t('product.form.saving', { defaultValue: 'Saving...' })
+                  : t('product.form.submit', { defaultValue: 'Submit' })}
               </Button>
             </Grid>
           </Grid>
@@ -261,19 +274,19 @@ const ProductManagement = () => {
 
       <Paper elevation={2} sx={{ p: 3 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Saved Products
+          {t('product.saved.title', { defaultValue: 'Saved Products' })}
         </Typography>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Product</TableCell>
-                <TableCell>Vendor</TableCell>
+                <TableCell>{t('product.table.product', { defaultValue: 'Product' })}</TableCell>
+                <TableCell>{t('product.table.vendor', { defaultValue: 'Vendor' })}</TableCell>
                 <TableCell>HSN</TableCell>
-                <TableCell>Batch</TableCell>
-                <TableCell>Price</TableCell>
+                <TableCell>{t('product.table.batch', { defaultValue: 'Batch' })}</TableCell>
+                <TableCell>{t('product.table.price', { defaultValue: 'Price' })}</TableCell>
                 <TableCell>UOM</TableCell>
-                <TableCell>Bill Date</TableCell>
+                <TableCell>{t('product.table.billDate', { defaultValue: 'Bill Date' })}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -293,7 +306,7 @@ const ProductManagement = () => {
               {products.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    No products found.
+                    {t('product.table.noProducts', { defaultValue: 'No products found.' })}
                   </TableCell>
                 </TableRow>
               )}
@@ -308,9 +321,12 @@ const ProductManagement = () => {
         onPreview={handlePreviewImportRows}
         onImport={handleImportRows}
         isImporting={isImporting}
-        title="Import Products"
-        infoText="Preview which product rows will be inserted, updated, or skipped before importing them into product management."
-        importButtonLabel="Import Products"
+        title={t('product.import.title', { defaultValue: 'Import Products' })}
+        infoText={t('product.import.infoText', {
+          defaultValue:
+            'Preview which product rows will be inserted, updated, or skipped before importing them into product management.',
+        })}
+        importButtonLabel={t('product.import.buttonLabel', { defaultValue: 'Import Products' })}
         templateFileName="products-import-template.xlsx"
         sheetName="Products"
         templateHeaders={[

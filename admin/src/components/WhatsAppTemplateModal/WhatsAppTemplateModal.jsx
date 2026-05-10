@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import Toast from 'react-hot-toast';
 import Config from '../Config';
+import { useTranslation } from 'react-i18next';
 
 // ── Available placeholder fields ─────────────────────────────────────────────
 export const TEMPLATE_FIELDS = [
@@ -59,6 +60,7 @@ const empty = {
 };
 
 const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
+  const { t } = useTranslation();
   const [form, setForm] = useState(empty);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -106,8 +108,8 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
   };
 
   const handleSubmit = async () => {
-    if (!form.name.trim()) { setError('Template name is required'); return; }
-    if (!form.body.trim()) { setError('Message body is required'); return; }
+    if (!form.name.trim()) { setError(t('whatsapp.modal.errors.templateNameRequired', { defaultValue: 'Template name is required' })); return; }
+    if (!form.body.trim()) { setError(t('whatsapp.modal.errors.messageBodyRequired', { defaultValue: 'Message body is required' })); return; }
 
     try {
       setSaving(true);
@@ -119,13 +121,17 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
         res = await Config.post('/whatsapp/templates', form);
       }
 
-      if (!res.data?.success) { setError(res.data?.message || 'Failed to save'); return; }
+      if (!res.data?.success) { setError(res.data?.message || t('whatsapp.modal.errors.saveFailed', { defaultValue: 'Failed to save' })); return; }
 
-      Toast.success(isEdit ? 'Template updated' : 'Template created');
+      Toast.success(
+        isEdit
+          ? t('whatsapp.modal.success.updated', { defaultValue: 'Template updated' })
+          : t('whatsapp.modal.success.created', { defaultValue: 'Template created' }),
+      );
       onSaved?.(res.data.data);
       handleClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save template');
+      setError(err.response?.data?.message || t('whatsapp.modal.errors.saveTemplateFailed', { defaultValue: 'Failed to save template' }));
     } finally {
       setSaving(false);
     }
@@ -150,7 +156,9 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
       <Fade in={open}>
         <Box sx={modalStyle}>
           <Typography variant="h6" fontWeight={600} mb={2}>
-            {isEdit ? 'Edit WhatsApp Template' : 'New WhatsApp Template'}
+            {isEdit
+              ? t('whatsapp.modal.titleEdit', { defaultValue: 'Edit WhatsApp Template' })
+              : t('whatsapp.modal.titleNew', { defaultValue: 'New WhatsApp Template' })}
           </Typography>
 
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -158,22 +166,22 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
           <Stack spacing={2}>
             {/* Name */}
             <TextField
-              label="Template Name"
+              label={t('whatsapp.modal.fields.templateName', { defaultValue: 'Template Name' })}
               name="name"
               value={form.name}
               onChange={handleChange}
               fullWidth
               size="small"
-              placeholder="e.g. Welcome Message"
+              placeholder={t('whatsapp.modal.fields.templateNamePlaceholder', { defaultValue: 'e.g. Welcome Message' })}
             />
 
             {/* Category */}
             <FormControl fullWidth size="small">
-              <InputLabel>Category</InputLabel>
-              <Select name="category" value={form.category} onChange={handleChange} label="Category">
+              <InputLabel>{t('whatsapp.modal.fields.category', { defaultValue: 'Category' })}</InputLabel>
+              <Select name="category" value={form.category} onChange={handleChange} label={t('whatsapp.modal.fields.category', { defaultValue: 'Category' })}>
                 {CATEGORIES.map((c) => (
                   <MenuItem key={c} value={c} sx={{ textTransform: 'capitalize' }}>
-                    {c.charAt(0).toUpperCase() + c.slice(1)}
+                    {t(`whatsapp.categories.${c}`, { defaultValue: c.charAt(0).toUpperCase() + c.slice(1) })}
                   </MenuItem>
                 ))}
               </Select>
@@ -182,13 +190,13 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
             {/* Available fields palette */}
             <Box>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
-                Click a field to insert it at the cursor position in the message:
+                {t('whatsapp.modal.fields.helpInsertField', { defaultValue: 'Click a field to insert it at the cursor position in the message:' })}
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
                 {TEMPLATE_FIELDS.map((f) => (
                   <Chip
                     key={f.key}
-                    label={f.label}
+                    label={t(`whatsapp.modal.templateFields.${f.key}`, { defaultValue: f.label })}
                     size="small"
                     variant="outlined"
                     color="primary"
@@ -202,7 +210,7 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
 
             {/* Message body */}
             <TextField
-              label="Message Body"
+              label={t('whatsapp.modal.fields.messageBody', { defaultValue: 'Message Body' })}
               name="body"
               value={form.body}
               onChange={handleChange}
@@ -210,7 +218,7 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
               minRows={5}
               fullWidth
               size="small"
-              placeholder={`Hi {{guest_name}}, welcome to {{hotel_name}}! Your room is {{room_no}}.`}
+              placeholder={t('whatsapp.modal.fields.messageBodyPlaceholder', { defaultValue: 'Hi {{guest_name}}, welcome to {{hotel_name}}! Your room is {{room_no}}.' })}
               inputRef={textareaRef}
             />
 
@@ -220,7 +228,7 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
                 <Divider />
                 <Box>
                   <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                    Preview (sample data):
+                    {t('whatsapp.modal.previewTitle', { defaultValue: 'Preview (sample data):' })}
                   </Typography>
                   <Box
                     sx={{
@@ -248,16 +256,20 @@ const WhatsAppTemplateModal = ({ open, handleClose, onSaved, initialData }) => {
                   color="primary"
                 />
               }
-              label="Active"
+              label={t('whatsapp.modal.fields.active', { defaultValue: 'Active' })}
             />
 
             {/* Actions */}
             <Stack direction="row" spacing={1} justifyContent="flex-end">
               <Button variant="outlined" color="inherit" onClick={handleClose} disabled={saving}>
-                Cancel
+                {t('whatsapp.actions.cancel', { defaultValue: 'Cancel' })}
               </Button>
               <Button variant="contained" onClick={handleSubmit} disabled={saving}>
-                {saving ? 'Saving…' : isEdit ? 'Update' : 'Create'}
+                {saving
+                  ? t('whatsapp.modal.actions.saving', { defaultValue: 'Saving...' })
+                  : isEdit
+                    ? t('whatsapp.modal.actions.update', { defaultValue: 'Update' })
+                    : t('whatsapp.modal.actions.create', { defaultValue: 'Create' })}
               </Button>
             </Stack>
           </Stack>

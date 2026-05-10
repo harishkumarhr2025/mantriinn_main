@@ -1,11 +1,13 @@
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from '../../../components/shared/DashboardCard';
 import Chart from 'react-apexcharts';
 
 
 const SalesOverview = () => {
+    const { t } = useTranslation();
 
     // select
     const [month, setMonth] = React.useState('1');
@@ -79,18 +81,22 @@ const SalesOverview = () => {
     };
     const seriescolumnchart = [
         {
-            name: 'Eanings this month',
+            name: t('dashboard.sections.salesOverview.earningsThisMonth', {
+                defaultValue: 'Earnings this month',
+            }),
             data: [355, 390, 300, 350, 390, 180, 355, 390],
         },
         {
-            name: 'Expense this month',
+            name: t('dashboard.sections.salesOverview.expenseThisMonth', {
+                defaultValue: 'Expense this month',
+            }),
             data: [280, 250, 325, 215, 250, 310, 280, 250],
         },
     ];
 
     return (
 
-        <DashboardCard title="Sales Overview" action={
+        <DashboardCard title={t('dashboard.sections.salesOverview.title', { defaultValue: 'Sales Overview' })} action={
             <Select
                 labelId="month-dd"
                 id="month-dd"
@@ -98,9 +104,9 @@ const SalesOverview = () => {
                 size="small"
                 onChange={handleChange}
             >
-                <MenuItem value={1}>March 2023</MenuItem>
-                <MenuItem value={2}>April 2023</MenuItem>
-                <MenuItem value={3}>May 2023</MenuItem>
+                <MenuItem value={1}>{t('dashboard.months.march2023', { defaultValue: 'March 2023' })}</MenuItem>
+                <MenuItem value={2}>{t('dashboard.months.april2023', { defaultValue: 'April 2023' })}</MenuItem>
+                <MenuItem value={3}>{t('dashboard.months.may2023', { defaultValue: 'May 2023' })}</MenuItem>
             </Select>
         }>
             <Chart

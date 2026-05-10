@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 // mui imports
 import { ListSubheader, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const NavGroup = ({ item }) => {
+  const { t } = useTranslation();
   const ListSubheaderStyle = styled((props) => <ListSubheader disableSticky {...props} />)(
     ({ theme }) => ({
       ...theme.typography.overline,
@@ -14,7 +16,9 @@ const NavGroup = ({ item }) => {
       padding: '3px 12px',
     }),
   );
-  return <ListSubheaderStyle>{item.subheader}</ListSubheaderStyle>;
+  return (
+    <ListSubheaderStyle>{t(item.subheaderKey || '', { defaultValue: item.subheader })}</ListSubheaderStyle>
+  );
 };
 
 NavGroup.propTypes = {

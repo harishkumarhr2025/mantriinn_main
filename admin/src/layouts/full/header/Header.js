@@ -1,12 +1,15 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // components
 import Profile from './Profile';
+import LanguageSwitcher from 'src/components/LanguageSwitcher/LanguageSwitcher';
 import { IconBellRinging, IconMenu } from '@tabler/icons';
 
 const Header = (props) => {
+  const { t } = useTranslation();
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
@@ -43,15 +46,10 @@ const Header = (props) => {
 
         <IconButton
           size="large"
-          aria-label="show 11 new notifications"
+          aria-label={t('common.notification', { defaultValue: 'Notifications' })}
           color="inherit"
           aria-controls="msgs-menu"
           aria-haspopup="true"
-          sx={{
-            ...(typeof anchorEl2 === 'object' && {
-              color: 'primary.main',
-            }),
-          }}
         >
           <Badge variant="dot" color="primary">
             <IconBellRinging size="21" stroke="1.5" />
@@ -60,6 +58,7 @@ const Header = (props) => {
 
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
+          <LanguageSwitcher />
           {/* <Button variant="contained" color="primary"  target="_blank" href="https://adminmart.com/product/modernize-react-mui-dashboard-template/">
             Upgrade to Pro
           </Button> */}

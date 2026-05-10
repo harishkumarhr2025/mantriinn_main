@@ -53,6 +53,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 
 import NotesIcon from '@mui/icons-material/Notes';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Toast from 'react-hot-toast';
 
 import AddRoomDialog from '../../components/AddRoomDialog/AddRoomDialog';
@@ -118,6 +119,7 @@ const DetailItem = ({ label, value, icon }) => (
 );
 
 const Room = () => {
+  const { t } = useTranslation();
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [tabValue, setTabValue] = useState(0);
   const [searchText, setSearchText] = useState('');
@@ -297,7 +299,7 @@ const Room = () => {
         <Toolbar>
           <MeetingRoom sx={{ mr: 2 }} />
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            PG Room Management
+            {t('room.title', { defaultValue: 'PG Room Management' })}
           </Typography>
 
           {allowExport && (
@@ -308,7 +310,7 @@ const Room = () => {
               style={{ textDecoration: 'none' }}
             >
               <Button variant="outlined" startIcon={<Download />} sx={{ mr: 2 }}>
-                Export CSV
+                {t('room.actions.exportCsv', { defaultValue: 'Export CSV' })}
               </Button>
             </CSVLink>
           )}
@@ -319,7 +321,7 @@ const Room = () => {
             sx={{ ml: 2 }}
             onClick={() => setShowAddDialog(true)}
           >
-            Add Room
+            {t('room.actions.addRoom', { defaultValue: 'Add Room' })}
           </Button>
         </Toolbar>
       </AppBar>
@@ -353,7 +355,7 @@ const Room = () => {
                         {rooms?.totalRoom}
                       </Typography>
                       <Typography variant="subtitle1" color="text.secondary">
-                        Total Rooms
+                        {t('room.summary.totalRooms', { defaultValue: 'Total Rooms' })}
                       </Typography>
                     </Box>
                   </Box>
@@ -361,7 +363,7 @@ const Room = () => {
                   {/* Beds Overview Section */}
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                      Beds Overview
+                      {t('room.summary.bedsOverview', { defaultValue: 'Beds Overview' })}
                     </Typography>
 
                     {/* Total Beds */}
@@ -377,7 +379,7 @@ const Room = () => {
                       }}
                     >
                       <Typography variant="body2" color="text.secondary">
-                        Total Beds
+                        {t('room.summary.totalBeds', { defaultValue: 'Total Beds' })}
                       </Typography>
                       <Typography variant="body1" fontWeight={500}>
                         {rooms?.totalBed}
@@ -403,7 +405,7 @@ const Room = () => {
                         }}
                       >
                         <Typography variant="caption" color="text.secondary">
-                          Occupied
+                          {t('room.summary.occupied', { defaultValue: 'Occupied' })}
                         </Typography>
                         <Typography variant="h6" fontWeight={600} color="#dc3545">
                           {rooms?.occupiedBed}
@@ -423,7 +425,7 @@ const Room = () => {
                         }}
                       >
                         <Typography variant="caption" color="text.secondary">
-                          Available
+                          {t('room.summary.available', { defaultValue: 'Available' })}
                         </Typography>
                         <Typography variant="h6" fontWeight={600} color="#28a745">
                           {rooms?.vacantBed}
@@ -453,7 +455,7 @@ const Room = () => {
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    Floor {floor}
+                    {t('room.floorLabel', { defaultValue: 'Floor {{floor}}', floor })}
                   </Typography>
 
                   <Grid container spacing={3}>
@@ -513,10 +515,12 @@ const Room = () => {
                                   <StatusChip
                                     label={
                                       room.currentOccupancy === 0
-                                        ? 'vacant'
+                                        ? t('room.status.vacant', { defaultValue: 'vacant' })
                                         : Number(room.currentOccupancy) < Number(room.capacity)
-                                        ? 'Partially Occupied'
-                                        : 'Full'
+                                        ? t('room.status.partiallyOccupied', {
+                                            defaultValue: 'Partially Occupied',
+                                          })
+                                        : t('room.status.full', { defaultValue: 'Full' })
                                     }
                                     sx={{
                                       backgroundColor:
@@ -547,7 +551,11 @@ const Room = () => {
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <People fontSize="small" />
                                     <Typography variant="caption">
-                                      {room.currentOccupancy}/{room.capacity} occupied
+                                      {t('room.capacityOccupied', {
+                                        defaultValue: '{{occupied}}/{{capacity}} occupied',
+                                        occupied: room.currentOccupancy,
+                                        capacity: room.capacity,
+                                      })}
                                     </Typography>
                                   </Box>
                                 </Box>
@@ -580,15 +588,20 @@ const Room = () => {
                 p: 2,
               }}
             >
-              <Typography variant="h5">Room No. {selectedRoom.roomNumber}</Typography>
+              <Typography variant="h5">
+                {t('room.drawer.roomNo', {
+                  defaultValue: 'Room No. {{roomNumber}}',
+                  roomNumber: selectedRoom.roomNumber,
+                })}
+              </Typography>
               <IconButton onClick={() => setSelectedRoom(null)}>
                 <Close />
               </IconButton>
             </Box>
             <Tabs value={tabValue} onChange={(e, val) => setTabValue(val)} sx={{ mb: 2 }}>
-              <Tab label="Details" icon={<MeetingRoom />} />
-              <Tab label="Tenants" icon={<People />} />
-              <Tab label="History" icon={<History />} />
+              <Tab label={t('room.tabs.details', { defaultValue: 'Details' })} icon={<MeetingRoom />} />
+              <Tab label={t('room.tabs.tenants', { defaultValue: 'Tenants' })} icon={<People />} />
+              <Tab label={t('room.tabs.history', { defaultValue: 'History' })} icon={<History />} />
             </Tabs>
 
             <Box sx={{ p: 3 }}>
@@ -597,13 +610,13 @@ const Room = () => {
                   <Grid item xs={6}>
                     <Typography variant="subtitle1" gutterBottom sx={{ fontSize: 16 }}>
                       <span style={{ fontFamily: 'Poppins', fontSize: '16px', fontWeight: '600' }}>
-                        Floor:{' '}
+                        {t('room.drawer.floor', { defaultValue: 'Floor:' })}{' '}
                       </span>
                       {getOrdinalSuffix(selectedRoom.floor)}
                     </Typography>
                     <Typography variant="subtitle1" gutterBottom mt={1}>
                       <span style={{ fontFamily: 'Poppins', fontSize: '16px', fontWeight: '600' }}>
-                        Room Type:{' '}
+                        {t('room.drawer.roomType', { defaultValue: 'Room Type:' })}{' '}
                       </span>
                       {selectedRoom.roomType}
                     </Typography>
@@ -613,7 +626,11 @@ const Room = () => {
                         variant="caption"
                         sx={{ fontFamily: 'Poppins', fontSize: '14px' }}
                       >
-                        {selectedRoom.currentOccupancy}/{selectedRoom.capacity} occupied
+                        {t('room.capacityOccupied', {
+                          defaultValue: '{{occupied}}/{{capacity}} occupied',
+                          occupied: selectedRoom.currentOccupancy,
+                          capacity: selectedRoom.capacity,
+                        })}
                       </Typography>
                     </Box>
                   </Grid>
@@ -623,7 +640,7 @@ const Room = () => {
                       gutterBottom
                       sx={{ fontFamily: 'Poppins', fontSize: '14px', fontWeight: '600' }}
                     >
-                      Amenities
+                      {t('room.drawer.amenities', { defaultValue: 'Amenities' })}
                     </Typography>
                     <List dense>
                       {selectedRoom.amenities.map((amenity) => {
@@ -667,10 +684,16 @@ const Room = () => {
                     }}
                   >
                     <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      🏨 Room {selectedRoom?.roomNumber} Guests
+                      {t('room.tenants.heading', {
+                        defaultValue: 'Room {{roomNumber}} Guests',
+                        roomNumber: selectedRoom?.roomNumber,
+                      })}
                     </Typography>
                     <Chip
-                      label={`${guests.length} current guest${guests.length !== 1 ? 's' : ''}`}
+                      label={t('room.tenants.currentGuests', {
+                        defaultValue: '{{count}} current guest',
+                        count: guests.length,
+                      })}
                       color="primary"
                       variant="outlined"
                     />
@@ -692,7 +715,9 @@ const Room = () => {
                         <HotelIcon sx={{ fontSize: 40, color: 'action.disabled' }} />
                       </Typography>
                       <Typography variant="body1" color="text.secondary">
-                        No active guests in this room
+                        {t('room.tenants.noActiveGuests', {
+                          defaultValue: 'No active guests in this room',
+                        })}
                       </Typography>
                     </Box>
                   ) : (
@@ -711,16 +736,16 @@ const Room = () => {
                         }}
                       >
                         <Grid item xs={4}>
-                          Guest Name
+                          {t('room.tenants.guestName', { defaultValue: 'Guest Name' })}
                         </Grid>
                         <Grid item xs={3}>
-                          Contact
+                          {t('room.tenants.contact', { defaultValue: 'Contact' })}
                         </Grid>
                         <Grid item xs={2}>
-                          Bed No.
+                          {t('room.tenants.bedNo', { defaultValue: 'Bed No.' })}
                         </Grid>
                         <Grid item xs={3}>
-                          Check-in Date
+                          {t('room.tenants.checkInDate', { defaultValue: 'Check-in Date' })}
                         </Grid>
                       </Grid>
 
@@ -802,7 +827,10 @@ const Room = () => {
                   >
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-                        📜 Room {selectedRoom?.roomNumber} History
+                        {t('room.history.heading', {
+                          defaultValue: 'Room {{roomNumber}} History',
+                          roomNumber: selectedRoom?.roomNumber,
+                        })}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {`${selectedRoom?.currentOccupancy} currently occupied / ${selectedRoom?.beds?.length} beds`}
@@ -810,7 +838,10 @@ const Room = () => {
                     </Box>
                     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                       <Chip
-                        label={`${roomHistory.length} entries`}
+                        label={t('room.history.entries', {
+                          defaultValue: '{{count}} entries',
+                          count: roomHistory.length,
+                        })}
                         color="primary"
                         variant="outlined"
                         size="small"
@@ -835,7 +866,9 @@ const Room = () => {
                         sx={{ fontSize: 40, color: 'action.disabled', mb: 2 }}
                       />
                       <Typography variant="body1" color="text.secondary">
-                        No historical data available
+                        {t('room.history.noData', {
+                          defaultValue: 'No historical data available',
+                        })}
                       </Typography>
                     </Box>
                   ) : (
@@ -902,7 +935,11 @@ const Room = () => {
 
                               {/* Status Chip */}
                               <Chip
-                                label={guest?.checkOut ? 'Checked Out' : 'Active'}
+                                label={
+                                  guest?.checkOut
+                                    ? t('room.history.checkedOut', { defaultValue: 'Checked Out' })
+                                    : t('room.history.active', { defaultValue: 'Active' })
+                                }
                                 size="small"
                                 sx={{
                                   bgcolor: guest.checkOut ? 'success.light' : 'primary.light',
@@ -918,12 +955,16 @@ const Room = () => {
                               <Grid item xs={12} md={6}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                   <DetailItem
-                                    label="Aadhar Number"
+                                    label={t('room.history.aadharNumber', {
+                                      defaultValue: 'Aadhar Number',
+                                    })}
                                     value={guest?.guest.aadhar || 'N/A'}
                                     icon={<IdentificationIcon fontSize="small" />}
                                   />
                                   <DetailItem
-                                    label="Email Address"
+                                    label={t('room.history.emailAddress', {
+                                      defaultValue: 'Email Address',
+                                    })}
                                     value={
                                       <Typography
                                         variant="body2"
@@ -933,15 +974,23 @@ const Room = () => {
                                           color: 'text.primary',
                                         }}
                                       >
-                                        {guest?.guest.email || 'Not provided'}
+                                        {guest?.guest.email ||
+                                          t('room.history.notProvided', {
+                                            defaultValue: 'Not provided',
+                                          })}
                                       </Typography>
                                     }
                                     icon={<EmailIcon fontSize="small" />}
                                   />
                                   <DetailItem
-                                    label="Duration"
+                                    label={t('room.history.duration', { defaultValue: 'Duration' })}
                                     value={
-                                      guest.durationDays ? `${guest.durationDays} days` : 'Ongoing'
+                                      guest.durationDays
+                                        ? t('room.history.days', {
+                                            defaultValue: '{{count}} days',
+                                            count: guest.durationDays,
+                                          })
+                                        : t('room.history.ongoing', { defaultValue: 'Ongoing' })
                                     }
                                     icon={<ScheduleIcon fontSize="small" />}
                                   />
@@ -955,7 +1004,9 @@ const Room = () => {
                                     <EventIcon fontSize="small" color="action" />
                                     <Box>
                                       <Typography variant="caption" color="text.secondary">
-                                        Check-in Date
+                                          {t('room.tenants.checkInDate', {
+                                            defaultValue: 'Check-in Date',
+                                          })}
                                       </Typography>
                                       <Typography variant="body2">
                                         {new Date(guest?.checkIn).toLocaleDateString(
@@ -971,7 +1022,9 @@ const Room = () => {
                                       <ExitToAppIcon fontSize="small" color="action" />
                                       <Box>
                                         <Typography variant="caption" color="text.secondary">
-                                          Check-out Date
+                                          {t('room.history.checkOutDate', {
+                                            defaultValue: 'Check-out Date',
+                                          })}
                                         </Typography>
                                         <Typography variant="body2">
                                           {new Date(guest.checkOut).toLocaleDateString(
@@ -986,17 +1039,26 @@ const Room = () => {
                                       <AccessTimeIcon fontSize="small" color="action" />
                                       <Box>
                                         <Typography variant="caption" color="text.secondary">
-                                          Current Status
+                                          {t('room.history.currentStatus', {
+                                            defaultValue: 'Current Status',
+                                          })}
                                         </Typography>
                                         <Typography variant="body2" color="success.main">
-                                          Active Stay
+                                          {t('room.history.activeStay', {
+                                            defaultValue: 'Active Stay',
+                                          })}
                                         </Typography>
                                       </Box>
                                     </Box>
                                   )}
                                   <DetailItem
-                                    label="Special Remarks"
-                                    value={guest.remarks || 'No remarks'}
+                                    label={t('room.history.specialRemarks', {
+                                      defaultValue: 'Special Remarks',
+                                    })}
+                                    value={
+                                      guest.remarks ||
+                                      t('room.history.noRemarks', { defaultValue: 'No remarks' })
+                                    }
                                     icon={<NotesIcon fontSize="small" />}
                                   />
                                 </Box>
@@ -1024,12 +1086,19 @@ const Room = () => {
       />
 
       <Dialog open={allowModify && !!roomToDelete} onClose={() => setRoomToDelete(null)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>{t('room.delete.confirmTitle', { defaultValue: 'Confirm Delete' })}</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete room {roomToDelete?.roomNumber}?</Typography>
+          <Typography>
+            {t('room.delete.confirmBody', {
+              defaultValue: 'Are you sure you want to delete room {{roomNumber}}?',
+              roomNumber: roomToDelete?.roomNumber,
+            })}
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setRoomToDelete(null)}>Cancel</Button>
+          <Button onClick={() => setRoomToDelete(null)}>
+            {t('common.cancel', { defaultValue: 'Cancel' })}
+          </Button>
           <Button
             onClick={() => {
               handleDeleteRoom(roomToDelete);
@@ -1037,7 +1106,7 @@ const Room = () => {
             }}
             color="error"
           >
-            Delete
+            {t('common.delete', { defaultValue: 'Delete' })}
           </Button>
         </DialogActions>
       </Dialog>

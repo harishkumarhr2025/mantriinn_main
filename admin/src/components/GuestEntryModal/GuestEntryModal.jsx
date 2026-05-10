@@ -757,6 +757,12 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
     }
   }, [guestDetails.roomId]);
 
+  const requiredInputSx = {
+    '& .MuiInputBase-root': {
+      backgroundColor: '#fff9c4',
+    },
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -841,6 +847,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
                   <TextField
@@ -855,6 +862,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     error={!!errorText.Guest_name}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
                 </Box>
@@ -881,6 +889,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
                   <TextField
@@ -895,6 +904,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     error={!!errorText.Guest_email}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
                 </Box>
@@ -915,9 +925,13 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
-                  <FormControl sx={{ minWidth: 120, width: '50%' }} error={!!errorText.Guest_type}>
+                  <FormControl
+                    sx={{ minWidth: 120, width: '50%', ...requiredInputSx }}
+                    error={!!errorText.Guest_type}
+                  >
                     <InputLabel required id="demo-select-small-label">
                       Guest Type
                     </InputLabel>
@@ -1176,7 +1190,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                           ...params.InputProps,
                           style: {
                             borderRadius: '8px',
-                            backgroundColor: '#f8f9fa',
+                            backgroundColor: '#fff9c4',
                             transition: 'all 0.3s ease',
                           },
                         }}
@@ -1290,7 +1304,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                           ),
                           style: {
                             borderRadius: '8px',
-                            backgroundColor: '#f8f9fa',
+                            backgroundColor: '#fff9c4',
                             transition: 'all 0.3s ease',
                           },
                         }}
@@ -1368,7 +1382,10 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     disabled={!guestDetails.roomId}
                   />}
 
-                  <FormControl sx={{ minWidth: 120, width: '50%' }} error={!!errorText.Room_type}>
+                  <FormControl
+                    sx={{ minWidth: 120, width: '50%', ...requiredInputSx }}
+                    error={!!errorText.Room_type}
+                  >
                     <InputLabel id="demo-select-small-label">Room Type</InputLabel>
                     <Select
                       name="Room_type"
@@ -1404,6 +1421,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                     sx={{
                       width: '50%',
+                      ...requiredInputSx,
                     }}
                   />
                   <TextField
@@ -1437,6 +1455,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     }}
                     sx={{
                       width: guestDetails.Guest_type !== 'Daily' ? '50%' : '100%',
+                      ...requiredInputSx,
                     }}
                   />
                   {guestDetails.Guest_type !== 'Daily' && <TextField
@@ -1458,7 +1477,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                 <Box sx={{ display: 'flex', gap: 2, marginTop: '20px', alignItems: 'center' }}>
                   {guestDetails.Guest_type !== 'Daily' && (
                     <FormControl
-                      sx={{ minWidth: 120, width: '50%' }}
+                      sx={{ minWidth: 120, width: '50%', ...requiredInputSx }}
                       error={!!errorText.Profession_type}
                     >
                       <InputLabel id="demo-select-small-label">Profession Type</InputLabel>
@@ -1480,7 +1499,11 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     </FormControl>
                   )}
                   <FormControl
-                    sx={{ minWidth: 120, width: guestDetails.Guest_type !== 'Daily' ? '50%' : '100%' }}
+                    sx={{
+                      minWidth: 120,
+                      width: guestDetails.Guest_type !== 'Daily' ? '50%' : '100%',
+                      ...requiredInputSx,
+                    }}
                     error={!!errorText.Payment_type}
                   >
                     <InputLabel id="demo-select-small-label">Payment Type</InputLabel>
@@ -1517,6 +1540,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                     fullWidth
                     multiline
                     rows={3}
+                    sx={requiredInputSx}
                   />
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2, marginTop: '20px', alignItems: 'center' }}>
@@ -1554,7 +1578,7 @@ const GuestEntryModal = ({ open, handleClose, handleModalSubmit, opacityValue, g
                   }}
                 >
                   <FormControl
-                    sx={{ minWidth: 120 }}
+                    sx={{ minWidth: 120, ...requiredInputSx }}
                     fullWidth
                     error={!!errorText.Guest_nationality}
                   >

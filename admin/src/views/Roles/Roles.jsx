@@ -24,6 +24,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import Toast from 'react-hot-toast';
 import Config from '../../components/Config';
+import { useTranslation } from 'react-i18next';
 
 const ROLE_OPTIONS = ['admin', 'semi admin', 'user'];
 
@@ -43,6 +44,7 @@ const toDisplayRole = (role) => {
 };
 
 const Roles = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [editUser, setEditUser] = useState(null);
@@ -55,7 +57,7 @@ const Roles = () => {
       const response = await Config.get('/auth/users');
       setUsers(Array.isArray(response.data?.users) ? response.data.users : []);
     } catch (error) {
-      Toast.error(error.response?.data?.message || 'Failed to load users');
+      Toast.error(error.response?.data?.message || t('roles.toast.loadUsersFailed', { defaultValue: 'Failed to load users' }));
       setUsers([]);
     } finally {
       setIsLoading(false);
@@ -94,15 +96,15 @@ const Roles = () => {
       });
 
       if (!response.data?.success) {
-        Toast.error(response.data?.message || 'Failed to update role');
+        Toast.error(response.data?.message || t('roles.toast.updateFailed', { defaultValue: 'Failed to update role' }));
         return;
       }
 
-      Toast.success(response.data?.message || 'Role updated successfully');
+      Toast.success(response.data?.message || t('roles.toast.updateSuccess', { defaultValue: 'Role updated successfully' }));
       closeEditDialog();
       await loadUsers();
     } catch (error) {
-      Toast.error(error.response?.data?.message || 'Failed to update role');
+      Toast.error(error.response?.data?.message || t('roles.toast.updateFailed', { defaultValue: 'Failed to update role' }));
     } finally {
       setIsUpdating(false);
     }
@@ -111,10 +113,10 @@ const Roles = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
-        Roles
+        {t('roles.title', { defaultValue: 'Roles' })}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Manage role access for all members.
+        {t('roles.description', { defaultValue: 'Manage role access for all members.' })}
       </Typography>
 
       <Card>
@@ -123,10 +125,10 @@ const Roles = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Current Role</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell>{t('roles.table.name', { defaultValue: 'Name' })}</TableCell>
+                  <TableCell>{t('roles.table.email', { defaultValue: 'Email' })}</TableCell>
+                  <TableCell>{t('roles.table.currentRole', { defaultValue: 'Current Role' })}</TableCell>
+                  <TableCell align="right">{t('roles.table.action', { defaultValue: 'Action' })}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -135,7 +137,14 @@ const Roles = () => {
                     <TableCell>{user.name || '-'}</TableCell>
                     <TableCell>{user.email || '-'}</TableCell>
                     <TableCell>
-                      <Chip label={toDisplayRole(user.role)} size="small" color="primary" variant="outlined" />
+                      <Chip
+                        label={t(`roles.roleNames.${normalizeRole(toDisplayRole(user.role))}`, {
+                          defaultValue: toDisplayRole(user.role),
+                        })}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                      />
                     </TableCell>
                     <TableCell align="right">
                       <Button
@@ -144,7 +153,7 @@ const Roles = () => {
                         startIcon={<EditIcon />}
                         onClick={() => openEditDialog(user)}
                       >
-                        Edit
+                        {t('roles.actions.edit', { defaultValue: 'Edit' })}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -153,7 +162,7 @@ const Roles = () => {
                 {!isLoading && sortedUsers.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={4} align="center">
-                      No users found
+                      {t('roles.states.noUsers', { defaultValue: 'No users found' })}
                     </TableCell>
                   </TableRow>
                 )}
@@ -163,29 +172,29 @@ const Roles = () => {
 
           {isLoading && (
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-              Loading members...
+              {t('roles.states.loadingMembers', { defaultValue: 'Loading members...' })}
             </Typography>
           )}
         </CardContent>
       </Card>
 
       <Dialog open={Boolean(editUser)} onClose={closeEditDialog} maxWidth="xs" fullWidth>
-        <DialogTitle>Update Role</DialogTitle>
+        <DialogTitle>{t('roles.dialog.updateRole', { defaultValue: 'Update Role' })}</DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ mb: 2 }}>
             {editUser?.name || editUser?.email}
           </Typography>
           <FormControl fullWidth>
-            <InputLabel id="member-role-label">Role</InputLabel>
+            <InputLabel id="member-role-label">{t('roles.dialog.role', { defaultValue: 'Role' })}</InputLabel>
             <Select
               labelId="member-role-label"
-              label="Role"
+              label={t('roles.dialog.role', { defaultValue: 'Role' })}
               value={selectedRole}
               onChange={(event) => setSelectedRole(event.target.value)}
             >
               {ROLE_OPTIONS.map((role) => (
                 <MenuItem key={role} value={role}>
-                  {role}
+                  {t(`roles.roleNames.${normalizeRole(role)}`, { defaultValue: role })}
                 </MenuItem>
               ))}
             </Select>
@@ -193,10 +202,12 @@ const Roles = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeEditDialog} disabled={isUpdating}>
-            Cancel
+            {t('roles.actions.cancel', { defaultValue: 'Cancel' })}
           </Button>
           <Button onClick={handleUpdateRole} variant="contained" disabled={isUpdating}>
-            {isUpdating ? 'Updating...' : 'Save'}
+            {isUpdating
+              ? t('roles.actions.updating', { defaultValue: 'Updating...' })
+              : t('roles.actions.save', { defaultValue: 'Save' })}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,0 +1,545 @@
+{
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "hindi": "Hindi",
+    "kannada": "Kannada",
+    "notification": "Notifications",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "dashboard": {
+    "pageTitle": "Dashboard",
+    "pageDescription": "this is Dashboard",
+    "heroTitle": "Welcome to Mantri In",
+    "heroSubtitle": "Where Luxury Meets Homely Comfort",
+    "bookNow": "Book Your Stay Now",
+    "stats": {
+      "luxuryRooms": "Luxury Rooms",
+      "starRating": "5-Star Rating",
+      "happyGuests": "Happy Guests",
+      "specialOffers": "Special Offers"
+    },
+    "common": {
+      "lastYear": "last year"
+    },
+    "months": {
+      "march2023": "March 2023",
+      "april2023": "April 2023",
+      "may2023": "May 2023"
+    },
+    "sections": {
+      "salesOverview": {
+        "title": "Sales Overview",
+        "earningsThisMonth": "Earnings this month",
+        "expenseThisMonth": "Expense this month"
+      },
+      "yearlyBreakup": {
+        "title": "Yearly Breakup",
+        "year2022": "2022",
+        "year2023": "2023"
+      },
+      "recentTransactions": {
+        "title": "Recent Transactions",
+        "paymentReceived": "Payment received from John Doe of $385.90",
+        "newSaleRecorded": "New sale recorded",
+        "paymentMade": "Payment was made of $64.95 to Michael",
+        "newArrivalRecorded": "New arrival recorded",
+        "paymentReceivedShort": "Payment Received"
+      },
+      "productPerformance": {
+        "title": "Product Performance",
+        "columns": {
+          "id": "Id",
+          "assigned": "Assigned",
+          "name": "Name",
+          "priority": "Priority",
+          "budget": "Budget"
+        },
+        "priority": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "critical": "Critical"
+        }
+      },
+      "monthlyEarnings": {
+        "title": "Monthly Earnings"
+      },
+      "blog": {
+        "title": "Products",
+        "addToCart": "Add To Cart"
+      }
+    }
+  },
+  "guestEntry": {
+    "summary": {
+      "totalGuests": "Total Guests",
+      "active": "Active"
+    },
+    "actions": {
+      "addGuest": "Add Guest",
+      "generateReport": "Generate Report",
+      "importCsv": "Import CSV / Excel",
+      "importing": "Importing...",
+      "exportExcel": "Export Excel (All Fields)"
+    },
+    "table": {
+      "slNo": "SL No.",
+      "grcNo": "GRC No.",
+      "guestName": "Guest Name",
+      "contact": "Contact",
+      "arrivalDate": "Arrival Date",
+      "arrivalTime": "Arrival Time",
+      "tariff": "Tariff",
+      "action": "Action",
+      "viewDetails": "View Details"
+    },
+    "states": {
+      "noGuests": "No guests found."
+    }
+  },
+  "room": {
+    "title": "PG Room Management",
+    "actions": {
+      "exportCsv": "Export CSV",
+      "addRoom": "Add Room"
+    },
+    "summary": {
+      "totalRooms": "Total Rooms",
+      "bedsOverview": "Beds Overview",
+      "totalBeds": "Total Beds",
+      "occupied": "Occupied",
+      "available": "Available"
+    },
+    "floorLabel": "Floor {{floor}}",
+    "status": {
+      "vacant": "vacant",
+      "partiallyOccupied": "Partially Occupied",
+      "full": "Full"
+    },
+    "capacityOccupied": "{{occupied}}/{{capacity}} occupied",
+    "tabs": {
+      "details": "Details",
+      "tenants": "Tenants",
+      "history": "History"
+    },
+    "drawer": {
+      "roomNo": "Room No. {{roomNumber}}",
+      "floor": "Floor:",
+      "roomType": "Room Type:",
+      "amenities": "Amenities"
+    },
+    "tenants": {
+      "heading": "Room {{roomNumber}} Guests",
+      "currentGuests": "{{count}} current guest",
+      "noActiveGuests": "No active guests in this room",
+      "guestName": "Guest Name",
+      "contact": "Contact",
+      "bedNo": "Bed No.",
+      "checkInDate": "Check-in Date"
+    },
+    "history": {
+      "heading": "Room {{roomNumber}} History",
+      "entries": "{{count}} entries",
+      "noData": "No historical data available",
+      "checkedOut": "Checked Out",
+      "active": "Active",
+      "aadharNumber": "Aadhar Number",
+      "emailAddress": "Email Address",
+      "duration": "Duration",
+      "days": "{{count}} days",
+      "ongoing": "Ongoing",
+      "checkOutDate": "Check-out Date",
+      "currentStatus": "Current Status",
+      "activeStay": "Active Stay",
+      "specialRemarks": "Special Remarks",
+      "notProvided": "Not provided",
+      "noRemarks": "No remarks"
+    },
+    "delete": {
+      "confirmTitle": "Confirm Delete",
+      "confirmBody": "Are you sure you want to delete room {{roomNumber}}?"
+    }
+  },
+  "employee": {
+    "title": "Employee Management",
+    "actions": {
+      "addEmployee": "Add Employee",
+      "exportCsv": "Export CSV"
+    },
+    "summary": {
+      "totalEmployees": "Total Employees",
+      "activeEmployees": "Active Employees"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "empty": {
+      "title": "No Employees Found",
+      "description": "Start building your team by adding the first employee record"
+    },
+    "csv": {
+      "employeeId": "Employee ID",
+      "employeeName": "Employee Name",
+      "phone": "Phone",
+      "workplace": "Workplace",
+      "currentStatus": "Current Status",
+      "joiningDate": "Joining Date"
+    }
+  },
+  "product": {
+    "title": "Product Management",
+    "actions": {
+      "exportCsv": "Export CSV",
+      "importCsv": "Import CSV / Excel",
+      "addAriaLabel": "Add agent"
+    },
+    "toast": {
+      "fetchFailed": "Failed to fetch products.",
+      "createFailed": "Failed to create product.",
+      "importFailed": "Failed to import products."
+    },
+    "csv": {
+      "productName": "Product Name",
+      "hsnCode": "HSN Code",
+      "vendorName": "Vendor Name",
+      "vendorCode": "Vendor Code",
+      "manufacturingDate": "Manufacturing Date",
+      "expiryDate": "Expiry Date",
+      "price": "Price",
+      "gstType": "GST Type",
+      "minQuantity": "Min Quantity",
+      "maxQuantity": "Max Quantity",
+      "batchNumber": "Batch Number",
+      "billNumber": "Bill Number",
+      "billDate": "Bill Date",
+      "remarks": "Remarks"
+    },
+    "form": {
+      "title": "Product Entry Form",
+      "productName": "Product Name",
+      "hsnCode": "HSN Code",
+      "vendorName": "Vendor Name",
+      "vendorCode": "Vendor Code",
+      "manufacturingDate": "Date of Manufacturing",
+      "expiryDate": "Date of Expiry",
+      "uom": "Unit of Measurement",
+      "price": "Price",
+      "gstType": "GST Type",
+      "minQuantity": "Min Quantity",
+      "maxQuantity": "Max Quantity",
+      "batchNumber": "Batch Number",
+      "billNumber": "Bill Number",
+      "billDate": "Bill Date",
+      "remarks": "Remarks",
+      "saving": "Saving...",
+      "submit": "Submit"
+    },
+    "saved": {
+      "title": "Saved Products"
+    },
+    "table": {
+      "product": "Product",
+      "vendor": "Vendor",
+      "batch": "Batch",
+      "price": "Price",
+      "billDate": "Bill Date",
+      "noProducts": "No products found."
+    },
+    "import": {
+      "title": "Import Products",
+      "buttonLabel": "Import Products",
+      "infoText": "Preview which product rows will be inserted, updated, or skipped before importing them into product management."
+    }
+  },
+  "agents": {
+    "title": "Agents",
+    "actions": {
+      "exportCsv": "Export CSV",
+      "importCsv": "Import CSV / Excel"
+    },
+    "states": {
+      "noAgents": "No Agents onboarded"
+    },
+    "card": {
+      "unnamedAgent": "Unnamed Agent",
+      "id": "ID",
+      "phone": "Phone",
+      "status": "Status"
+    },
+    "csv": {
+      "agentId": "Agent ID",
+      "agentName": "Agent Name",
+      "contactNumber": "Contact Number",
+      "aadharNumber": "Aadhar Number",
+      "vehicleNumber": "Vehicle Number",
+      "commissionType": "Commission Type",
+      "commissionAmount": "Commission Amount",
+      "status": "Status"
+    },
+    "import": {
+      "title": "Import Agents",
+      "buttonLabel": "Import Agents",
+      "infoText": "Preview which agent rows will be inserted, updated, or skipped before importing them into agent management."
+    },
+    "modal": {
+      "title": "Enter Agent Details",
+      "errors": {
+        "agentNameRequired": "Agent name is required",
+        "mobileRequired": "Mobile number is required",
+        "addFailed": "Failed to add agent"
+      },
+      "success": {
+        "added": "Agent added successfully"
+      },
+      "fields": {
+        "agentName": "Agent Name",
+        "mobileNumber": "Mobile Number",
+        "vehicleNumber": "Vehicle Number",
+        "aadharNumber": "Agent Aadhar No",
+        "commissionType": "Commission Type",
+        "commissionAmount": "Commission Amount",
+        "commissionPercentage": "Commission Percentage",
+        "remark": "Remark"
+      },
+      "options": {
+        "percentage": "Percentage",
+        "fix": "Fix"
+      },
+      "actions": {
+        "close": "Close",
+        "adding": "Adding Agent...",
+        "add": "Add Agent"
+      }
+    }
+  },
+  "roles": {
+    "title": "Roles",
+    "description": "Manage role access for all members.",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "currentRole": "Current Role",
+      "action": "Action"
+    },
+    "actions": {
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "updating": "Updating..."
+    },
+    "states": {
+      "noUsers": "No users found",
+      "loadingMembers": "Loading members..."
+    },
+    "dialog": {
+      "updateRole": "Update Role",
+      "role": "Role"
+    },
+    "roleNames": {
+      "admin": "admin",
+      "semiadmin": "semi admin",
+      "user": "user"
+    },
+    "toast": {
+      "loadUsersFailed": "Failed to load users",
+      "updateFailed": "Failed to update role",
+      "updateSuccess": "Role updated successfully"
+    }
+  },
+  "whatsapp": {
+    "title": "WhatsApp Templates",
+    "description": "Create and manage message templates with dynamic fields",
+    "actions": {
+      "newTemplate": "New Template",
+      "cancel": "Cancel",
+      "addAriaLabel": "Add template",
+      "sendNow": "Send Now",
+      "sending": "Sending...",
+      "scheduleTest": "Schedule Test",
+      "scheduling": "Scheduling..."
+    },
+    "filter": {
+      "label": "Filter by Category",
+      "all": "All",
+      "templateSingle": "template",
+      "templatePlural": "templates"
+    },
+    "states": {
+      "noTemplatesTitle": "No templates yet",
+      "noTemplatesDescription": "Click New Template to create your first WhatsApp message template."
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "categories": {
+      "check-in": "Check-in",
+      "checkout": "Checkout",
+      "reminder": "Reminder",
+      "promotion": "Promotion",
+      "custom": "Custom"
+    },
+    "fieldsUsed": "Fields used:",
+    "tooltips": {
+      "testWa2": "Test via WA2 (instant)",
+      "testProvider1": "Test via Provider 1 (1 min)",
+      "copyMessage": "Copy message",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "confirm": {
+      "deleteTemplate": "Delete this template?"
+    },
+    "wa2Dialog": {
+      "title": "Test via WA2 Provider",
+      "templateLabel": "Template",
+      "description": "Message is sent instantly using the secondary WhatsApp provider (WA2).",
+      "mobileLabel": "Mobile Number",
+      "mobilePlaceholder": "Enter 10-digit mobile",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Message to send (pre-filled from template body)",
+      "helperText": "Placeholders like {{guest_name}} will be sent as-is for testing"
+    },
+    "testDialog": {
+      "title": "Send Test Message",
+      "templateLabel": "Template",
+      "description": "The message will be sent with sample/dummy data and delivered in ~1 minute.",
+      "scheduledAt": "Scheduled at:",
+      "mobileLabel": "Mobile Number",
+      "mobilePlaceholder": "Enter 10-digit mobile",
+      "helperText": "WhatsApp will be sent to this number"
+    },
+    "toast": {
+      "loadFailed": "Failed to load templates",
+      "deleted": "Template deleted",
+      "deleteFailed": "Failed to delete template",
+      "copied": "Copied!",
+      "invalidMobile": "Enter a valid 10-digit mobile number",
+      "wa2Sent": "Message sent via WA2 provider!",
+      "wa2Failed": "WA2 send failed",
+      "testScheduled": "Test message scheduled for 1 minute from now!",
+      "scheduleFailed": "Failed to schedule test"
+    },
+    "modal": {
+      "titleEdit": "Edit WhatsApp Template",
+      "titleNew": "New WhatsApp Template",
+      "previewTitle": "Preview (sample data):",
+      "errors": {
+        "templateNameRequired": "Template name is required",
+        "messageBodyRequired": "Message body is required",
+        "saveFailed": "Failed to save",
+        "saveTemplateFailed": "Failed to save template"
+      },
+      "success": {
+        "updated": "Template updated",
+        "created": "Template created"
+      },
+      "fields": {
+        "templateName": "Template Name",
+        "templateNamePlaceholder": "e.g. Welcome Message",
+        "category": "Category",
+        "helpInsertField": "Click a field to insert it at the cursor position in the message:",
+        "messageBody": "Message Body",
+        "messageBodyPlaceholder": "Hi {{guest_name}}, welcome to {{hotel_name}}! Your room is {{room_no}}.",
+        "active": "Active"
+      },
+      "templateFields": {
+        "guest_name": "Guest Name",
+        "room_no": "Room No",
+        "grc_no": "GRC No",
+        "arrival_date": "Arrival Date",
+        "checkout_date": "Checkout Date",
+        "amount": "Amount",
+        "hotel_name": "Hotel Name",
+        "contact_number": "Contact Number",
+        "agent_name": "Agent Name",
+        "days": "No. of Days"
+      },
+      "actions": {
+        "saving": "Saving...",
+        "update": "Update",
+        "create": "Create"
+      }
+    }
+  },
+  "importDialog": {
+    "units": {
+      "kb": "KB",
+      "mb": "MB"
+    },
+    "actions": {
+      "insert": "Insert",
+      "update": "Update",
+      "skip": "Skip"
+    },
+    "errors": {
+      "noImportableRows": "The selected file does not contain any importable rows.",
+      "previewFailed": "Unable to preview import actions.",
+      "readFailed": "Unable to read the selected file.",
+      "invalidFile": "Invalid file selected.",
+      "chooseFileBeforeImport": "Choose a valid CSV or Excel file before importing."
+    },
+    "helper": {
+      "dropOrChoose": "Drag and drop a CSV/XLS/XLSX file here, or choose it from your computer.",
+      "rowsFound": "{{count}} row(s) found in sheet \"{{sheetName}}\"."
+    },
+    "dropzone": {
+      "activeTitle": "Drop the import sheet here",
+      "idleTitle": "Drag and drop CSV or Excel here"
+    },
+    "buttons": {
+      "chooseFile": "Choose File",
+      "downloadTemplate": "Download Template",
+      "remove": "Remove",
+      "cancel": "Cancel",
+      "importing": "Importing...",
+      "close": "Close"
+    },
+    "summary": {
+      "rows": "Rows: {{count}}",
+      "matchedHeaders": "Matched headers: {{count}}",
+      "missingHeaders": "Missing headers: {{count}}"
+    },
+    "forceCreateLabel": "Always create new rows instead of updating matches",
+    "preview": {
+      "checking": "Checking which rows will be inserted, updated, or skipped...",
+      "willInsert": "Will insert: {{count}}",
+      "willUpdate": "Will update: {{count}}",
+      "willSkip": "Will skip: {{count}}"
+    },
+    "rowLabel": "Row {{rowNumber}}{{labelSuffix}}",
+    "result": {
+      "title": "Import Result",
+      "inserted": "Inserted: {{count}}",
+      "updated": "Updated: {{count}}",
+      "skipped": "Skipped: {{count}}"
+    }
+  },
+  "header": {
+    "welcome": "Welcome, {{name}}",
+    "guest": "Guest",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "sidebar": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "guestEntry": "Guest Entry",
+    "room": "Room",
+    "employeeManagements": "Employee Managements",
+    "employee": "Employee",
+    "productManagements": "Product Managements",
+    "manageProduct": "Manage Product",
+    "agents": "Agents",
+    "manageAgents": "Manage Agents",
+    "whatsApp": "WhatsApp",
+    "waTemplates": "WA Templates",
+    "accessControl": "Access Control",
+    "roles": "Roles"
+  }
+}

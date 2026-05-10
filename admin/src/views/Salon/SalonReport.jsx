@@ -34,6 +34,7 @@ import MonthlyRevenueReport from 'src/components/PDF-Format/Salon/MonthlyRevenue
 import Unauthorized from 'src/components/Unauthorized/Unauthorized';
 import Config from '../../components/Config';
 import EntityImportDialog from '../../components/shared/EntityImportDialog';
+import { canExportData, canModifyRecords } from '../../utils/permissions';
 
 const SalonReport = () => {
   const [isPrinting, setIsPrinting] = useState(false);
@@ -43,6 +44,9 @@ const SalonReport = () => {
   const { data: dailyData, isLoading, error } = useSelector((state) => state.Report.salonReport);
 
   const { isAuthenticated, user } = useSelector((state) => state.Auth);
+  const currentUser = useSelector((state) => state.Auth.user);
+  const allowExport = canExportData(currentUser);
+  const allowImport = canModifyRecords(currentUser);
 
   console.log('Report User:', user);
 
@@ -270,35 +274,39 @@ const SalonReport = () => {
                   Print Details
                 </Button>
 
-                <CSVLink
-                  data={csvData}
-                  headers={csvHeaders}
-                  filename={`Monthly ${monthName} report.csv`}
-                  style={{ textDecoration: 'none' }}
-                >
+                {allowExport && (
+                  <CSVLink
+                    data={csvData}
+                    headers={csvHeaders}
+                    filename={`Monthly ${monthName} report.csv`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<DownloadIcon />}
+                      sx={{
+                        height: '56px',
+                        backgroundColor: '#1976d2',
+                        '&:hover': { backgroundColor: '#1565c0' },
+                      }}
+                    >
+                      Export CSV
+                    </Button>
+                  </CSVLink>
+                )}
+
+                {allowImport && (
                   <Button
                     variant="contained"
-                    color="primary"
-                    startIcon={<DownloadIcon />}
-                    sx={{
-                      height: '56px',
-                      backgroundColor: '#1976d2',
-                      '&:hover': { backgroundColor: '#1565c0' },
-                    }}
+                    color="secondary"
+                    startIcon={<UploadFileIcon />}
+                    onClick={() => setImportDialogOpen(true)}
+                    sx={{ height: '56px' }}
                   >
-                    Export CSV
+                    Import CSV / Excel
                   </Button>
-                </CSVLink>
-
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<UploadFileIcon />}
-                  onClick={() => setImportDialogOpen(true)}
-                  sx={{ height: '56px' }}
-                >
-                  Import CSV / Excel
-                </Button>
+                )}
               </Box>
             </Box>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // mui imports
 import { ListItemIcon, ListItem, List, styled, ListItemText, useTheme } from '@mui/material';
@@ -8,6 +9,7 @@ import { ListItemIcon, ListItem, List, styled, ListItemText, useTheme } from '@m
 const NavItem = ({ item, level, pathDirect, onClick }) => {
   const Icon = item.icon;
   const theme = useTheme();
+  const { t } = useTranslation();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
   const ListItemStyled = styled(ListItem)(() => ({
@@ -54,7 +56,7 @@ const NavItem = ({ item, level, pathDirect, onClick }) => {
           {itemIcon}
         </ListItemIcon>
         <ListItemText>
-          <>{item.title}</>
+          <>{t(item.titleKey || '', { defaultValue: item.title })}</>
         </ListItemText>
       </ListItemStyled>
     </List>

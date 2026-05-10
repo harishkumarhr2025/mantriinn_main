@@ -8,6 +8,7 @@ import img4 from 'src/assets/images/products/s11.jpg';
 import { Stack } from '@mui/system';
 import { IconBasket } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
+import { useTranslation } from 'react-i18next';
 
 const ecoCard = [
     {
@@ -45,15 +46,19 @@ const ecoCard = [
 ];
 
 const Blog = () => {
+    const { t } = useTranslation();
     return (
         <Grid container spacing={3}>
             {ecoCard.map((product, index) => (
                 <Grid item sm={12} md={4} lg={3} key={index}>
                     <BlankCard>
+                        <Typography variant="subtitle1" sx={{ p: 2, pb: 0, fontWeight: 600 }}>
+                            {t('dashboard.sections.blog.title', { defaultValue: 'Products' })}
+                        </Typography>
                         <Typography component={Link} to="/">
                             <img src={product.photo} alt="img" width="100%" />
                         </Typography>
-                        <Tooltip title="Add To Cart">
+                        <Tooltip title={t('dashboard.sections.blog.addToCart', { defaultValue: 'Add To Cart' })}>
                             <Fab
                                 size="small"
                                 color="primary"

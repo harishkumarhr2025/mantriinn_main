@@ -17,8 +17,10 @@ import Fade from '@mui/material/Fade';
 import dayjs from 'dayjs';
 import Toast from 'react-hot-toast';
 import Config from '../../components/Config';
+import { useTranslation } from 'react-i18next';
 
 const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacityValue }) => {
+  const { t } = useTranslation();
   const [agentDetails, setAgentDetails] = useState({
     agent_name: '',
     agent_mobile_no: '',
@@ -43,12 +45,12 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
 
   const handleSubmit = async () => {
     if (!agentDetails.agent_name?.trim()) {
-      setError('Agent name is required');
+      setError(t('agents.modal.errors.agentNameRequired', { defaultValue: 'Agent name is required' }));
       return;
     }
 
     if (!agentDetails.agent_mobile_no?.trim()) {
-      setError('Mobile number is required');
+      setError(t('agents.modal.errors.mobileRequired', { defaultValue: 'Mobile number is required' }));
       return;
     }
 
@@ -74,11 +76,11 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
       const response = await Config.post('/create-new-agent', payload);
 
       if (!response.data?.success) {
-        setError(response.data?.message || 'Failed to add agent');
+        setError(response.data?.message || t('agents.modal.errors.addFailed', { defaultValue: 'Failed to add agent' }));
         return;
       }
 
-      Toast.success(response.data?.message || 'Agent added successfully');
+      Toast.success(response.data?.message || t('agents.modal.success.added', { defaultValue: 'Agent added successfully' }));
       handleModalSubmit?.(response.data?.agent);
       handleClose();
 
@@ -94,7 +96,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
         agent_remarks: '',
       });
     } catch (submitError) {
-      setError(submitError.response?.data?.message || 'Failed to add agent');
+      setError(submitError.response?.data?.message || t('agents.modal.errors.addFailed', { defaultValue: 'Failed to add agent' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -141,7 +143,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
         >
           <Typography id="transition-modal-title" variant="h6" align="center" component="h2">
             {/* {initialData ? "Update FAQ'S Here" : "Add new FAQ'S Here"} */}
-            Enter Agent Details
+            {t('agents.modal.title', { defaultValue: 'Enter Agent Details' })}
           </Typography>
           <Stack sx={{ width: '100%', marginTop: '10px' }} spacing={2}>
             {error && (
@@ -166,7 +168,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
               <TextField
                 name="agent_name"
                 id="outlined-basic"
-                label="Agent Name"
+                label={t('agents.modal.fields.agentName', { defaultValue: 'Agent Name' })}
                 variant="outlined"
                 value={agentDetails.agent_name}
                 onChange={handleChange}
@@ -177,7 +179,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
               <TextField
                 name="agent_mobile_no"
                 id="outlined-basic"
-                label="Mobile Number"
+                label={t('agents.modal.fields.mobileNumber', { defaultValue: 'Mobile Number' })}
                 variant="outlined"
                 value={agentDetails.agent_mobile_no}
                 onChange={handleChange}
@@ -191,7 +193,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
               <TextField
                 name="agent_vehicle_no"
                 id="outlined-basic"
-                label="Vehicle Number"
+                label={t('agents.modal.fields.vehicleNumber', { defaultValue: 'Vehicle Number' })}
                 variant="outlined"
                 value={agentDetails.agent_vehicle_no}
                 onChange={handleChange}
@@ -202,7 +204,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
               <TextField
                 name="agent_aadhar_no"
                 id="outlined-basic"
-                label="Agent Aadhar No"
+                label={t('agents.modal.fields.aadharNumber', { defaultValue: 'Agent Aadhar No' })}
                 variant="outlined"
                 value={agentDetails.agent_aadhar_no}
                 onChange={handleChange}
@@ -214,24 +216,24 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
 
             <Box sx={{ display: 'flex', gap: 2, marginTop: '20px' }}>
               <FormControl sx={{ minWidth: 120, width: '50%' }}>
-                <InputLabel id="demo-select-small-label">Commission Type</InputLabel>
+                <InputLabel id="demo-select-small-label">{t('agents.modal.fields.commissionType', { defaultValue: 'Commission Type' })}</InputLabel>
                 <Select
                   name="commission_type"
                   labelId="demo-select-small-label"
                   id="demo-select-small"
                   value={agentDetails.commission_type}
-                  label="Commission Type"
+                  label={t('agents.modal.fields.commissionType', { defaultValue: 'Commission Type' })}
                   onChange={handleChange}
                 >
-                  <MenuItem value={'percentage'}>Percentage</MenuItem>
-                  <MenuItem value={'fix'}>Fix</MenuItem>
+                  <MenuItem value={'percentage'}>{t('agents.modal.options.percentage', { defaultValue: 'Percentage' })}</MenuItem>
+                  <MenuItem value={'fix'}>{t('agents.modal.options.fix', { defaultValue: 'Fix' })}</MenuItem>
                 </Select>
               </FormControl>
               {agentDetails.commission_type === 'fix' ? (
                 <TextField
                   name="commission_amount"
                   id="outlined-basic"
-                  label="Commission Amount"
+                  label={t('agents.modal.fields.commissionAmount', { defaultValue: 'Commission Amount' })}
                   variant="outlined"
                   value={agentDetails.commission_amount}
                   onChange={handleChange}
@@ -243,7 +245,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
                 <TextField
                   name="commission_percentage"
                   id="outlined-basic"
-                  label="Commission Percentage"
+                  label={t('agents.modal.fields.commissionPercentage', { defaultValue: 'Commission Percentage' })}
                   variant="outlined"
                   value={agentDetails.commission_percentage}
                   onChange={handleChange}
@@ -258,7 +260,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
               <TextField
                 name="agent_remarks"
                 id="outlined-basic"
-                label="Remark"
+                label={t('agents.modal.fields.remark', { defaultValue: 'Remark' })}
                 variant="outlined"
                 value={agentDetails.agent_remarks}
                 onChange={handleChange}
@@ -303,7 +305,7 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
                 sx={{ width: '20%', padding: '8px' }}
                 onClick={handleClose}
               >
-                Close
+                {t('agents.modal.actions.close', { defaultValue: 'Close' })}
               </Button>
               <Button
                 variant="contained"
@@ -313,7 +315,9 @@ const AgentModal = ({ open, handleClose, handleModalSubmit, initialData, opacity
                 sx={{ width: '78%', padding: '8px', marginLeft: '10px' }}
               >
                 {/* {initialData ? 'Update FAQ' : 'Add FAQ'} */}
-                {isSubmitting ? 'Adding Agent...' : 'Add Agent'}
+                {isSubmitting
+                  ? t('agents.modal.actions.adding', { defaultValue: 'Adding Agent...' })
+                  : t('agents.modal.actions.add', { defaultValue: 'Add Agent' })}
               </Button>
             </Box>
           </div>

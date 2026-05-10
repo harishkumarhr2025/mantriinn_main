@@ -4,8 +4,10 @@ import { useTheme } from '@mui/material/styles';
 import { Stack, Typography, Avatar, Fab } from '@mui/material';
 import { IconArrowDownRight, IconCurrencyDollar } from '@tabler/icons';
 import DashboardCard from '../../../components/shared/DashboardCard';
+import { useTranslation } from 'react-i18next';
 
 const MonthlyEarnings = () => {
+  const { t } = useTranslation();
   // chart color
   const theme = useTheme();
   const secondary = theme.palette.secondary.main;
@@ -53,7 +55,7 @@ const MonthlyEarnings = () => {
 
   return (
     <DashboardCard
-      title="Monthly Earnings"
+      title={t('dashboard.sections.monthlyEarnings.title', { defaultValue: 'Monthly Earnings' })}
       action={
         <Fab color="secondary" size="medium" sx={{color: '#ffffff'}}>
           <IconCurrencyDollar width={24} />
@@ -75,7 +77,7 @@ const MonthlyEarnings = () => {
             +9%
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            last year
+            {t('dashboard.common.lastYear', { defaultValue: 'last year' })}
           </Typography>
         </Stack>
       </>

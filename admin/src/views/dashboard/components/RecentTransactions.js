@@ -11,10 +11,16 @@ import {
   timelineOppositeContentClasses,
 } from '@mui/lab';
 import { Link, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const RecentTransactions = () => {
+  const { t } = useTranslation();
   return (
-    <DashboardCard title="Recent Transactions">
+    <DashboardCard
+      title={t('dashboard.sections.recentTransactions.title', {
+        defaultValue: 'Recent Transactions',
+      })}
+    >
       <>
         <Timeline
           className="theme-timeline"
@@ -40,7 +46,11 @@ const RecentTransactions = () => {
               <TimelineDot color="primary" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Payment received from John Doe of $385.90</TimelineContent>
+            <TimelineContent>
+              {t('dashboard.sections.recentTransactions.paymentReceived', {
+                defaultValue: 'Payment received from John Doe of $385.90',
+              })}
+            </TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>10:00 am</TimelineOppositeContent>
@@ -49,7 +59,11 @@ const RecentTransactions = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">New sale recorded</Typography>{' '}
+              <Typography fontWeight="600">
+                {t('dashboard.sections.recentTransactions.newSaleRecorded', {
+                  defaultValue: 'New sale recorded',
+                })}
+              </Typography>{' '}
               <Link href="/" underline="none">
                 #ML-3467
               </Link>
@@ -61,7 +75,11 @@ const RecentTransactions = () => {
               <TimelineDot color="success" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Payment was made of $64.95 to Michael</TimelineContent>
+            <TimelineContent>
+              {t('dashboard.sections.recentTransactions.paymentMade', {
+                defaultValue: 'Payment was made of $64.95 to Michael',
+              })}
+            </TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>09:30 am</TimelineOppositeContent>
@@ -70,7 +88,11 @@ const RecentTransactions = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">New sale recorded</Typography>{' '}
+              <Typography fontWeight="600">
+                {t('dashboard.sections.recentTransactions.newSaleRecorded', {
+                  defaultValue: 'New sale recorded',
+                })}
+              </Typography>{' '}
               <Link href="/" underline="none">
                 #ML-3467
               </Link>
@@ -83,7 +105,11 @@ const RecentTransactions = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">New arrival recorded</Typography>
+              <Typography fontWeight="600">
+                {t('dashboard.sections.recentTransactions.newArrivalRecorded', {
+                  defaultValue: 'New arrival recorded',
+                })}
+              </Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
@@ -91,7 +117,11 @@ const RecentTransactions = () => {
             <TimelineSeparator>
               <TimelineDot color="success" variant="outlined" />
             </TimelineSeparator>
-            <TimelineContent>Payment Received</TimelineContent>
+            <TimelineContent>
+              {t('dashboard.sections.recentTransactions.paymentReceivedShort', {
+                defaultValue: 'Payment Received',
+              })}
+            </TimelineContent>
           </TimelineItem>
         </Timeline>
       </>

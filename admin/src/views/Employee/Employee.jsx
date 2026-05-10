@@ -21,6 +21,7 @@ import { fetchAllEmployee } from '../../redux/features/EMS/EmployeeSlice';
 import EmployeeDetails from '../../components/EMS/EmployeeDetails';
 import { CSVLink } from 'react-csv';
 import { canExportData } from '../../utils/permissions';
+import { useTranslation } from 'react-i18next';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: '12px',
@@ -38,6 +39,7 @@ const RoleChip = styled(Chip)(({ role }) => ({
 }));
 
 const Employee = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
@@ -69,12 +71,18 @@ const Employee = () => {
   };
 
   const csvHeaders = [
-    { label: 'Employee ID', key: 'employeeId' },
-    { label: 'Employee Name', key: 'employeeName' },
-    { label: 'Phone', key: 'phone' },
-    { label: 'Workplace', key: 'workplace' },
-    { label: 'Current Status', key: 'currentStatus' },
-    { label: 'Joining Date', key: 'joiningDate' },
+    { label: t('employee.csv.employeeId', { defaultValue: 'Employee ID' }), key: 'employeeId' },
+    {
+      label: t('employee.csv.employeeName', { defaultValue: 'Employee Name' }),
+      key: 'employeeName',
+    },
+    { label: t('employee.csv.phone', { defaultValue: 'Phone' }), key: 'phone' },
+    { label: t('employee.csv.workplace', { defaultValue: 'Workplace' }), key: 'workplace' },
+    {
+      label: t('employee.csv.currentStatus', { defaultValue: 'Current Status' }),
+      key: 'currentStatus',
+    },
+    { label: t('employee.csv.joiningDate', { defaultValue: 'Joining Date' }), key: 'joiningDate' },
   ];
 
   const csvData = (employee || []).map((emp) => ({
@@ -104,7 +112,7 @@ const Employee = () => {
             letterSpacing: '-0.5px',
           }}
         >
-          Employee Management
+          {t('employee.title', { defaultValue: 'Employee Management' })}
         </Typography>
         <Button
           variant="contained"
@@ -114,7 +122,7 @@ const Employee = () => {
             setOpen(true);
           }}
         >
-          Add Employee
+          {t('employee.actions.addEmployee', { defaultValue: 'Add Employee' })}
         </Button>
         {allowExport && (
           <CSVLink
@@ -124,18 +132,22 @@ const Employee = () => {
             style={{ textDecoration: 'none' }}
           >
             <Button variant="outlined" startIcon={<DownloadIcon />} sx={{ ml: 2 }}>
-              Export CSV
+              {t('employee.actions.exportCsv', { defaultValue: 'Export CSV' })}
             </Button>
           </CSVLink>
         )}
       </Box>
 
-      {/* Summary Cards */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
         {[
-          { title: 'Total Employees', value: totalEmployees, icon: <People />, color: '#4a148c' },
           {
-            title: 'Active Employees',
+            title: t('employee.summary.totalEmployees', { defaultValue: 'Total Employees' }),
+            value: totalEmployees,
+            icon: <People />,
+            color: '#4a148c',
+          },
+          {
+            title: t('employee.summary.activeEmployees', { defaultValue: 'Active Employees' }),
             value: activeEmployees,
             icon: <CheckCircle />,
             color: '#2e7d32',
@@ -251,7 +263,9 @@ const Employee = () => {
                           textTransform: 'uppercase',
                         }}
                       >
-                        {emp.currentStatus ? 'Active' : 'Inactive'}
+                        {emp.currentStatus
+                          ? t('employee.status.active', { defaultValue: 'Active' })
+                          : t('employee.status.inactive', { defaultValue: 'Inactive' })}
                       </Box>
                     </CardContent>
                   </StyledCard>
@@ -300,7 +314,7 @@ const Employee = () => {
                 fontWeight: 500,
               }}
             >
-              No Employees Found
+              {t('employee.empty.title', { defaultValue: 'No Employees Found' })}
             </Typography>
             <Typography
               variant="body1"
@@ -310,7 +324,9 @@ const Employee = () => {
                 mb: 3,
               }}
             >
-              Start building your team by adding the first employee record
+              {t('employee.empty.description', {
+                defaultValue: 'Start building your team by adding the first employee record',
+              })}
             </Typography>
           </Box>
         </Card>

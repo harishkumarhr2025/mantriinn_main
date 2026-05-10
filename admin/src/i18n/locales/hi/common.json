@@ -1,0 +1,545 @@
+{
+  "common": {
+    "language": "भाषा",
+    "english": "अंग्रेज़ी",
+    "hindi": "हिंदी",
+    "kannada": "कन्नड़",
+    "notification": "सूचनाएं",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं"
+  },
+  "dashboard": {
+    "pageTitle": "डैशबोर्ड",
+    "pageDescription": "यह डैशबोर्ड है",
+    "heroTitle": "मंत्रि इन में आपका स्वागत है",
+    "heroSubtitle": "जहां लक्जरी और घर जैसा आराम मिलता है",
+    "bookNow": "अभी अपना स्टे बुक करें",
+    "stats": {
+      "luxuryRooms": "लक्जरी कमरे",
+      "starRating": "5-स्टार रेटिंग",
+      "happyGuests": "खुश मेहमान",
+      "specialOffers": "विशेष ऑफर"
+    },
+    "common": {
+      "lastYear": "पिछले वर्ष"
+    },
+    "months": {
+      "march2023": "मार्च 2023",
+      "april2023": "अप्रैल 2023",
+      "may2023": "मई 2023"
+    },
+    "sections": {
+      "salesOverview": {
+        "title": "बिक्री अवलोकन",
+        "earningsThisMonth": "इस महीने की कमाई",
+        "expenseThisMonth": "इस महीने का खर्च"
+      },
+      "yearlyBreakup": {
+        "title": "वार्षिक विवरण",
+        "year2022": "2022",
+        "year2023": "2023"
+      },
+      "recentTransactions": {
+        "title": "हाल के लेनदेन",
+        "paymentReceived": "John Doe से $385.90 का भुगतान प्राप्त हुआ",
+        "newSaleRecorded": "नई बिक्री दर्ज की गई",
+        "paymentMade": "Michael को $64.95 का भुगतान किया गया",
+        "newArrivalRecorded": "नया आगमन दर्ज किया गया",
+        "paymentReceivedShort": "भुगतान प्राप्त"
+      },
+      "productPerformance": {
+        "title": "उत्पाद प्रदर्शन",
+        "columns": {
+          "id": "आईडी",
+          "assigned": "असाइन किया गया",
+          "name": "नाम",
+          "priority": "प्राथमिकता",
+          "budget": "बजट"
+        },
+        "priority": {
+          "low": "निम्न",
+          "medium": "मध्यम",
+          "high": "उच्च",
+          "critical": "महत्वपूर्ण"
+        }
+      },
+      "monthlyEarnings": {
+        "title": "मासिक कमाई"
+      },
+      "blog": {
+        "title": "उत्पाद",
+        "addToCart": "कार्ट में जोड़ें"
+      }
+    }
+  },
+  "guestEntry": {
+    "summary": {
+      "totalGuests": "कुल मेहमान",
+      "active": "सक्रिय"
+    },
+    "actions": {
+      "addGuest": "मेहमान जोड़ें",
+      "generateReport": "रिपोर्ट तैयार करें",
+      "importCsv": "CSV / Excel आयात करें",
+      "importing": "आयात हो रहा है...",
+      "exportExcel": "Excel निर्यात करें (सभी फ़ील्ड)"
+    },
+    "table": {
+      "slNo": "क्रमांक",
+      "grcNo": "GRC नं.",
+      "guestName": "मेहमान का नाम",
+      "contact": "संपर्क",
+      "arrivalDate": "आगमन तिथि",
+      "arrivalTime": "आगमन समय",
+      "tariff": "टैरिफ",
+      "action": "कार्य",
+      "viewDetails": "विवरण देखें"
+    },
+    "states": {
+      "noGuests": "कोई मेहमान नहीं मिला।"
+    }
+  },
+  "room": {
+    "title": "पीजी रूम प्रबंधन",
+    "actions": {
+      "exportCsv": "CSV निर्यात करें",
+      "addRoom": "रूम जोड़ें"
+    },
+    "summary": {
+      "totalRooms": "कुल कमरे",
+      "bedsOverview": "बिस्तरों का अवलोकन",
+      "totalBeds": "कुल बिस्तर",
+      "occupied": "भरा हुआ",
+      "available": "उपलब्ध"
+    },
+    "floorLabel": "मंजिल {{floor}}",
+    "status": {
+      "vacant": "खाली",
+      "partiallyOccupied": "आंशिक रूप से भरा",
+      "full": "पूर्ण"
+    },
+    "capacityOccupied": "{{occupied}}/{{capacity}} भरा हुआ",
+    "tabs": {
+      "details": "विवरण",
+      "tenants": "किरायेदार",
+      "history": "इतिहास"
+    },
+    "drawer": {
+      "roomNo": "रूम नं. {{roomNumber}}",
+      "floor": "मंजिल:",
+      "roomType": "रूम प्रकार:",
+      "amenities": "सुविधाएं"
+    },
+    "tenants": {
+      "heading": "रूम {{roomNumber}} मेहमान",
+      "currentGuests": "{{count}} वर्तमान मेहमान",
+      "noActiveGuests": "इस रूम में कोई सक्रिय मेहमान नहीं है",
+      "guestName": "मेहमान का नाम",
+      "contact": "संपर्क",
+      "bedNo": "बेड नं.",
+      "checkInDate": "चेक-इन तिथि"
+    },
+    "history": {
+      "heading": "रूम {{roomNumber}} इतिहास",
+      "entries": "{{count}} प्रविष्टियां",
+      "noData": "कोई ऐतिहासिक डेटा उपलब्ध नहीं है",
+      "checkedOut": "चेक-आउट",
+      "active": "सक्रिय",
+      "aadharNumber": "आधार नंबर",
+      "emailAddress": "ईमेल पता",
+      "duration": "अवधि",
+      "days": "{{count}} दिन",
+      "ongoing": "जारी",
+      "checkOutDate": "चेक-आउट तिथि",
+      "currentStatus": "वर्तमान स्थिति",
+      "activeStay": "सक्रिय स्टे",
+      "specialRemarks": "विशेष टिप्पणी",
+      "notProvided": "उपलब्ध नहीं",
+      "noRemarks": "कोई टिप्पणी नहीं"
+    },
+    "delete": {
+      "confirmTitle": "हटाने की पुष्टि करें",
+      "confirmBody": "क्या आप रूम {{roomNumber}} हटाना चाहते हैं?"
+    }
+  },
+  "employee": {
+    "title": "कर्मचारी प्रबंधन",
+    "actions": {
+      "addEmployee": "कर्मचारी जोड़ें",
+      "exportCsv": "CSV निर्यात करें"
+    },
+    "summary": {
+      "totalEmployees": "कुल कर्मचारी",
+      "activeEmployees": "सक्रिय कर्मचारी"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    },
+    "empty": {
+      "title": "कोई कर्मचारी नहीं मिला",
+      "description": "पहला कर्मचारी रिकॉर्ड जोड़कर अपनी टीम बनाना शुरू करें"
+    },
+    "csv": {
+      "employeeId": "कर्मचारी आईडी",
+      "employeeName": "कर्मचारी नाम",
+      "phone": "फ़ोन",
+      "workplace": "कार्यस्थल",
+      "currentStatus": "वर्तमान स्थिति",
+      "joiningDate": "जॉइनिंग तिथि"
+    }
+  },
+  "product": {
+    "title": "उत्पाद प्रबंधन",
+    "actions": {
+      "exportCsv": "CSV निर्यात करें",
+      "importCsv": "CSV / Excel आयात करें",
+      "addAriaLabel": "एजेंट जोड़ें"
+    },
+    "toast": {
+      "fetchFailed": "उत्पाद लाने में विफल।",
+      "createFailed": "उत्पाद बनाने में विफल।",
+      "importFailed": "उत्पाद आयात करने में विफल।"
+    },
+    "csv": {
+      "productName": "उत्पाद नाम",
+      "hsnCode": "HSN कोड",
+      "vendorName": "विक्रेता नाम",
+      "vendorCode": "विक्रेता कोड",
+      "manufacturingDate": "निर्माण तिथि",
+      "expiryDate": "समाप्ति तिथि",
+      "price": "कीमत",
+      "gstType": "GST प्रकार",
+      "minQuantity": "न्यूनतम मात्रा",
+      "maxQuantity": "अधिकतम मात्रा",
+      "batchNumber": "बैच नंबर",
+      "billNumber": "बिल नंबर",
+      "billDate": "बिल तिथि",
+      "remarks": "टिप्पणी"
+    },
+    "form": {
+      "title": "उत्पाद प्रविष्टि फ़ॉर्म",
+      "productName": "उत्पाद नाम",
+      "hsnCode": "HSN कोड",
+      "vendorName": "विक्रेता नाम",
+      "vendorCode": "विक्रेता कोड",
+      "manufacturingDate": "निर्माण की तिथि",
+      "expiryDate": "समाप्ति की तिथि",
+      "uom": "मापन इकाई",
+      "price": "कीमत",
+      "gstType": "GST प्रकार",
+      "minQuantity": "न्यूनतम मात्रा",
+      "maxQuantity": "अधिकतम मात्रा",
+      "batchNumber": "बैच नंबर",
+      "billNumber": "बिल नंबर",
+      "billDate": "बिल तिथि",
+      "remarks": "टिप्पणी",
+      "saving": "सहेजा जा रहा है...",
+      "submit": "सबमिट"
+    },
+    "saved": {
+      "title": "सहेजे गए उत्पाद"
+    },
+    "table": {
+      "product": "उत्पाद",
+      "vendor": "विक्रेता",
+      "batch": "बैच",
+      "price": "कीमत",
+      "billDate": "बिल तिथि",
+      "noProducts": "कोई उत्पाद नहीं मिला।"
+    },
+    "import": {
+      "title": "उत्पाद आयात करें",
+      "buttonLabel": "उत्पाद आयात करें",
+      "infoText": "आयात करने से पहले देखें कि कौन-सी उत्पाद पंक्तियां जोड़ी जाएंगी, अपडेट होंगी या छोड़ी जाएंगी।"
+    }
+  },
+  "agents": {
+    "title": "एजेंट",
+    "actions": {
+      "exportCsv": "CSV निर्यात करें",
+      "importCsv": "CSV / Excel आयात करें"
+    },
+    "states": {
+      "noAgents": "कोई एजेंट ऑनबोर्ड नहीं है"
+    },
+    "card": {
+      "unnamedAgent": "अनाम एजेंट",
+      "id": "आईडी",
+      "phone": "फोन",
+      "status": "स्थिति"
+    },
+    "csv": {
+      "agentId": "एजेंट आईडी",
+      "agentName": "एजेंट नाम",
+      "contactNumber": "संपर्क नंबर",
+      "aadharNumber": "आधार नंबर",
+      "vehicleNumber": "वाहन नंबर",
+      "commissionType": "कमीशन प्रकार",
+      "commissionAmount": "कमीशन राशि",
+      "status": "स्थिति"
+    },
+    "import": {
+      "title": "एजेंट आयात करें",
+      "buttonLabel": "एजेंट आयात करें",
+      "infoText": "आयात से पहले देखें कि कौन-सी एजेंट पंक्तियां जोड़ी जाएंगी, अपडेट होंगी या छोड़ी जाएंगी।"
+    },
+    "modal": {
+      "title": "एजेंट विवरण दर्ज करें",
+      "errors": {
+        "agentNameRequired": "एजेंट नाम आवश्यक है",
+        "mobileRequired": "मोबाइल नंबर आवश्यक है",
+        "addFailed": "एजेंट जोड़ने में विफल"
+      },
+      "success": {
+        "added": "एजेंट सफलतापूर्वक जोड़ा गया"
+      },
+      "fields": {
+        "agentName": "एजेंट नाम",
+        "mobileNumber": "मोबाइल नंबर",
+        "vehicleNumber": "वाहन नंबर",
+        "aadharNumber": "एजेंट आधार नंबर",
+        "commissionType": "कमीशन प्रकार",
+        "commissionAmount": "कमीशन राशि",
+        "commissionPercentage": "कमीशन प्रतिशत",
+        "remark": "टिप्पणी"
+      },
+      "options": {
+        "percentage": "प्रतिशत",
+        "fix": "फिक्स"
+      },
+      "actions": {
+        "close": "बंद करें",
+        "adding": "एजेंट जोड़ा जा रहा है...",
+        "add": "एजेंट जोड़ें"
+      }
+    }
+  },
+  "roles": {
+    "title": "भूमिकाएं",
+    "description": "सभी सदस्यों के लिए भूमिका पहुंच प्रबंधित करें।",
+    "table": {
+      "name": "नाम",
+      "email": "ईमेल",
+      "currentRole": "वर्तमान भूमिका",
+      "action": "क्रिया"
+    },
+    "actions": {
+      "edit": "संपादित करें",
+      "cancel": "रद्द करें",
+      "save": "सहेजें",
+      "updating": "अपडेट हो रहा है..."
+    },
+    "states": {
+      "noUsers": "कोई उपयोगकर्ता नहीं मिला",
+      "loadingMembers": "सदस्य लोड हो रहे हैं..."
+    },
+    "dialog": {
+      "updateRole": "भूमिका अपडेट करें",
+      "role": "भूमिका"
+    },
+    "roleNames": {
+      "admin": "एडमिन",
+      "semiadmin": "सेमी एडमिन",
+      "user": "उपयोगकर्ता"
+    },
+    "toast": {
+      "loadUsersFailed": "उपयोगकर्ताओं को लोड करने में विफल",
+      "updateFailed": "भूमिका अपडेट करने में विफल",
+      "updateSuccess": "भूमिका सफलतापूर्वक अपडेट हुई"
+    }
+  },
+  "whatsapp": {
+    "title": "व्हाट्सऐप टेम्पलेट्स",
+    "description": "डायनामिक फील्ड्स के साथ संदेश टेम्पलेट बनाएं और प्रबंधित करें",
+    "actions": {
+      "newTemplate": "नया टेम्पलेट",
+      "cancel": "रद्द करें",
+      "addAriaLabel": "टेम्पलेट जोड़ें",
+      "sendNow": "अभी भेजें",
+      "sending": "भेजा जा रहा है...",
+      "scheduleTest": "टेस्ट शेड्यूल करें",
+      "scheduling": "शेड्यूल किया जा रहा है..."
+    },
+    "filter": {
+      "label": "श्रेणी से फ़िल्टर करें",
+      "all": "सभी",
+      "templateSingle": "टेम्पलेट",
+      "templatePlural": "टेम्पलेट्स"
+    },
+    "states": {
+      "noTemplatesTitle": "अभी कोई टेम्पलेट नहीं",
+      "noTemplatesDescription": "अपना पहला व्हाट्सऐप संदेश टेम्पलेट बनाने के लिए नया टेम्पलेट क्लिक करें।"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    },
+    "categories": {
+      "check-in": "चेक-इन",
+      "checkout": "चेकआउट",
+      "reminder": "रिमाइंडर",
+      "promotion": "प्रमोशन",
+      "custom": "कस्टम"
+    },
+    "fieldsUsed": "उपयोग किए गए फ़ील्ड:",
+    "tooltips": {
+      "testWa2": "WA2 से टेस्ट करें (तुरंत)",
+      "testProvider1": "प्रोवाइडर 1 से टेस्ट करें (1 मिनट)",
+      "copyMessage": "संदेश कॉपी करें",
+      "edit": "संपादित करें",
+      "delete": "हटाएं"
+    },
+    "confirm": {
+      "deleteTemplate": "क्या यह टेम्पलेट हटाना है?"
+    },
+    "wa2Dialog": {
+      "title": "WA2 प्रोवाइडर से टेस्ट करें",
+      "templateLabel": "टेम्पलेट",
+      "description": "संदेश सेकेंडरी व्हाट्सऐप प्रोवाइडर (WA2) से तुरंत भेजा जाता है।",
+      "mobileLabel": "मोबाइल नंबर",
+      "mobilePlaceholder": "10 अंकों का मोबाइल दर्ज करें",
+      "messageLabel": "संदेश",
+      "messagePlaceholder": "भेजने के लिए संदेश (टेम्पलेट बॉडी से भरा हुआ)",
+      "helperText": "{{guest_name}} जैसे प्लेसहोल्डर टेस्ट के लिए जैसे-के-तैसे भेजे जाएंगे"
+    },
+    "testDialog": {
+      "title": "टेस्ट संदेश भेजें",
+      "templateLabel": "टेम्पलेट",
+      "description": "संदेश नमूना/डमी डेटा के साथ भेजा जाएगा और लगभग 1 मिनट में डिलीवर होगा।",
+      "scheduledAt": "शेड्यूल समय:",
+      "mobileLabel": "मोबाइल नंबर",
+      "mobilePlaceholder": "10 अंकों का मोबाइल दर्ज करें",
+      "helperText": "व्हाट्सऐप इस नंबर पर भेजा जाएगा"
+    },
+    "toast": {
+      "loadFailed": "टेम्पलेट लोड करने में विफल",
+      "deleted": "टेम्पलेट हटा दिया गया",
+      "deleteFailed": "टेम्पलेट हटाने में विफल",
+      "copied": "कॉपी किया गया!",
+      "invalidMobile": "मान्य 10 अंकों का मोबाइल नंबर दर्ज करें",
+      "wa2Sent": "संदेश WA2 प्रोवाइडर से भेज दिया गया!",
+      "wa2Failed": "WA2 भेजना विफल",
+      "testScheduled": "टेस्ट संदेश 1 मिनट बाद के लिए शेड्यूल किया गया!",
+      "scheduleFailed": "टेस्ट शेड्यूल करने में विफल"
+    },
+    "modal": {
+      "titleEdit": "व्हाट्सऐप टेम्पलेट संपादित करें",
+      "titleNew": "नया व्हाट्सऐप टेम्पलेट",
+      "previewTitle": "पूर्वावलोकन (नमूना डेटा):",
+      "errors": {
+        "templateNameRequired": "टेम्पलेट नाम आवश्यक है",
+        "messageBodyRequired": "संदेश बॉडी आवश्यक है",
+        "saveFailed": "सहेजने में विफल",
+        "saveTemplateFailed": "टेम्पलेट सहेजने में विफल"
+      },
+      "success": {
+        "updated": "टेम्पलेट अपडेट किया गया",
+        "created": "टेम्पलेट बनाया गया"
+      },
+      "fields": {
+        "templateName": "टेम्पलेट नाम",
+        "templateNamePlaceholder": "उदा. स्वागत संदेश",
+        "category": "श्रेणी",
+        "helpInsertField": "संदेश में कर्सर स्थान पर डालने के लिए किसी फील्ड पर क्लिक करें:",
+        "messageBody": "संदेश बॉडी",
+        "messageBodyPlaceholder": "नमस्ते {{guest_name}}, {{hotel_name}} में आपका स्वागत है! आपका कमरा {{room_no}} है।",
+        "active": "सक्रिय"
+      },
+      "templateFields": {
+        "guest_name": "मेहमान नाम",
+        "room_no": "कमरा नं",
+        "grc_no": "GRC नं",
+        "arrival_date": "आगमन तिथि",
+        "checkout_date": "चेकआउट तिथि",
+        "amount": "राशि",
+        "hotel_name": "होटल नाम",
+        "contact_number": "संपर्क नंबर",
+        "agent_name": "एजेंट नाम",
+        "days": "दिनों की संख्या"
+      },
+      "actions": {
+        "saving": "सहेजा जा रहा है...",
+        "update": "अपडेट",
+        "create": "बनाएं"
+      }
+    }
+  },
+  "importDialog": {
+    "units": {
+      "kb": "KB",
+      "mb": "MB"
+    },
+    "actions": {
+      "insert": "जोड़ें",
+      "update": "अपडेट",
+      "skip": "छोड़ें"
+    },
+    "errors": {
+      "noImportableRows": "चयनित फाइल में कोई आयात योग्य पंक्तियां नहीं हैं।",
+      "previewFailed": "आयात क्रियाओं का पूर्वावलोकन नहीं हो सका।",
+      "readFailed": "चयनित फाइल पढ़ी नहीं जा सकी।",
+      "invalidFile": "अमान्य फाइल चुनी गई।",
+      "chooseFileBeforeImport": "आयात करने से पहले मान्य CSV या Excel फाइल चुनें।"
+    },
+    "helper": {
+      "dropOrChoose": "CSV/XLS/XLSX फाइल यहां ड्रैग-ड्रॉप करें, या अपने कंप्यूटर से चुनें।",
+      "rowsFound": "शीट \"{{sheetName}}\" में {{count}} पंक्ति(याँ) मिलीं।"
+    },
+    "dropzone": {
+      "activeTitle": "आयात शीट यहां छोड़ें",
+      "idleTitle": "CSV या Excel यहां ड्रैग-ड्रॉप करें"
+    },
+    "buttons": {
+      "chooseFile": "फाइल चुनें",
+      "downloadTemplate": "टेम्पलेट डाउनलोड करें",
+      "remove": "हटाएं",
+      "cancel": "रद्द करें",
+      "importing": "आयात हो रहा है...",
+      "close": "बंद करें"
+    },
+    "summary": {
+      "rows": "पंक्तियां: {{count}}",
+      "matchedHeaders": "मिले हेडर: {{count}}",
+      "missingHeaders": "गायब हेडर: {{count}}"
+    },
+    "forceCreateLabel": "मिलान अपडेट करने के बजाय हमेशा नई पंक्तियां बनाएं",
+    "preview": {
+      "checking": "जांच हो रही है कि कौन-सी पंक्तियां जोड़ी जाएंगी, अपडेट होंगी या छोड़ी जाएंगी...",
+      "willInsert": "जोड़ी जाएंगी: {{count}}",
+      "willUpdate": "अपडेट होंगी: {{count}}",
+      "willSkip": "छोड़ी जाएंगी: {{count}}"
+    },
+    "rowLabel": "पंक्ति {{rowNumber}}{{labelSuffix}}",
+    "result": {
+      "title": "आयात परिणाम",
+      "inserted": "जोड़ी गई: {{count}}",
+      "updated": "अपडेट की गई: {{count}}",
+      "skipped": "छोड़ी गई: {{count}}"
+    }
+  },
+  "header": {
+    "welcome": "स्वागत है, {{name}}",
+    "guest": "अतिथि",
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉगआउट",
+    "login": "लॉगिन",
+    "register": "रजिस्टर"
+  },
+  "sidebar": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "guestEntry": "गेस्ट एंट्री",
+    "room": "रूम",
+    "employeeManagements": "कर्मचारी प्रबंधन",
+    "employee": "कर्मचारी",
+    "productManagements": "उत्पाद प्रबंधन",
+    "manageProduct": "उत्पाद प्रबंधन",
+    "agents": "एजेंट",
+    "manageAgents": "एजेंट प्रबंधन",
+    "whatsApp": "व्हाट्सऐप",
+    "waTemplates": "WA टेम्पलेट्स",
+    "accessControl": "एक्सेस कंट्रोल",
+    "roles": "भूमिकाएं"
+  }
+}

@@ -3,10 +3,12 @@ import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Stack, Typography, Avatar } from '@mui/material';
 import { IconArrowUpLeft } from '@tabler/icons';
+import { useTranslation } from 'react-i18next';
 
 import DashboardCard from '../../../components/shared/DashboardCard';
 
 const YearlyBreakup = () => {
+  const { t } = useTranslation();
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
@@ -62,7 +64,7 @@ const YearlyBreakup = () => {
   const seriescolumnchart = [38, 40, 25];
 
   return (
-    <DashboardCard title="Yearly Breakup">
+    <DashboardCard title={t('dashboard.sections.yearlyBreakup.title', { defaultValue: 'Yearly Breakup' })}>
       <Grid container spacing={3}>
         {/* column */}
         <Grid item xs={7} sm={7}>
@@ -77,7 +79,7 @@ const YearlyBreakup = () => {
               +9%
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
-              last year
+              {t('dashboard.common.lastYear', { defaultValue: 'last year' })}
             </Typography>
           </Stack>
           <Stack spacing={3} mt={5} direction="row">
@@ -86,7 +88,7 @@ const YearlyBreakup = () => {
                 sx={{ width: 9, height: 9, bgcolor: primary, svg: { display: 'none' } }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
-                2022
+                {t('dashboard.sections.yearlyBreakup.year2022', { defaultValue: '2022' })}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
@@ -94,7 +96,7 @@ const YearlyBreakup = () => {
                 sx={{ width: 9, height: 9, bgcolor: primarylight, svg: { display: 'none' } }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
-                2023
+                {t('dashboard.sections.yearlyBreakup.year2023', { defaultValue: '2023' })}
               </Typography>
             </Stack>
           </Stack>

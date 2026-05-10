@@ -31,6 +31,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import * as XLSX from 'xlsx';
 
 import GroupIcon from '@mui/icons-material/Group';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addNewGuest,
@@ -138,6 +139,7 @@ const SummaryCard = styled(Paper)(({ theme, color }) => ({
 }));
 
 const GuestEntry = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isImportDialogOpen, setImportDialogOpen] = useState(false);
   const [openDetailsModal, setOpenDetailsModal] = useState(false);
@@ -391,11 +393,7 @@ const GuestEntry = () => {
   };
 
   const handleImportButtonClick = () => {
-    if (!allowImport) {
-      Toast.error('Only admin users can import guest data.');
-      return;
-    }
-
+    if (!allowImport) return;
     setImportDialogOpen(true);
   };
 
@@ -507,7 +505,9 @@ const GuestEntry = () => {
                   {/* {totalGuests} */}
                   {completeGuests?.length}
                 </Typography>
-                <Typography variant="body2">Total Guests</Typography>
+                <Typography variant="body2">
+                  {t('guestEntry.summary.totalGuests', { defaultValue: 'Total Guests' })}
+                </Typography>
               </Box>
             </SummaryCard>
           </Grid>
@@ -521,7 +521,7 @@ const GuestEntry = () => {
                   {pendingCheckouts}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#fff' }}>
-                  Active
+                  {t('guestEntry.summary.active', { defaultValue: 'Active' })}
                 </Typography>
               </Box>
             </SummaryCard>
@@ -588,7 +588,7 @@ const GuestEntry = () => {
               whiteSpace: 'nowrap',
             }}
           >
-            Add Guest
+            {t('guestEntry.actions.addGuest', { defaultValue: 'Add Guest' })}
           </Button>
           {allowReports && (
             <Button
@@ -609,7 +609,7 @@ const GuestEntry = () => {
                 transition: 'all 0.3s ease',
               }}
             >
-              Generate Report
+              {t('guestEntry.actions.generateReport', { defaultValue: 'Generate Report' })}
             </Button>
           )}
           {allowImport && (
@@ -627,7 +627,9 @@ const GuestEntry = () => {
                 whiteSpace: 'nowrap',
               }}
             >
-              {isImporting ? 'Importing...' : 'Import CSV / Excel'}
+              {isImporting
+                ? t('guestEntry.actions.importing', { defaultValue: 'Importing...' })
+                : t('guestEntry.actions.importCsv', { defaultValue: 'Import CSV / Excel' })}
             </Button>
           )}
           {allowExport && (
@@ -650,7 +652,9 @@ const GuestEntry = () => {
                 transition: 'all 0.3s ease',
               }}
             >
-              Export Excel (All Fields)
+              {t('guestEntry.actions.exportExcel', {
+                defaultValue: 'Export Excel (All Fields)',
+              })}
             </Button>
           )}
         </Box>
@@ -678,14 +682,30 @@ const GuestEntry = () => {
           <Table sx={{ minWidth: 700, height: '100%' }} stickyHeader aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>SL No.</StyledTableCell>
-                <StyledTableCell>GRC No.</StyledTableCell>
-                <StyledTableCell align="left">Guest Name</StyledTableCell>
-                <StyledTableCell align="left">Contact</StyledTableCell>
-                <StyledTableCell align="left">Arrival Date</StyledTableCell>
-                <StyledTableCell align="left">Arrival Time</StyledTableCell>
-                <StyledTableCell align="left">Tariff</StyledTableCell>
-                <StyledTableCell align="left">Action</StyledTableCell>
+                <StyledTableCell>
+                  {t('guestEntry.table.slNo', { defaultValue: 'SL No.' })}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {t('guestEntry.table.grcNo', { defaultValue: 'GRC No.' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.guestName', { defaultValue: 'Guest Name' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.contact', { defaultValue: 'Contact' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.arrivalDate', { defaultValue: 'Arrival Date' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.arrivalTime', { defaultValue: 'Arrival Time' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.tariff', { defaultValue: 'Tariff' })}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {t('guestEntry.table.action', { defaultValue: 'Action' })}
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody
@@ -728,7 +748,11 @@ const GuestEntry = () => {
                         style={{ cursor: 'pointer', margin: '5px' }}
                         onClick={() => handleOpenDetailModal(guest._id)}
                       >
-                        <Tooltip title="View Details">
+                        <Tooltip
+                          title={t('guestEntry.table.viewDetails', {
+                            defaultValue: 'View Details',
+                          })}
+                        >
                           <RemoveRedEyeIcon />
                         </Tooltip>
                       </span>
@@ -740,7 +764,7 @@ const GuestEntry = () => {
               {isEmptyState && (
                 <StyledTableRow>
                   <StyledTableCell colSpan={10} align="center">
-                    No guests found.
+                    {t('guestEntry.states.noGuests', { defaultValue: 'No guests found.' })}
                   </StyledTableCell>
                 </StyledTableRow>
               )}

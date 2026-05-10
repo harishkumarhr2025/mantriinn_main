@@ -9,8 +9,10 @@ import Config from '../../components/Config';
 import EntityImportDialog from '../../components/shared/EntityImportDialog';
 import { useSelector } from 'react-redux';
 import { canModifyRecords, canExportData } from '../../utils/permissions';
+import { useTranslation } from 'react-i18next';
 
 const Agents = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [agents, setAgents] = useState([]);
   const [isImportDialogOpen, setImportDialogOpen] = useState(false);
@@ -46,14 +48,14 @@ const Agents = () => {
   };
 
   const csvHeaders = [
-    { label: 'Agent ID', key: 'agent_ID' },
-    { label: 'Agent Name', key: 'Agent_name' },
-    { label: 'Contact Number', key: 'Agent_contact_number' },
-    { label: 'Aadhar Number', key: 'Agent_aadhar_No' },
-    { label: 'Vehicle Number', key: 'Agent_vehicle_no' },
-    { label: 'Commission Type', key: 'Agent_commission_type' },
-    { label: 'Commission Amount', key: 'Agent_commission_amount' },
-    { label: 'Status', key: 'status' },
+    { label: t('agents.csv.agentId', { defaultValue: 'Agent ID' }), key: 'agent_ID' },
+    { label: t('agents.csv.agentName', { defaultValue: 'Agent Name' }), key: 'Agent_name' },
+    { label: t('agents.csv.contactNumber', { defaultValue: 'Contact Number' }), key: 'Agent_contact_number' },
+    { label: t('agents.csv.aadharNumber', { defaultValue: 'Aadhar Number' }), key: 'Agent_aadhar_No' },
+    { label: t('agents.csv.vehicleNumber', { defaultValue: 'Vehicle Number' }), key: 'Agent_vehicle_no' },
+    { label: t('agents.csv.commissionType', { defaultValue: 'Commission Type' }), key: 'Agent_commission_type' },
+    { label: t('agents.csv.commissionAmount', { defaultValue: 'Commission Amount' }), key: 'Agent_commission_amount' },
+    { label: t('agents.csv.status', { defaultValue: 'Status' }), key: 'status' },
   ];
 
   const csvData = useMemo(
@@ -100,7 +102,7 @@ const Agents = () => {
       />
       <Box sx={{ p: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h4">Agents</Typography>
+          <Typography variant="h4">{t('agents.title', { defaultValue: 'Agents' })}</Typography>
           {allowExport && (
             <CSVLink
               data={csvData}
@@ -109,13 +111,13 @@ const Agents = () => {
               style={{ textDecoration: 'none' }}
             >
               <Button variant="outlined" startIcon={<DownloadIcon />}>
-                Export CSV
+                {t('agents.actions.exportCsv', { defaultValue: 'Export CSV' })}
               </Button>
             </CSVLink>
           )}
           {allowImport && (
             <Button variant="outlined" startIcon={<UploadFileIcon />} sx={{ ml: 2 }} onClick={() => setImportDialogOpen(true)}>
-              Import CSV / Excel
+              {t('agents.actions.importCsv', { defaultValue: 'Import CSV / Excel' })}
             </Button>
           )}
         </Box>
@@ -125,10 +127,10 @@ const Agents = () => {
               <Grid item xs={12} md={4} key={agent._id}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">{agent.Agent_name || 'Unnamed Agent'}</Typography>
-                    <Typography variant="body2">ID: {agent.agent_ID || '-'}</Typography>
-                    <Typography variant="body2">Phone: {agent.Agent_contact_number || '-'}</Typography>
-                    <Typography variant="body2">Status: {agent.status || '-'}</Typography>
+                    <Typography variant="h6">{agent.Agent_name || t('agents.card.unnamedAgent', { defaultValue: 'Unnamed Agent' })}</Typography>
+                    <Typography variant="body2">{t('agents.card.id', { defaultValue: 'ID' })}: {agent.agent_ID || '-'}</Typography>
+                    <Typography variant="body2">{t('agents.card.phone', { defaultValue: 'Phone' })}: {agent.Agent_contact_number || '-'}</Typography>
+                    <Typography variant="body2">{t('agents.card.status', { defaultValue: 'Status' })}: {agent.status || '-'}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -136,13 +138,13 @@ const Agents = () => {
           </Grid>
         ) : (
           <h1 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            No Agents onboarded
+            {t('agents.states.noAgents', { defaultValue: 'No Agents onboarded' })}
           </h1>
         )}
       </Box>
       <Fab
         color="primary"
-        aria-label="add"
+        aria-label={t('agents.actions.addAriaLabel', { defaultValue: 'Add agent' })}
         onClick={handleOpen}
         sx={{ position: 'fixed', bottom: '70px', right: '70px' }}
       >
@@ -154,9 +156,9 @@ const Agents = () => {
         onPreview={handlePreviewImportRows}
         onImport={handleImportRows}
         isImporting={isImporting}
-        title="Import Agents"
-        infoText="Preview which agent rows will be inserted, updated, or skipped before importing them into agent management."
-        importButtonLabel="Import Agents"
+        title={t('agents.import.title', { defaultValue: 'Import Agents' })}
+        infoText={t('agents.import.infoText', { defaultValue: 'Preview which agent rows will be inserted, updated, or skipped before importing them into agent management.' })}
+        importButtonLabel={t('agents.import.buttonLabel', { defaultValue: 'Import Agents' })}
         templateFileName="agents-import-template.xlsx"
         sheetName="Agents"
         templateHeaders={['agent_ID', 'Agent_name', 'Agent_contact_number', 'Agent_aadhar_No', 'Agent_vehicle_no', 'Agent_commission_type', 'Agent_commission_amount', 'status']}

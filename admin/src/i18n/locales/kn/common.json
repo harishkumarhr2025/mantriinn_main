@@ -1,0 +1,545 @@
+{
+  "common": {
+    "language": "ಭಾಷೆ",
+    "english": "ಇಂಗ್ಲಿಷ್",
+    "hindi": "ಹಿಂದಿ",
+    "kannada": "ಕನ್ನಡ",
+    "notification": "ಅಧಿಸೂಚನೆಗಳು",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "delete": "ಅಳಿಸಿ"
+  },
+  "dashboard": {
+    "pageTitle": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "pageDescription": "ಇದು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "heroTitle": "ಮಂತ್ರಿ ಇನ್‌ಗೆ ಸ್ವಾಗತ",
+    "heroSubtitle": "ಐಶ್ವರ್ಯ ಮತ್ತು ಮನೆಮಾತಿನ ಆರಾಮ ಇಲ್ಲಿ ಸೇರಿವೆ",
+    "bookNow": "ಈಗಲೇ ಬುಕ್ ಮಾಡಿ",
+    "stats": {
+      "luxuryRooms": "ಐಶ್ವರ್ಯಮಯ ಕೊಠಡಿಗಳು",
+      "starRating": "5-ಸ್ಟಾರ್ ರೇಟಿಂಗ್",
+      "happyGuests": "ಸಂತೋಷಿತ ಅತಿಥಿಗಳು",
+      "specialOffers": "ವಿಶೇಷ ಆಫರ್‌ಗಳು"
+    },
+    "common": {
+      "lastYear": "ಹಿಂದಿನ ವರ್ಷ"
+    },
+    "months": {
+      "march2023": "ಮಾರ್ಚ್ 2023",
+      "april2023": "ಏಪ್ರಿಲ್ 2023",
+      "may2023": "ಮೇ 2023"
+    },
+    "sections": {
+      "salesOverview": {
+        "title": "ಮಾರಾಟ ಅವಲೋಕನ",
+        "earningsThisMonth": "ಈ ತಿಂಗಳ ಆದಾಯ",
+        "expenseThisMonth": "ಈ ತಿಂಗಳ ಖರ್ಚು"
+      },
+      "yearlyBreakup": {
+        "title": "ವಾರ್ಷಿಕ ವಿವರ",
+        "year2022": "2022",
+        "year2023": "2023"
+      },
+      "recentTransactions": {
+        "title": "ಇತ್ತೀಚಿನ ವ್ಯವಹಾರಗಳು",
+        "paymentReceived": "John Doe ರಿಂದ $385.90 ಪಾವತಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
+        "newSaleRecorded": "ಹೊಸ ಮಾರಾಟ ದಾಖಲಾಗಿದೆ",
+        "paymentMade": "Michael ಗೆ $64.95 ಪಾವತಿ ಮಾಡಲಾಗಿದೆ",
+        "newArrivalRecorded": "ಹೊಸ ಆಗಮನ ದಾಖಲಾಗಿದೆ",
+        "paymentReceivedShort": "ಪಾವತಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ"
+      },
+      "productPerformance": {
+        "title": "ಉತ್ಪನ್ನ ಕಾರ್ಯಕ್ಷಮತೆ",
+        "columns": {
+          "id": "ಐಡಿ",
+          "assigned": "ನಿಯೋಜಿತ",
+          "name": "ಹೆಸರು",
+          "priority": "ಆದ್ಯತೆ",
+          "budget": "ಬಜೆಟ್"
+        },
+        "priority": {
+          "low": "ಕಡಿಮೆ",
+          "medium": "ಮಧ್ಯಮ",
+          "high": "ಉನ್ನತ",
+          "critical": "ಗಂಭೀರ"
+        }
+      },
+      "monthlyEarnings": {
+        "title": "ಮಾಸಿಕ ಆದಾಯ"
+      },
+      "blog": {
+        "title": "ಉತ್ಪನ್ನಗಳು",
+        "addToCart": "ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಿ"
+      }
+    }
+  },
+  "guestEntry": {
+    "summary": {
+      "totalGuests": "ಒಟ್ಟು ಅತಿಥಿಗಳು",
+      "active": "ಸಕ್ರಿಯ"
+    },
+    "actions": {
+      "addGuest": "ಅತಿಥಿಯನ್ನು ಸೇರಿಸಿ",
+      "generateReport": "ವರದಿ ರಚಿಸಿ",
+      "importCsv": "CSV / Excel ಆಮದು ಮಾಡಿ",
+      "importing": "ಆಮದು ಮಾಡಲಾಗುತ್ತಿದೆ...",
+      "exportExcel": "Excel ರಫ್ತು (ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳು)"
+    },
+    "table": {
+      "slNo": "ಕ್ರಮ ಸಂಖ್ಯೆ",
+      "grcNo": "GRC ಸಂಖ್ಯೆ",
+      "guestName": "ಅತಿಥಿ ಹೆಸರು",
+      "contact": "ಸಂಪರ್ಕ",
+      "arrivalDate": "ಆಗಮನ ದಿನಾಂಕ",
+      "arrivalTime": "ಆಗಮನ ಸಮಯ",
+      "tariff": "ದರ",
+      "action": "ಕ್ರಿಯೆ",
+      "viewDetails": "ವಿವರಗಳನ್ನು ನೋಡಿ"
+    },
+    "states": {
+      "noGuests": "ಯಾವುದೇ ಅತಿಥಿಗಳು ಕಂಡುಬರಲಿಲ್ಲ."
+    }
+  },
+  "room": {
+    "title": "ಪಿಜಿ ಕೊಠಡಿ ನಿರ್ವಹಣೆ",
+    "actions": {
+      "exportCsv": "CSV ರಫ್ತು ಮಾಡಿ",
+      "addRoom": "ಕೊಠಡಿ ಸೇರಿಸಿ"
+    },
+    "summary": {
+      "totalRooms": "ಒಟ್ಟು ಕೊಠಡಿಗಳು",
+      "bedsOverview": "ಹಾಸಿಗೆಗಳ ಅವಲೋಕನ",
+      "totalBeds": "ಒಟ್ಟು ಹಾಸಿಗೆಗಳು",
+      "occupied": "ಆಕ್ಯುಪೈಡ್",
+      "available": "ಲಭ್ಯ"
+    },
+    "floorLabel": "ಮಹಡಿ {{floor}}",
+    "status": {
+      "vacant": "ಖಾಲಿ",
+      "partiallyOccupied": "ಭಾಗಶಃ ಭರ್ತಿ",
+      "full": "ಪೂರ್ಣ"
+    },
+    "capacityOccupied": "{{occupied}}/{{capacity}} ಆಕ್ಯುಪೈಡ್",
+    "tabs": {
+      "details": "ವಿವರಗಳು",
+      "tenants": "ನಿವಾಸಿಗಳು",
+      "history": "ಇತಿಹಾಸ"
+    },
+    "drawer": {
+      "roomNo": "ಕೊಠಡಿ ಸಂಖ್ಯೆ {{roomNumber}}",
+      "floor": "ಮಹಡಿ:",
+      "roomType": "ಕೊಠಡಿ ಪ್ರಕಾರ:",
+      "amenities": "ಸೌಲಭ್ಯಗಳು"
+    },
+    "tenants": {
+      "heading": "ಕೊಠಡಿ {{roomNumber}} ಅತಿಥಿಗಳು",
+      "currentGuests": "ಪ್ರಸ್ತುತ {{count}} ಅತಿಥಿಗಳು",
+      "noActiveGuests": "ಈ ಕೊಠಡಿಯಲ್ಲಿ ಸಕ್ರಿಯ ಅತಿಥಿಗಳಿಲ್ಲ",
+      "guestName": "ಅತಿಥಿ ಹೆಸರು",
+      "contact": "ಸಂಪರ್ಕ",
+      "bedNo": "ಹಾಸಿಗೆ ಸಂಖ್ಯೆ",
+      "checkInDate": "ಚೆಕ್-ಇನ್ ದಿನಾಂಕ"
+    },
+    "history": {
+      "heading": "ಕೊಠಡಿ {{roomNumber}} ಇತಿಹಾಸ",
+      "entries": "{{count}} ಎಂಟ್ರಿಗಳು",
+      "noData": "ಇತಿಹಾಸದ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ",
+      "checkedOut": "ಚೆಕ್-ಔಟ್",
+      "active": "ಸಕ್ರಿಯ",
+      "aadharNumber": "ಆಧಾರ್ ಸಂಖ್ಯೆ",
+      "emailAddress": "ಇಮೇಲ್ ವಿಳಾಸ",
+      "duration": "ಅವಧಿ",
+      "days": "{{count}} ದಿನಗಳು",
+      "ongoing": "ಮುಂದುವರಿಯುತ್ತಿದೆ",
+      "checkOutDate": "ಚೆಕ್-ಔಟ್ ದಿನಾಂಕ",
+      "currentStatus": "ಪ್ರಸ್ತುತ ಸ್ಥಿತಿ",
+      "activeStay": "ಸಕ್ರಿಯ ವಾಸ",
+      "specialRemarks": "ವಿಶೇಷ ಟಿಪ್ಪಣಿ",
+      "notProvided": "ಒದಗಿಸಲಾಗಿಲ್ಲ",
+      "noRemarks": "ಟಿಪ್ಪಣಿಗಳಿಲ್ಲ"
+    },
+    "delete": {
+      "confirmTitle": "ಅಳಿಸುವುದನ್ನು ದೃಢೀಕರಿಸಿ",
+      "confirmBody": "ನೀವು ಕೊಠಡಿ {{roomNumber}} ಅನ್ನು ಅಳಿಸಲು ಖಚಿತವೇ?"
+    }
+  },
+  "employee": {
+    "title": "ಸಿಬ್ಬಂದಿ ನಿರ್ವಹಣೆ",
+    "actions": {
+      "addEmployee": "ಸಿಬ್ಬಂದಿ ಸೇರಿಸಿ",
+      "exportCsv": "CSV ರಫ್ತು ಮಾಡಿ"
+    },
+    "summary": {
+      "totalEmployees": "ಒಟ್ಟು ಸಿಬ್ಬಂದಿ",
+      "activeEmployees": "ಸಕ್ರಿಯ ಸಿಬ್ಬಂದಿ"
+    },
+    "status": {
+      "active": "ಸಕ್ರಿಯ",
+      "inactive": "ನಿಷ್ಕ್ರಿಯ"
+    },
+    "empty": {
+      "title": "ಯಾವುದೇ ಸಿಬ್ಬಂದಿ ದಾಖಲೆಗಳಿಲ್ಲ",
+      "description": "ಮೊದಲ ಸಿಬ್ಬಂದಿ ದಾಖಲೆಯನ್ನು ಸೇರಿಸಿ ನಿಮ್ಮ ತಂಡವನ್ನು ನಿರ್ಮಿಸಲು ಆರಂಭಿಸಿ"
+    },
+    "csv": {
+      "employeeId": "ಸಿಬ್ಬಂದಿ ಐಡಿ",
+      "employeeName": "ಸಿಬ್ಬಂದಿ ಹೆಸರು",
+      "phone": "ಫೋನ್",
+      "workplace": "ಕಾರ್ಯಸ್ಥಳ",
+      "currentStatus": "ಪ್ರಸ್ತುತ ಸ್ಥಿತಿ",
+      "joiningDate": "ಸೇರಿದ ದಿನಾಂಕ"
+    }
+  },
+  "product": {
+    "title": "ಉತ್ಪನ್ನ ನಿರ್ವಹಣೆ",
+    "actions": {
+      "exportCsv": "CSV ರಫ್ತು ಮಾಡಿ",
+      "importCsv": "CSV / Excel ಆಮದು ಮಾಡಿ",
+      "addAriaLabel": "ಏಜೆಂಟ್ ಸೇರಿಸಿ"
+    },
+    "toast": {
+      "fetchFailed": "ಉತ್ಪನ್ನಗಳನ್ನು ತರಲು ವಿಫಲವಾಗಿದೆ.",
+      "createFailed": "ಉತ್ಪನ್ನವನ್ನು ಸೃಷ್ಟಿಸಲು ವಿಫಲವಾಗಿದೆ.",
+      "importFailed": "ಉತ್ಪನ್ನಗಳನ್ನು ಆಮದು ಮಾಡಲು ವಿಫಲವಾಗಿದೆ."
+    },
+    "csv": {
+      "productName": "ಉತ್ಪನ್ನದ ಹೆಸರು",
+      "hsnCode": "HSN ಕೋಡ್",
+      "vendorName": "ವೆಂಡರ್ ಹೆಸರು",
+      "vendorCode": "ವೆಂಡರ್ ಕೋಡ್",
+      "manufacturingDate": "ತಯಾರಿಕೆಯ ದಿನಾಂಕ",
+      "expiryDate": "ಕಾಲಹರಣ ದಿನಾಂಕ",
+      "price": "ಬೆಲೆ",
+      "gstType": "GST ಪ್ರಕಾರ",
+      "minQuantity": "ಕನಿಷ್ಠ ಪ್ರಮಾಣ",
+      "maxQuantity": "ಗರಿಷ್ಠ ಪ್ರಮಾಣ",
+      "batchNumber": "ಬ್ಯಾಚ್ ಸಂಖ್ಯೆ",
+      "billNumber": "ಬಿಲ್ ಸಂಖ್ಯೆ",
+      "billDate": "ಬಿಲ್ ದಿನಾಂಕ",
+      "remarks": "ಟಿಪ್ಪಣಿ"
+    },
+    "form": {
+      "title": "ಉತ್ಪನ್ನ ಪ್ರವೇಶ ಫಾರ್ಮ್",
+      "productName": "ಉತ್ಪನ್ನದ ಹೆಸರು",
+      "hsnCode": "HSN ಕೋಡ್",
+      "vendorName": "ವೆಂಡರ್ ಹೆಸರು",
+      "vendorCode": "ವೆಂಡರ್ ಕೋಡ್",
+      "manufacturingDate": "ತಯಾರಿಕೆಯ ದಿನಾಂಕ",
+      "expiryDate": "ಕಾಲಹರಣ ದಿನಾಂಕ",
+      "uom": "ಮಾಪನ ಘಟಕ",
+      "price": "ಬೆಲೆ",
+      "gstType": "GST ಪ್ರಕಾರ",
+      "minQuantity": "ಕನಿಷ್ಠ ಪ್ರಮಾಣ",
+      "maxQuantity": "ಗರಿಷ್ಠ ಪ್ರಮಾಣ",
+      "batchNumber": "ಬ್ಯಾಚ್ ಸಂಖ್ಯೆ",
+      "billNumber": "ಬಿಲ್ ಸಂಖ್ಯೆ",
+      "billDate": "ಬಿಲ್ ದಿನಾಂಕ",
+      "remarks": "ಟಿಪ್ಪಣಿ",
+      "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+      "submit": "ಸಲ್ಲಿಸಿ"
+    },
+    "saved": {
+      "title": "ಉಳಿಸಿದ ಉತ್ಪನ್ನಗಳು"
+    },
+    "table": {
+      "product": "ಉತ್ಪನ್ನ",
+      "vendor": "ವೆಂಡರ್",
+      "batch": "ಬ್ಯಾಚ್",
+      "price": "ಬೆಲೆ",
+      "billDate": "ಬಿಲ್ ದಿನಾಂಕ",
+      "noProducts": "ಯಾವುದೇ ಉತ್ಪನ್ನಗಳು ಕಂಡುಬರಲಿಲ್ಲ."
+    },
+    "import": {
+      "title": "ಉತ್ಪನ್ನಗಳನ್ನು ಆಮದು ಮಾಡಿ",
+      "buttonLabel": "ಉತ್ಪನ್ನಗಳನ್ನು ಆಮದು ಮಾಡಿ",
+      "infoText": "ಆಮದು ಮಾಡುವ ಮೊದಲು ಯಾವ ಉತ್ಪನ್ನ ಸಾಲುಗಳು ಸೇರಿಸಲ್ಪಡುವವು, ನವೀಕರಿಸಲ್ಪಡುವವು ಅಥವಾ ಬಿಡಲಾಗುವವು ಎಂದು ಪೂರ್ವವೀಕ್ಷಿಸಿ."
+    }
+  },
+  "agents": {
+    "title": "ಏಜೆಂಟ್ಸ್",
+    "actions": {
+      "exportCsv": "CSV ರಫ್ತು ಮಾಡಿ",
+      "importCsv": "CSV / Excel ಆಮದು ಮಾಡಿ"
+    },
+    "states": {
+      "noAgents": "ಯಾವುದೇ ಏಜೆಂಟ್ಸ್ ಆನ್‌ಬೋರ್ಡ್ ಆಗಿಲ್ಲ"
+    },
+    "card": {
+      "unnamedAgent": "ಹೆಸರಿಲ್ಲದ ಏಜೆಂಟ್",
+      "id": "ಐಡಿ",
+      "phone": "ಫೋನ್",
+      "status": "ಸ್ಥಿತಿ"
+    },
+    "csv": {
+      "agentId": "ಏಜೆಂಟ್ ಐಡಿ",
+      "agentName": "ಏಜೆಂಟ್ ಹೆಸರು",
+      "contactNumber": "ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+      "aadharNumber": "ಆಧಾರ್ ಸಂಖ್ಯೆ",
+      "vehicleNumber": "ವಾಹನ ಸಂಖ್ಯೆ",
+      "commissionType": "ಕಮಿಷನ್ ಪ್ರಕಾರ",
+      "commissionAmount": "ಕಮಿಷನ್ ಮೊತ್ತ",
+      "status": "ಸ್ಥಿತಿ"
+    },
+    "import": {
+      "title": "ಏಜೆಂಟ್ಸ್ ಆಮದು ಮಾಡಿ",
+      "buttonLabel": "ಏಜೆಂಟ್ಸ್ ಆಮದು ಮಾಡಿ",
+      "infoText": "ಆಮದು ಮಾಡುವ ಮೊದಲು ಯಾವ ಏಜೆಂಟ್ ಸಾಲುಗಳು ಸೇರಿಸಲಾಗುತ್ತವೆ, ನವೀಕರಿಸಲಾಗುತ್ತವೆ ಅಥವಾ ಬಿಡಲಾಗುತ್ತವೆ ಎಂಬುದನ್ನು ಪೂರ್ವವೀಕ್ಷಿಸಿ."
+    },
+    "modal": {
+      "title": "ಏಜೆಂಟ್ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ",
+      "errors": {
+        "agentNameRequired": "ಏಜೆಂಟ್ ಹೆಸರು ಅಗತ್ಯ",
+        "mobileRequired": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಅಗತ್ಯ",
+        "addFailed": "ಏಜೆಂಟ್ ಸೇರಿಸಲು ವಿಫಲವಾಗಿದೆ"
+      },
+      "success": {
+        "added": "ಏಜೆಂಟ್ ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ"
+      },
+      "fields": {
+        "agentName": "ಏಜೆಂಟ್ ಹೆಸರು",
+        "mobileNumber": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+        "vehicleNumber": "ವಾಹನ ಸಂಖ್ಯೆ",
+        "aadharNumber": "ಏಜೆಂಟ್ ಆಧಾರ್ ಸಂಖ್ಯೆ",
+        "commissionType": "ಕಮಿಷನ್ ಪ್ರಕಾರ",
+        "commissionAmount": "ಕಮಿಷನ್ ಮೊತ್ತ",
+        "commissionPercentage": "ಕಮಿಷನ್ ಶೇಕಡಾವಾರು",
+        "remark": "ಟಿಪ್ಪಣಿ"
+      },
+      "options": {
+        "percentage": "ಶೇಕಡಾವಾರು",
+        "fix": "ಫಿಕ್ಸ್"
+      },
+      "actions": {
+        "close": "ಮುಚ್ಚಿ",
+        "adding": "ಏಜೆಂಟ್ ಸೇರಿಸಲಾಗುತ್ತಿದೆ...",
+        "add": "ಏಜೆಂಟ್ ಸೇರಿಸಿ"
+      }
+    }
+  },
+  "roles": {
+    "title": "ಪಾತ್ರಗಳು",
+    "description": "ಎಲ್ಲ ಸದಸ್ಯರ ಪಾತ್ರ ಪ್ರವೇಶವನ್ನು ನಿರ್ವಹಿಸಿ.",
+    "table": {
+      "name": "ಹೆಸರು",
+      "email": "ಇಮೇಲ್",
+      "currentRole": "ಪ್ರಸ್ತುತ ಪಾತ್ರ",
+      "action": "ಕ್ರಿಯೆ"
+    },
+    "actions": {
+      "edit": "ತಿದ್ದು",
+      "cancel": "ರದ್ದು ಮಾಡಿ",
+      "save": "ಉಳಿಸಿ",
+      "updating": "ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ..."
+    },
+    "states": {
+      "noUsers": "ಯಾವುದೇ ಬಳಕೆದಾರರು ಕಂಡುಬಂದಿಲ್ಲ",
+      "loadingMembers": "ಸದಸ್ಯರನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
+    },
+    "dialog": {
+      "updateRole": "ಪಾತ್ರ ನವೀಕರಿಸಿ",
+      "role": "ಪಾತ್ರ"
+    },
+    "roleNames": {
+      "admin": "ನಿರ್ವಾಹಕ",
+      "semiadmin": "ಅರ್ಧ ನಿರ್ವಾಹಕ",
+      "user": "ಬಳಕೆದಾರ"
+    },
+    "toast": {
+      "loadUsersFailed": "ಬಳಕೆದಾರರನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+      "updateFailed": "ಪಾತ್ರವನ್ನು ನವೀಕರಿಸಲು ವಿಫಲವಾಗಿದೆ",
+      "updateSuccess": "ಪಾತ್ರ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+    }
+  },
+  "whatsapp": {
+    "title": "ವಾಟ್ಸ್ಆಪ್ ಟೆಂಪ್ಲೇಟ್‌ಗಳು",
+    "description": "ಡೈನಾಮಿಕ್ ಕ್ಷೇತ್ರಗಳೊಂದಿಗೆ ಸಂದೇಶ ಟೆಂಪ್ಲೇಟ್‌ಗಳನ್ನು ರಚಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ",
+    "actions": {
+      "newTemplate": "ಹೊಸ ಟೆಂಪ್ಲೇಟ್",
+      "cancel": "ರದ್ದು ಮಾಡಿ",
+      "addAriaLabel": "ಟೆಂಪ್ಲೇಟ್ ಸೇರಿಸಿ",
+      "sendNow": "ಈಗ ಕಳುಹಿಸಿ",
+      "sending": "ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ...",
+      "scheduleTest": "ಟೆಸ್ಟ್ ಶೆಡ್ಯೂಲ್ ಮಾಡಿ",
+      "scheduling": "ಶೆಡ್ಯೂಲ್ ಮಾಡಲಾಗುತ್ತಿದೆ..."
+    },
+    "filter": {
+      "label": "ವರ್ಗದ ಪ್ರಕಾರ ಫಿಲ್ಟರ್ ಮಾಡಿ",
+      "all": "ಎಲ್ಲ",
+      "templateSingle": "ಟೆಂಪ್ಲೇಟ್",
+      "templatePlural": "ಟೆಂಪ್ಲೇಟ್‌ಗಳು"
+    },
+    "states": {
+      "noTemplatesTitle": "ಇನ್ನೂ ಯಾವುದೇ ಟೆಂಪ್ಲೇಟ್ ಇಲ್ಲ",
+      "noTemplatesDescription": "ನಿಮ್ಮ ಮೊದಲ ವಾಟ್ಸ್ಆಪ್ ಸಂದೇಶ ಟೆಂಪ್ಲೇಟ್ ರಚಿಸಲು ಹೊಸ ಟೆಂಪ್ಲೇಟ್ ಕ್ಲಿಕ್ ಮಾಡಿ."
+    },
+    "status": {
+      "active": "ಸಕ್ರಿಯ",
+      "inactive": "ನಿಷ್ಕ್ರಿಯ"
+    },
+    "categories": {
+      "check-in": "ಚೆಕ್-ಇನ್",
+      "checkout": "ಚೆಕ್‌ಔಟ್",
+      "reminder": "ಜ್ಞಾಪನೆ",
+      "promotion": "ಪ್ರಚಾರ",
+      "custom": "ಕಸ್ಟಮ್"
+    },
+    "fieldsUsed": "ಬಳಕೆಯಾದ ಕ್ಷೇತ್ರಗಳು:",
+    "tooltips": {
+      "testWa2": "WA2 ಮೂಲಕ ಟೆಸ್ಟ್ ಮಾಡಿ (ತಕ್ಷಣ)",
+      "testProvider1": "ಪ್ರೊವೈಡರ್ 1 ಮೂಲಕ ಟೆಸ್ಟ್ ಮಾಡಿ (1 ನಿಮಿಷ)",
+      "copyMessage": "ಸಂದೇಶ ನಕಲಿಸಿ",
+      "edit": "ತಿದ್ದು",
+      "delete": "ಅಳಿಸಿ"
+    },
+    "confirm": {
+      "deleteTemplate": "ಈ ಟೆಂಪ್ಲೇಟ್ ಅಳಿಸಬೇಕೆ?"
+    },
+    "wa2Dialog": {
+      "title": "WA2 ಪ್ರೊವೈಡರ್ ಮೂಲಕ ಟೆಸ್ಟ್ ಮಾಡಿ",
+      "templateLabel": "ಟೆಂಪ್ಲೇಟ್",
+      "description": "ಸಂದೇಶವನ್ನು ಸೆಕೆಂಡರಿ ವಾಟ್ಸ್ಆಪ್ ಪ್ರೊವೈಡರ್ (WA2) ಮೂಲಕ ತಕ್ಷಣ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.",
+      "mobileLabel": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+      "mobilePlaceholder": "10 ಅಂಕೆಯ ಮೊಬೈಲ್ ನಮೂದಿಸಿ",
+      "messageLabel": "ಸಂದೇಶ",
+      "messagePlaceholder": "ಕಳುಹಿಸಲು ಸಂದೇಶ (ಟೆಂಪ್ಲೇಟ್ ಬಾಡಿಯಿಂದ ತುಂಬಲಾಗಿದೆ)",
+      "helperText": "{{guest_name}} ಹಾಗಿನ ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್‌ಗಳು ಟೆಸ್ಟ್‌ಗೆ ಹಾಗೆಯೇ ಕಳುಹಿಸಲಾಗುತ್ತವೆ"
+    },
+    "testDialog": {
+      "title": "ಟೆಸ್ಟ್ ಸಂದೇಶ ಕಳುಹಿಸಿ",
+      "templateLabel": "ಟೆಂಪ್ಲೇಟ್",
+      "description": "ಸಂದೇಶವನ್ನು ಮಾದರಿ/ಡಮ್ಮಿ ಡೇಟಾದೊಂದಿಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಸುಮಾರು 1 ನಿಮಿಷದಲ್ಲಿ ಡೆಲಿವರ್ ಆಗುತ್ತದೆ.",
+      "scheduledAt": "ಶೆಡ್ಯೂಲ್ ಸಮಯ:",
+      "mobileLabel": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+      "mobilePlaceholder": "10 ಅಂಕೆಯ ಮೊಬೈಲ್ ನಮೂದಿಸಿ",
+      "helperText": "ವಾಟ್ಸ್ಆಪ್ ಈ ಸಂಖ್ಯೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ"
+    },
+    "toast": {
+      "loadFailed": "ಟೆಂಪ್ಲೇಟ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ",
+      "deleted": "ಟೆಂಪ್ಲೇಟ್ ಅಳಿಸಲಾಗಿದೆ",
+      "deleteFailed": "ಟೆಂಪ್ಲೇಟ್ ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+      "copied": "ನಕಲಿಸಲಾಗಿದೆ!",
+      "invalidMobile": "ಮಾನ್ಯವಾದ 10 ಅಂಕೆಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+      "wa2Sent": "ಸಂದೇಶವನ್ನು WA2 ಪ್ರೊವೈಡರ್ ಮೂಲಕ ಕಳುಹಿಸಲಾಗಿದೆ!",
+      "wa2Failed": "WA2 ಕಳುಹಿಸುವುದು ವಿಫಲವಾಗಿದೆ",
+      "testScheduled": "ಟೆಸ್ಟ್ ಸಂದೇಶವನ್ನು ಈಗಿನಿಂದ 1 ನಿಮಿಷಕ್ಕೆ ಶೆಡ್ಯೂಲ್ ಮಾಡಲಾಗಿದೆ!",
+      "scheduleFailed": "ಟೆಸ್ಟ್ ಶೆಡ್ಯೂಲ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ"
+    },
+    "modal": {
+      "titleEdit": "ವಾಟ್ಸ್ಆಪ್ ಟೆಂಪ್ಲೇಟ್ ತಿದ್ದು",
+      "titleNew": "ಹೊಸ ವಾಟ್ಸ್ಆಪ್ ಟೆಂಪ್ಲೇಟ್",
+      "previewTitle": "ಪೂರ್ವವೀಕ್ಷಣೆ (ಮಾದರಿ ಡೇಟಾ):",
+      "errors": {
+        "templateNameRequired": "ಟೆಂಪ್ಲೇಟ್ ಹೆಸರು ಅಗತ್ಯ",
+        "messageBodyRequired": "ಸಂದೇಶ ಬಾಡಿ ಅಗತ್ಯ",
+        "saveFailed": "ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+        "saveTemplateFailed": "ಟೆಂಪ್ಲೇಟ್ ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ"
+      },
+      "success": {
+        "updated": "ಟೆಂಪ್ಲೇಟ್ ನವೀಕರಿಸಲಾಗಿದೆ",
+        "created": "ಟೆಂಪ್ಲೇಟ್ ರಚಿಸಲಾಗಿದೆ"
+      },
+      "fields": {
+        "templateName": "ಟೆಂಪ್ಲೇಟ್ ಹೆಸರು",
+        "templateNamePlaceholder": "ಉದಾ. ಸ್ವಾಗತ ಸಂದೇಶ",
+        "category": "ವರ್ಗ",
+        "helpInsertField": "ಸಂದೇಶದಲ್ಲಿ ಕರ್ಸರ್ ಸ್ಥಾನದಲ್ಲಿ ಸೇರಿಸಲು ಕ್ಷೇತ್ರವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ:",
+        "messageBody": "ಸಂದೇಶ ಬಾಡಿ",
+        "messageBodyPlaceholder": "ಹಾಯ್ {{guest_name}}, {{hotel_name}}ಗೆ ಸ್ವಾಗತ! ನಿಮ್ಮ ಕೊಠಡಿ {{room_no}}.",
+        "active": "ಸಕ್ರಿಯ"
+      },
+      "templateFields": {
+        "guest_name": "ಅತಿಥಿ ಹೆಸರು",
+        "room_no": "ಕೊಠಡಿ ಸಂಖ್ಯೆ",
+        "grc_no": "GRC ಸಂಖ್ಯೆ",
+        "arrival_date": "ಆಗಮನ ದಿನಾಂಕ",
+        "checkout_date": "ಚೆಕ್‌ಔಟ್ ದಿನಾಂಕ",
+        "amount": "ಮೊತ್ತ",
+        "hotel_name": "ಹೋಟೆಲ್ ಹೆಸರು",
+        "contact_number": "ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+        "agent_name": "ಏಜೆಂಟ್ ಹೆಸರು",
+        "days": "ದಿನಗಳ ಸಂಖ್ಯೆ"
+      },
+      "actions": {
+        "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+        "update": "ನವೀಕರಿಸಿ",
+        "create": "ರಚಿಸಿ"
+      }
+    }
+  },
+  "importDialog": {
+    "units": {
+      "kb": "KB",
+      "mb": "MB"
+    },
+    "actions": {
+      "insert": "ಸೇರಿಸಿ",
+      "update": "ನವೀಕರಿಸಿ",
+      "skip": "ಬಿಡಿ"
+    },
+    "errors": {
+      "noImportableRows": "ಆಯ್ಕೆ ಮಾಡಿದ ಫೈಲ್‌ನಲ್ಲಿ ಆಮದು ಮಾಡಬಹುದಾದ ಸಾಲುಗಳಿಲ್ಲ.",
+      "previewFailed": "ಆಮದು ಕ್ರಿಯೆಗಳ ಪೂರ್ವವೀಕ್ಷಣೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+      "readFailed": "ಆಯ್ಕೆ ಮಾಡಿದ ಫೈಲ್ ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+      "invalidFile": "ಅಮಾನ್ಯ ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಲಾಗಿದೆ.",
+      "chooseFileBeforeImport": "ಆಮದು ಮಾಡುವ ಮೊದಲು ಮಾನ್ಯ CSV ಅಥವಾ Excel ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಿ."
+    },
+    "helper": {
+      "dropOrChoose": "CSV/XLS/XLSX ಫೈಲ್ ಅನ್ನು ಇಲ್ಲಿ ಎಳೆದು ಬಿಡಿ, ಅಥವಾ ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಿಂದ ಆಯ್ಕೆ ಮಾಡಿ.",
+      "rowsFound": "\"{{sheetName}}\" ಶೀಟ್‌ನಲ್ಲಿ {{count}} ಸಾಲು(ಗಳು) ಕಂಡುಬಂದಿವೆ."
+    },
+    "dropzone": {
+      "activeTitle": "ಆಮದು ಶೀಟ್ ಅನ್ನು ಇಲ್ಲಿ ಬಿಡಿ",
+      "idleTitle": "CSV ಅಥವಾ Excel ಅನ್ನು ಇಲ್ಲಿ ಎಳೆದು ಬಿಡಿ"
+    },
+    "buttons": {
+      "chooseFile": "ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಿ",
+      "downloadTemplate": "ಟೆಂಪ್ಲೇಟ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+      "remove": "ತೆಗೆದುಹಾಕಿ",
+      "cancel": "ರದ್ದು ಮಾಡಿ",
+      "importing": "ಆಮದು ಮಾಡಲಾಗುತ್ತಿದೆ...",
+      "close": "ಮುಚ್ಚಿ"
+    },
+    "summary": {
+      "rows": "ಸಾಲುಗಳು: {{count}}",
+      "matchedHeaders": "ಹೊಂದಿದ ಹೆಡರ್‌ಗಳು: {{count}}",
+      "missingHeaders": "ಕಾಣೆಯಾದ ಹೆಡರ್‌ಗಳು: {{count}}"
+    },
+    "forceCreateLabel": "ಹೊಂದಿಕೆಗಳನ್ನು ನವೀಕರಿಸುವ ಬದಲು ಯಾವಾಗಲೂ ಹೊಸ ಸಾಲುಗಳನ್ನು ರಚಿಸಿ",
+    "preview": {
+      "checking": "ಯಾವ ಸಾಲುಗಳನ್ನು ಸೇರಿಸಲಾಗುತ್ತದೆ, ನವೀಕರಿಸಲಾಗುತ್ತದೆ ಅಥವಾ ಬಿಡಲಾಗುತ್ತದೆ ಎಂಬುದನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...",
+      "willInsert": "ಸೇರಿಸಲಾಗುವುದು: {{count}}",
+      "willUpdate": "ನವೀಕರಿಸಲಾಗುವುದು: {{count}}",
+      "willSkip": "ಬಿಡಲಾಗುವುದು: {{count}}"
+    },
+    "rowLabel": "ಸಾಲು {{rowNumber}}{{labelSuffix}}",
+    "result": {
+      "title": "ಆಮದು ಫಲಿತಾಂಶ",
+      "inserted": "ಸೇರಿಸಿದವು: {{count}}",
+      "updated": "ನವೀಕರಿಸಿದವು: {{count}}",
+      "skipped": "ಬಿಟ್ಟವು: {{count}}"
+    }
+  },
+  "header": {
+    "welcome": "ಸ್ವಾಗತ, {{name}}",
+    "guest": "ಅತಿಥಿ",
+    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "logout": "ಲಾಗ್‌ಔಟ್",
+    "login": "ಲಾಗಿನ್",
+    "register": "ನೋಂದಣಿ"
+  },
+  "sidebar": {
+    "home": "ಮುಖ್ಯ",
+    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "guestEntry": "ಅತಿಥಿ ದಾಖಲಾತಿ",
+    "room": "ಕೊಠಡಿ",
+    "employeeManagements": "ಸಿಬ್ಬంది ನಿರ್ವಹಣೆ",
+    "employee": "ಸಿಬ್ಬಂದಿ",
+    "productManagements": "ಉತ್ಪನ್ನ ನಿರ್ವಹಣೆ",
+    "manageProduct": "ಉತ್ಪನ್ನ ನಿರ್ವಹಣೆ",
+    "agents": "ಏಜೆಂಟ್ಸ್",
+    "manageAgents": "ಏಜೆಂಟ್ ನಿರ್ವಹಣೆ",
+    "whatsApp": "ವಾಟ್ಸ್ಆಪ್",
+    "waTemplates": "WA ಟೆಂಪ್ಲೇಟ್‌ಗಳು",
+    "accessControl": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ",
+    "roles": "ಪಾತ್ರಗಳು"
+  }
+}
