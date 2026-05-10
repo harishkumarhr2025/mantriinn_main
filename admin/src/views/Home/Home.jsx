@@ -17,6 +17,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -48,6 +49,7 @@ const theme = createTheme({
 
 const Home = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const checkUserAuthentication = async () => {
@@ -152,7 +154,7 @@ const Home = () => {
                   },
                 }}
               >
-                PG rentals lowest from rs 8,999
+                {t('dashboard.pgRentals')}
               </Typography>
               <a href="https://www.google.com/maps/place/HOTEL+MANTRI+INN/@12.9870158,77.5723796,17z/data=!3m1!4b1!4m9!3m8!1s0x3bae16183c0f32ed:0xa91b2970ce401265!5m2!4m1!1i2!8m2!3d12.9870158!4d77.5723796!16s%2Fg%2F1td_fp69?entry=ttu&g_ep=EgoyMDI2MDMyNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <Box sx={{ 
