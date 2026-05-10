@@ -33,9 +33,9 @@ jobs:
 
       - name: Write frontend production env
         run: |
-          cat > admin/.env.production << 'EOF'
-          ${{ secrets.FRONTEND_ENV_FILE }}
-          EOF
+          printf '%s' "$FRONTEND_ENV" > admin/.env.production
+        env:
+          FRONTEND_ENV: ${{ secrets.FRONTEND_ENV_FILE }}
 
       - name: Build frontend
         run: |
