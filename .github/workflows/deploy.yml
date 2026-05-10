@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -31,16 +31,10 @@ jobs:
 
       - name: Rollback on demand
         if: ${{ github.event.inputs.rollback_release != '' }}
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          script: |
-            set -e
-            /var/www/mantri_inn/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
-            sudo systemctl reload nginx
+        run: |
+          set -e
+          /var/www/mantri_inn/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
+          sudo systemctl reload nginx
 
       - name: Write frontend production env
         if: ${{ github.event.inputs.rollback_release == '' }}
@@ -57,7 +51,7 @@ jobs:
           npm ci
           CI=false npm run build
           cd ..
-          tar -czf frontend.tgz -C admin build
+          tar -czf /tmp/frontend.tgz -C admin build
 
       - name: Package backend
         if: ${{ github.event.inputs.rollback_release == '' }}
@@ -67,31 +61,12 @@ jobs:
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.env' \
-            -czf backend.tgz -C Backend .
-
-      - name: Upload artifacts to VPS
-        if: ${{ github.event.inputs.rollback_release == '' }}
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          source: "frontend.tgz,backend.tgz"
-          target: "/tmp"
+            -czf /tmp/backend.tgz -C Backend .
 
       - name: Deploy on VPS
         if: ${{ github.event.inputs.rollback_release == '' }}
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          script: |
-            set -euo pipefail
-
-            RELEASE_ID="$(date +%Y%m%d%H%M%S)"
-            /var/www/mantri_inn/scripts/deploy.sh "$RELEASE_ID" /tmp/frontend.tgz /tmp/backend.tgz
-
-            sudo systemctl reload nginx
+        run: |
+          set -euo pipefail
+          RELEASE_ID="$(date +%Y%m%d%H%M%S)"
+          /var/www/mantri_inn/scripts/deploy.sh "$RELEASE_ID" /tmp/frontend.tgz /tmp/backend.tgz
+          sudo systemctl reload nginx
