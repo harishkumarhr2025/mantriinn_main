@@ -543,5 +543,57 @@
     "waTemplates": "WA ಟೆಂಪ್ಲೇಟ್‌ಗಳು",
     "accessControl": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ",
     "roles": "ಪಾತ್ರಗಳು"
+  },
+  "home": {
+    "location": "ಸೇಶಾದ್ರಿಪುರಂ",
+    "virtualTour": "ವರ್ಚುವಲ್ ಟೂರ್",
+    "livingSpace": "ವಾಸದ ಸ್ಥಳ",
+    "washRoom": "ವಾಶ್‌ರೂಮ್",
+    "features": {
+      "wifi": "ಹೈ-ಸ್ಪೀಡ್ WiFi",
+      "meals": "ರುಚಿಕರ ಊಟ",
+      "security": "24/7 ಭದ್ರತೆ",
+      "laundry": "ಲಾಂಡ್ರಿ ಸೇವೆ"
+    },
+    "flexiblePlans": "ಎಲ್ಲರಿಗೂ ಹೊಂದಿಕೊಳ್ಳುವ ಯೋಜನೆಗಳು",
+    "plans": {
+      "four": "ನಾಲ್ಕು ಹಂಚಿಕೆ",
+      "triple": "ಮೂರು ಹಂಚಿಕೆ",
+      "double": "ಎರಡು ಹಂಚಿಕೆ",
+      "single": "ಒಂಟಿ"
+    },
+    "perMonth": "/ತಿಂಗಳು",
+    "amenities": {
+      "ac": "AC ಕೊಠಡಿ*",
+      "lift": "ಲಿಫ್ಟ್ ಸೌಲಭ್ಯ",
+      "housekeeping": "ದೈನಂದಿನ ಹೌಸ್‌ಕೀಪಿಂಗ್",
+      "laundry": "ಲಾಂಡ್ರಿ ಸೇವೆ",
+      "hotwater": "ದೈನಂದಿನ ಬಿಸಿನೀರು",
+      "electricity": "24/7 ವಿದ್ಯುತ್",
+      "parking": "ದ್ವಿಚಕ್ರ ವಾಹನ ಪಾರ್ಕಿಂಗ್"
+    },
+    "mealPlans": "ಊಟದ ಯೋಜನೆಗಳು",
+    "meals": {
+      "one": "1 ಬಾರಿ ಊಟ",
+      "two": "2 ಬಾರಿ ಊಟ",
+      "three": "3 ಬಾರಿ ಊಟ"
+    },
+    "mealFeatures": {
+      "vegOptions": "ಸಸ್ಯಾಹಾರಿ ಆಯ್ಕೆಗಳು",
+      "weeklyMenu": "ಸಾಪ್ತಾಹಿಕ ಮೆನು ರೊಟೇಶನ್",
+      "notInterchangeable": "ಊಟ ಬದಲಾಯಿಸಲಾಗುವುದಿಲ್ಲ"
+    },
+    "ourSpaces": "ನಮ್ಮ ಸ್ಥಳಗಳು",
+    "spaces": {
+      "rooms": "ಐಶ್ವರ್ಯಮಯ ಕೊಠಡಿಗಳು",
+      "roomsDesc": "ಆಧುನಿಕ AC ವಸತಿ",
+      "dining": "ಊಟದ ಪ್ರದೇಶ",
+      "diningDesc": "ಆರೋಗ್ಯಕರ ಊಟ ಸೇವೆಗಳು",
+      "common": "ಸಾಮಾನ್ಯ ಪ್ರದೇಶಗಳು",
+      "commonDesc": "ಸಾಮಾಜಿಕ ಸ್ಥಳಗಳು",
+      "security": "ಭದ್ರತೆ",
+      "securityDesc": "24/7 ನಿಗಾ"
+    },
+    "viewMore": "ಇನ್ನಷ್ಟು ನೋಡಿ"
   }
 }

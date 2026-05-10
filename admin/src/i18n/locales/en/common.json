@@ -543,5 +543,57 @@
     "waTemplates": "WA Templates",
     "accessControl": "Access Control",
     "roles": "Roles"
+  },
+  "home": {
+    "location": "Seshadripuram",
+    "virtualTour": "Virtual Tour",
+    "livingSpace": "Living Space",
+    "washRoom": "Wash Room",
+    "features": {
+      "wifi": "High-Speed WiFi",
+      "meals": "Tasty Meals",
+      "security": "24/7 Security",
+      "laundry": "Laundry Service"
+    },
+    "flexiblePlans": "Flexible Plans for Everyone",
+    "plans": {
+      "four": "Four Sharing",
+      "triple": "Triple Sharing",
+      "double": "Double Sharing",
+      "single": "Single Sharing"
+    },
+    "perMonth": "/month",
+    "amenities": {
+      "ac": "AC Room*",
+      "lift": "Lift Facility",
+      "housekeeping": "Daily Housekeeping",
+      "laundry": "Laundry Service",
+      "hotwater": "Daily Hot Water",
+      "electricity": "24/7 Electricity",
+      "parking": "Parking for two wheeler"
+    },
+    "mealPlans": "Meal Plans",
+    "meals": {
+      "one": "1 Time meal",
+      "two": "2 Times meal",
+      "three": "3 Times meal"
+    },
+    "mealFeatures": {
+      "vegOptions": "Vegetarian Options",
+      "weeklyMenu": "Weekly Menu Rotation",
+      "notInterchangeable": "Meal is not interchangeable"
+    },
+    "ourSpaces": "Our Spaces",
+    "spaces": {
+      "rooms": "Luxury Rooms",
+      "roomsDesc": "Modern AC accommodations",
+      "dining": "Dining Area",
+      "diningDesc": "Healthy meal services",
+      "common": "Common Areas",
+      "commonDesc": "Social interaction spaces",
+      "security": "Security",
+      "securityDesc": "24/7 surveillance"
+    },
+    "viewMore": "View More"
   }
 }

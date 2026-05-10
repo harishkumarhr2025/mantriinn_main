@@ -542,6 +542,56 @@
     "whatsApp": "व्हाट्सऐप",
     "waTemplates": "WA टेम्पलेट्स",
     "accessControl": "एक्सेस कंट्रोल",
-    "roles": "भूमिकाएं"
-  }
+    "roles": "भूमिकाएं"  },
+  "home": {
+    "location": "सेशाद्रिपुरम",
+    "virtualTour": "वर्चुअल टूर",
+    "livingSpace": "रहने की जगह",
+    "washRoom": "वॉशरूम",
+    "features": {
+      "wifi": "हाई-स्पीड WiFi",
+      "meals": "स्वादिष्ट भोजन",
+      "security": "24/7 सुरक्षा",
+      "laundry": "लॉन्ड्री सेवा"
+    },
+    "flexiblePlans": "सभी के लिए लचीले प्लान",
+    "plans": {
+      "four": "चार साझा",
+      "triple": "तीन साझा",
+      "double": "दो साझा",
+      "single": "एकल"
+    },
+    "perMonth": "/माह",
+    "amenities": {
+      "ac": "AC कमरा*",
+      "lift": "लिफ्ट सुविधा",
+      "housekeeping": "दैनिक हाउसकीपिंग",
+      "laundry": "लॉन्ड्री सेवा",
+      "hotwater": "दैनिक गर्म पानी",
+      "electricity": "24/7 बिजली",
+      "parking": "दोपहिया वाहन पार्किंग"
+    },
+    "mealPlans": "भोजन योजनाएं",
+    "meals": {
+      "one": "1 बार भोजन",
+      "two": "2 बार भोजन",
+      "three": "3 बार भोजन"
+    },
+    "mealFeatures": {
+      "vegOptions": "शाकाहारी विकल्प",
+      "weeklyMenu": "साप्ताहिक मेनू रोटेशन",
+      "notInterchangeable": "भोजन परिवर्तनीय नहीं है"
+    },
+    "ourSpaces": "हमारे स्थान",
+    "spaces": {
+      "rooms": "लक्जरी कमरे",
+      "roomsDesc": "आधुनिक AC आवास",
+      "dining": "भोजन क्षेत्र",
+      "diningDesc": "स्वस्थ भोजन सेवाएं",
+      "common": "सामान्य क्षेत्र",
+      "commonDesc": "सामाजिक स्थान",
+      "security": "सुरक्षा",
+      "securityDesc": "24/7 निगरानी"
+    },
+    "viewMore": "और देखें"  }
 }

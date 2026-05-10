@@ -188,7 +188,7 @@ const Home = () => {
                       cursor: 'pointer',
                     }}
                   >
-                    seshadriupuram
+                    {t('home.location')}
                   </Typography>
                   <LocationOn 
                     className="location-icon"
@@ -213,7 +213,7 @@ const Home = () => {
                   fontFamily: 'Poppins',
                 }}
               >
-                Virtual Tour
+                {t('home.virtualTour')}
               </Button>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -273,7 +273,7 @@ const Home = () => {
                             variant="subtitle1"
                             sx={{ color: '#fff', fontFamily: 'Poppins' }}
                           >
-                            {item === 1 || item === 2 ? 'Living Space' : 'Wash Room'}
+                            {item === 1 || item === 2 ? t('home.livingSpace') : t('home.washRoom')}
                           </Typography>
                         </div>
                       </div>
@@ -287,10 +287,10 @@ const Home = () => {
           {/* Features Grid */}
           <Grid container spacing={4} sx={{ mb: 12 }}>
             {[
-              { icon: <Wifi sx={{ fontSize: 40 }} />, title: 'High-Speed WiFi' },
-              { icon: <Restaurant sx={{ fontSize: 40 }} />, title: 'Tasty Meals' },
-              { icon: <Security sx={{ fontSize: 40 }} />, title: '24/7 Security' },
-              { icon: <LocalLaundryService sx={{ fontSize: 40 }} />, title: 'Laundry Service' },
+              { icon: <Wifi sx={{ fontSize: 40 }} />, title: t('home.features.wifi') },
+              { icon: <Restaurant sx={{ fontSize: 40 }} />, title: t('home.features.meals') },
+              { icon: <Security sx={{ fontSize: 40 }} />, title: t('home.features.security') },
+              { icon: <LocalLaundryService sx={{ fontSize: 40 }} />, title: t('home.features.laundry') },
             ].map((feature, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card
@@ -336,10 +336,10 @@ const Home = () => {
                   fontFamily: 'Poppins',
                 }}
               >
-                Flexible Plans for Everyone
+                {t('home.flexiblePlans')}
               </Typography>
             </Grid>
-            {['ur Sharing', 'Triple Sharing', 'Double Sharing', 'Single Sharing'].map(
+            {[t('home.plans.four'), t('home.plans.triple'), t('home.plans.double'), t('home.plans.single')].map(
               (plan, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
                   <Card
@@ -385,7 +385,7 @@ const Home = () => {
                           fontFamily: 'Poppins',
                         }}
                       >
-                        /month
+                        {t('home.perMonth')}
                       </Typography>
                     </Typography>
                     <ul
@@ -398,13 +398,13 @@ const Home = () => {
                       }}
                     >
                       {[
-                        'AC Room*',
-                        'Lift Facility',
-                        'Daily Housekeeping',
-                        'Laundry Service',
-                        'Daily Hot Water',
-                        '24/7 Electricity',
-                        'Parking for two wheeler',
+                        t('home.amenities.ac'),
+                        t('home.amenities.lift'),
+                        t('home.amenities.housekeeping'),
+                        t('home.amenities.laundry'),
+                        t('home.amenities.hotwater'),
+                        t('home.amenities.electricity'),
+                        t('home.amenities.parking'),
                       ].map((item, i) => (
                         <li
                           key={i}
@@ -446,10 +446,10 @@ const Home = () => {
                   fontFamily: 'Poppins',
                 }}
               >
-                Meal Plans
+                {t('home.mealPlans')}
               </Typography>
             </Grid>
-            {['1 Time meal', '2 Times meal', '3 Times meal'].map((plan, index) => (
+            {[t('home.meals.one'), t('home.meals.two'), t('home.meals.three')].map((plan, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
                   sx={{
@@ -495,7 +495,7 @@ const Home = () => {
                         fontFamily: 'Poppins',
                       }}
                     >
-                      /month
+                      {t('home.perMonth')}
                     </Typography>
                   </Typography>
                   <ul
@@ -509,9 +509,9 @@ const Home = () => {
                   >
                     {[
                       `${index + 1} Meal${index > 0 ? 's' : ''} Per Day`,
-                      'Vegetarian Options',
-                      'Weekly Menu Rotation',
-                      'Meal is not inter changable',
+                      t('home.mealFeatures.vegOptions'),
+                      t('home.mealFeatures.weeklyMenu'),
+                      t('home.mealFeatures.notInterchangeable'),
                     ].map((item, i) => (
                       <li
                         key={i}
@@ -549,14 +549,14 @@ const Home = () => {
                 fontFamily: 'Poppins',
               }}
             >
-              Our Spaces
+              {t('home.ourSpaces')}
             </Typography>
             <Grid container spacing={2}>
               {[
-                { title: 'Luxury Rooms', desc: 'Modern AC accommodations' },
-                { title: 'Dining Area', desc: 'Healthy meal services' },
-                { title: 'Common Areas', desc: 'Social interaction spaces' },
-                { title: 'Security', desc: '24/7 surveillance' },
+                { title: t('home.spaces.rooms'), desc: t('home.spaces.roomsDesc') },
+                { title: t('home.spaces.dining'), desc: t('home.spaces.diningDesc') },
+                { title: t('home.spaces.common'), desc: t('home.spaces.commonDesc') },
+                { title: t('home.spaces.security'), desc: t('home.spaces.securityDesc') },
               ].map((space, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card
@@ -616,7 +616,7 @@ const Home = () => {
                             fontFamily: 'Poppins',
                           }}
                         >
-                          View More
+                          {t('home.viewMore')}
                         </Button>
                       </Box>
                     </Box>
