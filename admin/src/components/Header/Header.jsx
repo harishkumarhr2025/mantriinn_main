@@ -140,7 +140,7 @@ const Header = () => {
                   fontFamily: 'Poppins',
                 }}
               >
-                Mantri Inn
+                {t('common.appTitle')}
               </Typography>
             </motion.div>
 
