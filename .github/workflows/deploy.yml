@@ -17,34 +17,71 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    runs-on: self-hosted
+  # ── Job 1: Build on GitHub cloud ────────────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
     if: ${{ github.event.inputs.rollback_release == '' }}
 
     steps:
-      - name: Checkout latest code
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: admin/package-lock.json
 
       - name: Build frontend
         run: |
-          cp /var/www/mantri_inn/shared/.env.frontend admin/.env.production
+          echo "REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }}" > admin/.env.production
           cd admin
           npm ci
           CI=false npm run build
 
-      - name: Deploy frontend
+      - name: Package artifacts
         run: |
-          rm -rf /var/www/mantri_inn/frontend/current/build
-          cp -r admin/build /var/www/mantri_inn/frontend/current/build
+          tar -czf frontend.tgz -C admin build
+          tar \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.env' \
+            -czf backend.tgz -C Backend .
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-artifacts
+          path: |
+            frontend.tgz
+            backend.tgz
+          retention-days: 1
+
+  # ── Job 2: Deploy via self-hosted runner on VPS ─────────────────────────────
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    if: ${{ github.event.inputs.rollback_release == '' }}
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-artifacts
+          path: /tmp/mantriinn-artifacts
+
+      - name: Deploy
+        run: |
+          set -euo pipefail
+          RELEASE_ID="$(date +%Y%m%d%H%M%S)"
+          /var/www/mantri_inn/scripts/deploy.sh \
+            "$RELEASE_ID" \
+            /tmp/mantriinn-artifacts/frontend.tgz \
+            /tmp/mantriinn-artifacts/backend.tgz
           sudo systemctl reload nginx
 
-      - name: Deploy backend
-        run: |
-          cp -r Backend/. /var/www/mantri_inn/backend/current/
-          cd /var/www/mantri_inn/backend/current
-          npm ci --omit=dev
-          pm2 reload mantriinn-backend
-
+  # ── Rollback job (manual trigger only) ─────────────────────────────────────
   rollback:
     runs-on: self-hosted
     if: ${{ github.event.inputs.rollback_release != '' }}
@@ -52,5 +89,6 @@ jobs:
     steps:
       - name: Rollback
         run: |
+          set -e
           /var/www/mantri_inn/scripts/rollback.sh "${{ github.event.inputs.rollback_release }}"
           sudo systemctl reload nginx

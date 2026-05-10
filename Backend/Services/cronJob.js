@@ -6,7 +6,7 @@ import {
 } from "../controllers/ReportController.js";
 import ScheduledWhatsApp from "../models/ScheduledWhatsAppModel.js";
 import WhatsAppTemplate from "../models/WhatsAppTemplateModel.js";
-import sendGlobal91Whatsapp from "../utils/sendGlobal91WhatsApp.js";
+import sendGlobal91Whatsapp from "../utils/sendGlobal91Whatsapp.js";
 import Guest from "../models/GuestModel.js";
 
 // Process pending scheduled WhatsApp messages every minute
