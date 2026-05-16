@@ -18,6 +18,7 @@ import EmployeeRouter from "./routers/EmployeeRouter.js";
 import SalonRouter from "./routers/Salon/SalonRouter.js";
 import ProductRouter from "./routers/ProductRouter.js";
 import WhatsAppRouter from "./routers/WhatsAppRouter.js";
+import AdminLaundryRouter from "./routers/AdminLaundryRouter.js";
 import { initDailyReportCron, initScheduledWhatsAppCron, initCheckoutReminderCron, initBirthdayReschedulerCron } from "./Services/cronJob.js";
 import { seedWhatsAppTemplates } from "./scripts/seedWhatsAppTemplates.js";
 
@@ -98,6 +99,7 @@ app.use("/api/v1", EmployeeRouter);
 app.use("/api/v1", SalonRouter);
 app.use("/api/v1", ProductRouter);
 app.use("/api/v1", WhatsAppRouter);
+app.use("/api/v1", AdminLaundryRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at Port:${PORT}`);

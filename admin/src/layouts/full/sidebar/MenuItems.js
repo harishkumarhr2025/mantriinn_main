@@ -6,6 +6,7 @@ import {
   IconTools,
   IconReport,
   IconBrandWhatsapp,
+  IconWash,
 } from '@tabler/icons';
 import { uniqueId } from 'lodash';
 
@@ -77,6 +78,18 @@ const Menuitems = [
     titleKey: 'sidebar.manageAgents',
     icon: IconCar,
     href: '/agents',
+  },
+  {
+    navlabel: true,
+    subheader: 'Services',
+    subheaderKey: 'sidebar.services',
+  },
+  {
+    id: uniqueId(),
+    title: 'Laundry Service',
+    titleKey: 'sidebar.laundryService',
+    icon: IconWash,
+    href: '/laundry-service',
   },
   {
     navlabel: true,

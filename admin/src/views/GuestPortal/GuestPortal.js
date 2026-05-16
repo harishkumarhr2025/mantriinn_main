@@ -16,6 +16,18 @@ import {
   ListItemButton,
   TextField,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  OutlinedInput,
+  Chip,
 } from '@mui/material';
 import {
   Person,
@@ -50,6 +62,27 @@ const GuestPortal = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
+  const [laundryDialogOpen, setLaundryDialogOpen] = useState(false);
+  const [laundryForm, setLaundryForm] = useState({
+    clothType: [],
+    numberOfItems: '',
+    washType: '',
+    specialInstructions: '',
+    isEmergency: false,
+  });
+
+  const clothTypeOptions = [
+    'Shirts',
+    'Pants',
+    'T-Shirts',
+    'Jeans',
+    'Bedsheets',
+    'Towels',
+    'Blankets',
+    'Undergarments',
+    'Socks',
+    'Jackets',
+  ];
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -120,8 +153,63 @@ const GuestPortal = () => {
     return `${hours} hour${hours > 1 ? 's' : ''}`;
   };
 
-  const handleServiceRequest = (service) => {
-    Toast.success(`${service} request submitted!`);
+  const handleServiceRequest = async (service) => {
+    if (service === 'Laundry Service') {
+      setLaundryDialogOpen(true);
+    } else {
+      // Send WhatsApp notification for other services
+      try {
+        const token = localStorage.getItem('token');
+        const message = `🔔 Service Request: ${service}\n\nGuest: ${guestData.Guest_name}\nRoom: ${guestData.Room_no}\nTime: ${new Date().toLocaleString('en-IN')}`;
+        
+        await Config.post(
+          '/api/guest/service-notification',
+          { serviceName: service, message },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        Toast.success(`${service} request submitted!`);
+      } catch (error) {
+        console.error('Error sending service notification:', error);
+        Toast.success(`${service} request submitted!`);
+      }
+    }
+  };
+
+  const handleLaundrySubmit = async () => {
+    if (!laundryForm.clothType.length || !laundryForm.numberOfItems || !laundryForm.washType) {
+      Toast.error('Please fill all required fields');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Config.post(
+        '/api/guest/laundry-request',
+        laundryForm,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.success) {
+        const deliveryMsg = laundryForm.isEmergency 
+          ? 'Emergency delivery in 4 hours (₹200 extra charge)'
+          : 'Standard delivery in 24 hours';
+        Toast.success(`Laundry request submitted! ${deliveryMsg}`);
+        setLaundryDialogOpen(false);
+        setLaundryForm({
+          clothType: [],
+          numberOfItems: '',
+          washType: '',
+          specialInstructions: '',
+          isEmergency: false,
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting laundry request:', error);
+      Toast.error('Failed to submit laundry request');
+    }
   };
 
   const handleFeedbackSubmit = () => {
@@ -474,6 +562,115 @@ const GuestPortal = () => {
           </Box>
         )}
       </Box>
+
+      {/* Laundry Request Dialog */}
+      <Dialog open={laundryDialogOpen} onClose={() => setLaundryDialogOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ fontFamily: 'Poppins', fontWeight: 600, background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)', color: 'white' }}>
+          Laundry Service Request
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel>Cloth Types</InputLabel>
+                <Select
+                  multiple
+                  value={laundryForm.clothType}
+                  onChange={(e) => setLaundryForm({ ...laundryForm, clothType: e.target.value })}
+                  input={<OutlinedInput label="Cloth Types" />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} size="small" />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {clothTypeOptions.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      <Checkbox checked={laundryForm.clothType.indexOf(type) > -1} />
+                      <ListItemText primary={type} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Number of Items"
+                value={laundryForm.numberOfItems}
+                onChange={(e) => setLaundryForm({ ...laundryForm, numberOfItems: e.target.value })}
+                inputProps={{ min: 1 }}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel>Wash Type</InputLabel>
+                <Select
+                  value={laundryForm.washType}
+                  label="Wash Type"
+                  onChange={(e) => setLaundryForm({ ...laundryForm, washType: e.target.value })}
+                >
+                  <MenuItem value="Gentle Wash">Gentle Wash</MenuItem>
+                  <MenuItem value="Normal Wash">Normal Wash</MenuItem>
+                  <MenuItem value="Heavy Duty Wash">Heavy Duty Wash</MenuItem>
+                  <MenuItem value="Dry Clean">Dry Clean</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={laundryForm.isEmergency}
+                    onChange={(e) => setLaundryForm({ ...laundryForm, isEmergency: e.target.checked })}
+                    color="error"
+                  />
+                }
+                label={
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                      Emergency Delivery (4 hours)
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Extra charge: ₹200
+                    </Typography>
+                  </Box>
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                label="Special Instructions (Optional)"
+                placeholder="Any special care instructions..."
+                value={laundryForm.specialInstructions}
+                onChange={(e) => setLaundryForm({ ...laundryForm, specialInstructions: e.target.value })}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={() => setLaundryDialogOpen(false)} sx={{ fontFamily: 'Poppins' }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleLaundrySubmit}
+            variant="contained"
+            sx={{
+              fontFamily: 'Poppins',
+              background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
+            }}
+          >
+            Submit Request
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
