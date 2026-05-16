@@ -220,10 +220,28 @@ const AuthSlice = createSlice({
       state.data = null;
     });
 
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(logout.fulfilled, (state) => {
+      // Reset all state to initial values
       state.isAuthenticated = false;
+      state.isLoading = false;
+      state.data = null;
+      state.isError = null;
+      state.isSuccess = false;
+      state.role = null;
       state.user = null;
+    });
+    builder.addCase(logout.rejected, (state) => {
+      // Even if logout fails, clear the state
       state.isAuthenticated = false;
+      state.isLoading = false;
+      state.data = null;
+      state.isError = null;
+      state.isSuccess = false;
+      state.role = null;
+      state.user = null;
     });
   },
 });

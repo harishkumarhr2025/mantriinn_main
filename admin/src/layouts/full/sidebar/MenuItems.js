@@ -92,6 +92,13 @@ const Menuitems = [
     href: '/laundry-service',
   },
   {
+    id: uniqueId(),
+    title: 'Food Service',
+    titleKey: 'sidebar.foodService',
+    icon: IconCar,
+    href: '/food-service',
+  },
+  {
     navlabel: true,
     subheader: 'WhatsApp',
     subheaderKey: 'sidebar.whatsApp',

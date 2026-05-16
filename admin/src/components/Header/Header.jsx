@@ -39,13 +39,16 @@ const Header = () => {
   console.log('Header user:', user);
 
   useEffect(() => {
-    dispatch(CheckAuthentication());
-  }, [dispatch]);
+    // Only check authentication if there's a token
+    const token = localStorage.getItem('token');
+    if (token && !user) {
+      dispatch(CheckAuthentication());
+    }
+  }, [dispatch, user]);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem('token');
-    navigate('/');
+  const handleLogout = async () => {
+    await dispatch(logout());
+    navigate('/auth/login');
   };
 
   // Determine actual authentication status

@@ -18,7 +18,7 @@ const Protected = ({ Component, allowedRoles = [] }) => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        navigate('/');
+        navigate('/auth/login', { replace: true });
         return;
       }
 
@@ -26,7 +26,7 @@ const Protected = ({ Component, allowedRoles = [] }) => {
         await dispatch(CheckAuthentication()).unwrap();
       } catch (error) {
         localStorage.removeItem('token');
-        navigate('/');
+        navigate('/auth/login', { replace: true });
       } finally {
         setIsVerifying(false);
       }

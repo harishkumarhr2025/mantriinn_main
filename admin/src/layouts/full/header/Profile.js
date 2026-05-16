@@ -31,7 +31,7 @@ const Profile = () => {
     const logoutResp = await dispatch(logout());
 
     if (logout.fulfilled.match(logoutResp)) {
-      navigate('/');
+      navigate('/auth/login');
     } else {
       toast.error('Unexpected error occurred!!!');
     }

@@ -53,6 +53,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from 'src/redux/features/AuthSlice';
 import Config from 'src/components/Config';
 import Toast from 'react-hot-toast';
+import FoodServiceDialog from './FoodServiceDialog.jsx';
 
 const GuestPortal = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const GuestPortal = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [laundryDialogOpen, setLaundryDialogOpen] = useState(false);
+  const [foodDialogOpen, setFoodDialogOpen] = useState(false);
   const [laundryForm, setLaundryForm] = useState({
     clothType: [],
     numberOfItems: '',
@@ -154,7 +156,9 @@ const GuestPortal = () => {
   };
 
   const handleServiceRequest = async (service) => {
-    if (service === 'Laundry Service') {
+    if (service === 'Food Service') {
+      setFoodDialogOpen(true);
+    } else if (service === 'Laundry Service') {
       setLaundryDialogOpen(true);
     } else {
       // Send WhatsApp notification for other services
@@ -671,6 +675,12 @@ const GuestPortal = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Food Service Dialog */}
+      <FoodServiceDialog 
+        open={foodDialogOpen} 
+        onClose={() => setFoodDialogOpen(false)} 
+      />
     </Box>
   );
 };

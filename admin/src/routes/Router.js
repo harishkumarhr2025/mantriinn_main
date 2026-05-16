@@ -36,6 +36,9 @@ const WhatsAppTemplates = Loadable(
 const LaundryService = Loadable(
   lazy(() => import('../views/LaundryService/LaundryService')),
 );
+const FoodService = Loadable(
+  lazy(() => import('../views/FoodService/FoodService')),
+);
 
 const Router = [
   {
@@ -67,6 +70,7 @@ const Router = [
       { path: '/manage-employee', element: <Protected Component={Employee} /> },
       { path: '/whatsapp-templates', element: <Protected Component={WhatsAppTemplates} allowedRoles={['admin', 'semi admin']} /> },
       { path: '/laundry-service', element: <Protected Component={LaundryService} allowedRoles={['admin', 'semi admin']} /> },
+      { path: '/food-service', element: <Protected Component={FoodService} allowedRoles={['admin', 'semi admin']} /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
