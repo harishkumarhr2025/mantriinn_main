@@ -173,9 +173,6 @@ const Header = () => {
                     <Button onClick={() => navigate('/auth/login')} sx={buttonStyles}>
                       {t('header.login', { defaultValue: 'Login' })}
                     </Button>
-                    <Button onClick={() => navigate('/auth/register')} sx={buttonStyles}>
-                      {t('header.register', { defaultValue: 'Register' })}
-                    </Button>
                   </>
                 )}
                 <LanguageSwitcher />

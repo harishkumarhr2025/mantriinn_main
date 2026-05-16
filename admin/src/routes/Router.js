@@ -14,6 +14,9 @@ const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')));
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 const Register = Loadable(lazy(() => import('../views/authentication/Register')));
 const Login = Loadable(lazy(() => import('../views/authentication/Login')));
+const LoginTypeSelection = Loadable(lazy(() => import('../views/authentication/LoginTypeSelection')));
+const GuestLogin = Loadable(lazy(() => import('../views/authentication/GuestLogin')));
+const GuestPortal = Loadable(lazy(() => import('../views/GuestPortal/GuestPortal')));
 const Agents = Loadable(lazy(() => import('../views/Agents/Agents')));
 const GuestEntry = Loadable(lazy(() => import('../views/GuestEntry/GuestEntry')));
 const Home = Loadable(lazy(() => import('../views/Home/Home')));
@@ -37,7 +40,10 @@ const Router = [
     element: <BlankLayout />,
     children: [
       { path: '/', element: <Home /> },
-      { path: '/auth/login', element: <PublicRoute Component={Login} /> },
+      { path: '/auth/login', element: <LoginTypeSelection /> },
+      { path: '/auth/staff-login', element: <PublicRoute Component={Login} /> },
+      { path: '/auth/guest-login', element: <GuestLogin /> },
+      { path: '/guest-portal', element: <GuestPortal /> },
       { path: '/auth/register', element: <PublicRoute Component={Register} /> },
       { path: '/auth/404', element: <Error /> },
     ],

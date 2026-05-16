@@ -8,6 +8,7 @@ import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import GuestRouter from "./routers/GuestRouter.js";
+import GuestAuthRouter from "./routers/GuestAuthRouter.js";
 import AgentRouter from "./routers/AgentRouter.js";
 import AuthRouter from "./routers/AuthRouter.js";
 import ReportRouter from "./routers/ReportRouter.js";
@@ -87,6 +88,7 @@ app.post("/api/v1/local-upload", (req, res) => {
 
 // Route Middleware
 app.use("/api/v1", GuestRouter);
+app.use("/api/v1", GuestAuthRouter);
 app.use("/api/v1", AgentRouter);
 app.use("/api/v1", AuthRouter);
 app.use("/api/v1", ReportRouter);

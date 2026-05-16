@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/AuthModel.js";
+import GuestUser from "../models/GuestUserModel.js";
 
 const AuthMiddleware = async (req, res, next) => {
   try {
@@ -33,7 +34,21 @@ const verifyToken = async (token) => {
     const jwtToken = token?.split(" ")[1];
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
 
-    // Use findById by userId
+    // Check if it's a guest user
+    if (decoded.userType === "guest") {
+      const guestUser = await GuestUser.findById(decoded.id).select("-password");
+      if (guestUser) {
+        return {
+          _id: guestUser._id,
+          username: guestUser.username,
+          userType: guestUser.userType,
+          guestId: decoded.guestId,
+        };
+      }
+      return null;
+    }
+
+    // Use findById by userId for staff users
     const user = await User.findById(decoded.userId).select("-password");
 
     return user;

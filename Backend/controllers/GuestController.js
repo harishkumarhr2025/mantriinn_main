@@ -9,7 +9,7 @@ import WhatsAppTemplate from "../models/WhatsAppTemplateModel.js";
 import sendGlobal91Whatsapp from "../utils/sendGlobal91WhatsApp.js";
 import mongoose from "mongoose";
 import moment from "moment";
-// import { generateHTMLInvoice } from "../utils/InvoiceServices.js";
+import GuestUser from '../models/GuestUserModel.js';
 
 const importableGuestFields = [
   "GRC_No",
@@ -667,9 +667,19 @@ const createGuest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
+
     const { GRC_No, financialYear } = await generateGRCNo(session);
-    const { aadharFront, aadharBack, bedId, roomId, selectedRoom, whatsappTemplateIds, ...otherFields } = req.body;
+    let { aadharFront, aadharBack, bedId, roomId, selectedRoom, whatsappTemplateIds, ...otherFields } = req.body;
     console.log("create Guest body:", req.body);
+
+    // Auto-select Guest Portal Credentials template if not provided
+    if (!Array.isArray(whatsappTemplateIds) || whatsappTemplateIds.length === 0) {
+      // Find the Guest Portal Credentials template
+      const guestPortalTpl = await WhatsAppTemplate.findOne({ name: "Guest Portal Credentials", isActive: true });
+      if (guestPortalTpl) {
+        whatsappTemplateIds = [guestPortalTpl._id.toString()];
+      }
+    }
 
     const isDaily = otherFields.Guest_type === "Daily";
 
@@ -738,6 +748,29 @@ const createGuest = async (req, res) => {
     await guest.save({ session });
     await session.commitTransaction();
 
+    // --- Guest Portal Credentials Generation (after commit) ---
+    // Find the latest guest user to increment the ID
+    let username = '';
+    let password = '';
+    try {
+      const lastUser = await GuestUser.findOne({}, {}, { sort: { createdAt: -1 } });
+      let nextId = 1;
+      if (lastUser && lastUser.username && /^gu\d+$/.test(lastUser.username)) {
+        nextId = parseInt(lastUser.username.replace('gu', '')) + 1;
+      }
+      username = `gu${nextId}`;
+      password = guest.Contact_number || guest.Room_no || 'guest@123';
+      await GuestUser.create({
+        guestId: guest._id,
+        username,
+        password,
+        userType: 'guest',
+      });
+    } catch (err) {
+      console.error("[GuestUser] Post-commit error:", err.message);
+    }
+    // --- End Guest Portal Credentials Generation ---
+
     // Send welcome email (non-blocking — don't fail the request if email fails)
     if (guest.Guest_email) {
       SendEmail({
@@ -798,7 +831,9 @@ const createGuest = async (req, res) => {
                   (new Date(guest.Checkout_date) - new Date(guest.Arrival_date)) /
                   (1000 * 60 * 60 * 24)
                 )
-              : "-");
+              : "-")
+            .replace(/\{\{username\}\}/g, username || "")
+            .replace(/\{\{password\}\}/g, password || "");
 
         if (Array.isArray(whatsappTemplateIds) && whatsappTemplateIds.length > 0) {
           // Send each selected template via Global91
@@ -836,9 +871,13 @@ const createGuest = async (req, res) => {
       .status(201)
       .json({ success: true, message: "Guest Created Successfully", guest });
   } catch (error) {
-    await session.abortTransaction();
+    // Only abort if transaction is not already committed
+    try {
+      await session.abortTransaction();
+    } catch (abortErr) {
+      // Ignore abort errors if already committed
+    }
     console.error("Error creating guest:", error.message);
-
     return res.status(500).json({
       success: false,
       message: "Failed to create guest",

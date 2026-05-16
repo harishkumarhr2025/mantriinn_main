@@ -89,6 +89,19 @@ export const loggedInUser = createAsyncThunk(
   },
 );
 
+export const guestLogin = createAsyncThunk(
+  'Auth/guestLogin',
+  async (loginCredential, { rejectWithValue }) => {
+    try {
+      const response = await Config.post('/api/guest/login', loginCredential);
+      return response.data;
+    } catch (error) {
+      console.log('Error:', error);
+      return rejectWithValue({ message: extractErrorMessage(error, 'Guest login failed') });
+    }
+  },
+);
+
 export const logout = createAsyncThunk('Auth/logout', async (_, { rejectWithValue }) => {
   try {
     localStorage.removeItem('token');
@@ -182,6 +195,31 @@ const AuthSlice = createSlice({
       state.isError = action.payload?.message || action.error.message;
       state.data = null;
     });
+    builder.addCase(guestLogin.pending, (state, action) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.isSuccess = false;
+    });
+    builder.addCase(guestLogin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.data = action.payload;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+
+      if (action.payload?.token) {
+        localStorage.setItem('token', action.payload.token);
+      } else {
+        console.warn('No token received in guest login response');
+      }
+    });
+    builder.addCase(guestLogin.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = action.payload?.message || action.error.message;
+      state.data = null;
+    });
+
     builder.addCase(logout.fulfilled, (state) => {
       state.isAuthenticated = false;
       state.user = null;

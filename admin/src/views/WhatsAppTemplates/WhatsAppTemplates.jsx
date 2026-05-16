@@ -74,6 +74,27 @@ const WhatsAppTemplates = () => {
 
   useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 
+  // Auto-create Guest Portal Credentials template if missing
+  useEffect(() => {
+    if (templates && Array.isArray(templates)) {
+      const exists = templates.some(t => t.name === 'Guest Portal Credentials');
+      if (!exists) {
+        const newTemplate = {
+          name: 'Guest Portal Credentials',
+          category: 'check-in',
+          body: `Dear {{guest_name}},\n\nWelcome to Mantri In! Your guest portal is now active.\n\nLogin here: https://mantriinn.com/guest-portal (sample)\nUsername: {{username}}\nPassword: {{password}}\n\nYou can use the portal to opt for services, view your stay details, and more.\n\nFor any help, reply to this message.\n\nTeam Mantri In`,
+          isActive: true
+        };
+        Config.post('/whatsapp/templates', newTemplate)
+          .then(res => {
+            if (res.data?.success) fetchTemplates();
+          })
+          .catch(() => {});
+      }
+    }
+    // eslint-disable-next-line
+  }, [templates]);
+
   const handleSaved = () => { fetchTemplates(); };
 
   const openAdd  = () => { setEditTarget(null); setModalOpen(true); };
